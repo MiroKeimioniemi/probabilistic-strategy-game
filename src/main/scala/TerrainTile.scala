@@ -1,5 +1,6 @@
 import scala.math.max
 import scala.math.min
+import scala.util.Random
 
 trait TerrainTile:
 
@@ -45,3 +46,20 @@ class RockTile extends TerrainTile:
   end degrade
 
 end RockTile
+
+class SandTile extends TerrainTile:
+
+  var flatness = SandFlatness
+  var solidity = SandSolidity
+  var vegetationDensity = SandVegetationDensity
+  var elevation = SandElevation
+
+  // TODO: Refactor the method to not contain any magic numbers ------------- !
+  def degrade(damage: Int) =
+    flatness = min(100, flatness * Random().nextInt(10) / Random().nextInt(10))
+    solidity = solidity
+    vegetationDensity = 0
+    elevation = min(100, elevation * Random().nextInt(10) / Random().nextInt(10))
+  end degrade
+
+end SandTile

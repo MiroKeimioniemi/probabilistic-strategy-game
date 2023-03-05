@@ -6,6 +6,8 @@ import scalafx.scene.shape.Rectangle
 import scalafx.scene.layout.Pane
 
 object GUI extends JFXApp3:
+  
+  val Game = new Game
 
   def start(): Unit =
 

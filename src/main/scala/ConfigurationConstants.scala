@@ -2,7 +2,11 @@
  *
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
-/** TerrainTiles' attribute values are interpreted as percentages such that 100 -> 100% */
+/** Map properties */
+val MapWidth = 32
+val MapHeight = 18
+
+/** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass
 val GrassFlatness = 90
 val GrassSolidity = 90
@@ -14,3 +18,9 @@ val RockFlatness = 5
 val RockSolidity = 100
 val RockVegetationDensity = 0
 val RockElevation = 100
+
+// Sand
+val SandFlatness = 50
+val SandSolidity = 20
+val SandVegetationDensity = 0
+val SandElevation = 10

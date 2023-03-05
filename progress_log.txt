@@ -8,3 +8,13 @@ implementing it with different degrade methods based on their nature and
 ConfigurationConstants, changing TerrainTiles' "projectile passability" property to
 "elevation" to model the terrain itself more realistically and leave projectile
 passability to be calculated by the game class based on the tile properties instead.
+Dependency for O1Library added to access the grid package, Map class started and
+sand terrain tile added along with preliminary sketches of assets to resources.
+
+Development is late due to workload from other courses, resulting in me only reaching
+approximately 18h of work, and me being overly careful with every move so that I
+would not have to wrestle with IDE configuation issues or git conflicts in the future
+as my experience with both thus far consists largely of defeats. Difficulties faced
+mostly include bad tutorials for libraries and my cluelessness about best practices,
+especially in building the GUI, many of which have not been resolved yet. I hope to
+catch up next week and cannot wait to implement the actual game logic.
