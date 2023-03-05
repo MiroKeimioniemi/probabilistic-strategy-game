@@ -1,0 +1,10 @@
+5.3.2023
+
+Set up the devlopment environment and added dependencies for ScalaFX and ScalaTest.
+Created the initial project structure necessary for developing the game map.
+
+Implemented the TerrainTile trait with a couple of example terrain tile classes
+implementing it with different degrade methods based on their nature and
+ConfigurationConstants, changing TerrainTiles' "projectile passability" property to
+"elevation" to model the terrain itself more realistically and leave projectile
+passability to be calculated by the game class based on the tile properties instead.

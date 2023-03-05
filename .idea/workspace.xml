@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sbt.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sbt.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Created the initial project structure necessary for developing the game map by adding the Game and Map classes, the GUI object, ConfigurationConstants file for configuring the game and the TerrainTile trait as well as its subclasses representing different terrains in different tiles of the map. Additionally added dependencies to build.sbt for ScalaTest for future testing and ScalaFX and JavaFX for displaying the map and made the GUI display an empty window when running the program.">
+      <change afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,6 +137,14 @@
       <option name="presentableId" value="Default" />
       <updated>1675949968254</updated>
     </task>
+    <task id="LOCAL-00001" summary="Created the initial project structure necessary for developing the game map by adding the Game and Map classes, the GUI object, ConfigurationConstants file for configuring the game and the TerrainTile trait as well as its subclasses representing different terrains in different tiles of the map. Additionally added dependencies to build.sbt for ScalaTest for future testing and ScalaFX and JavaFX for displaying the map and made the GUI display an empty window when running the program.">
+      <created>1678016614944</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678016614944</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -154,5 +157,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Created the initial project structure necessary for developing the game map by adding the Game and Map classes, the GUI object, ConfigurationConstants file for configuring the game and the TerrainTile trait as well as its subclasses representing different terrains in different tiles of the map. Additionally added dependencies to build.sbt for ScalaTest for future testing and ScalaFX and JavaFX for displaying the map and made the GUI display an empty window when running the program." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created the initial project structure necessary for developing the game map by adding the Game and Map classes, the GUI object, ConfigurationConstants file for configuring the game and the TerrainTile trait as well as its subclasses representing different terrains in different tiles of the map. Additionally added dependencies to build.sbt for ScalaTest for future testing and ScalaFX and JavaFX for displaying the map and made the GUI display an empty window when running the program." />
   </component>
 </project>
