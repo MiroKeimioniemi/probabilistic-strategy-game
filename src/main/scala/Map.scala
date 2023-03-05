@@ -1,0 +1,3 @@
+class Map:
+
+end Map
