@@ -3,8 +3,8 @@
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
 /** Map properties */
-val MapWidth = 32
-val MapHeight = 18
+val MapWidth = 3    // 32
+val MapHeight = 2   // 18
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass

@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Dirt with little grass.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/degraded-grass-tile.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/Pixel tank draft for web .png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/pixel-desert-tile (1).png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/desert-tile.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Map.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,9 +146,9 @@
       <list>
         <item itemvalue="Application.GUI" />
         <item itemvalue="Scala REPL.REPL for strategy-game" />
+        <item itemvalue="Scala REPL.REPL for strategy-game" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.ScalaFXHelloWorld" />
-        <item itemvalue="Application.GameApp" />
       </list>
     </recent_temporary>
   </component>
@@ -184,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678050406269</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row.">
+      <created>1678088916224</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1678088916224</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -202,6 +210,7 @@
     <MESSAGE value="Created the initial project structure necessary for developing the game map by adding the Game and Map classes, the GUI object, ConfigurationConstants file for configuring the game and the TerrainTile trait as well as its subclasses representing different terrains in different tiles of the map. Additionally added dependencies to build.sbt for ScalaTest for future testing and ScalaFX and JavaFX for displaying the map and made the GUI display an empty window when running the program." />
     <MESSAGE value="Implemented the TerrainTile trait with a couple of example terrain tile classes implementing it with different degrade methods based on their nature and ConfigurationConstants. Also created and added the progress_log.txt file." />
     <MESSAGE value="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources." />
-    <option name="LAST_COMMIT_MESSAGE" value="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources." />
+    <MESSAGE value="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row." />
   </component>
 </project>
