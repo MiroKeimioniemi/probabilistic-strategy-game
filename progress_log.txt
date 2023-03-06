@@ -18,3 +18,8 @@ as my experience with both thus far consists largely of defeats. Difficulties fa
 mostly include bad tutorials for libraries and my cluelessness about best practices,
 especially in building the GUI, many of which have not been resolved yet. I hope to
 catch up next week and cannot wait to implement the actual game logic.
+
+6.3.2023
+
+Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile
+subclasses to case classes. GUI now displays the desired tile textures in a single row.

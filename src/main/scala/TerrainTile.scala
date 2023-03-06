@@ -2,7 +2,7 @@ import scala.math.max
 import scala.math.min
 import scala.util.Random
 
-trait TerrainTile:
+sealed trait TerrainTile:
 
   var flatness: Int
   var solidity: Int
@@ -13,7 +13,7 @@ trait TerrainTile:
 
 end TerrainTile
 
-class GrassTile extends TerrainTile:
+case class GrassTile() extends TerrainTile:
 
   var flatness = GrassFlatness
   var solidity = GrassSolidity
@@ -30,7 +30,7 @@ class GrassTile extends TerrainTile:
 
 end GrassTile
 
-class RockTile extends TerrainTile:
+case class RockTile() extends TerrainTile:
 
   var flatness = RockFlatness
   var solidity = RockSolidity
@@ -47,7 +47,7 @@ class RockTile extends TerrainTile:
 
 end RockTile
 
-class SandTile extends TerrainTile:
+case class SandTile() extends TerrainTile:
 
   var flatness = SandFlatness
   var solidity = SandSolidity
