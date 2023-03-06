@@ -24,3 +24,16 @@ val SandFlatness = 50
 val SandSolidity = 20
 val SandVegetationDensity = 0
 val SandElevation = 10
+
+/** BattleUnit properties */
+// Tank
+val TankWeight = 60000
+val TankVolume = 80
+val TankRange = 2
+val TankArmor = 100
+val TankDamageGradient = LazyList.iterate(200)( x => x / 2 ).patch(0, Iterable(10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
+
+var TankNumOfUnits = 1
+var TankAmmo = 2
+var TankFuel = 2
+var TankHealth = 100
