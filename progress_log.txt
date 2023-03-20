@@ -30,3 +30,12 @@ displaying BattleUnits on the map. Also added more class files.
 
 Development has caught up to plan more, considering that many of week 2 goals have been
 completed although there are no controllable battle units on the map yet.
+
+20.3.2023
+
+I am extremely late from the intended schedule because of various other course deadlines
+and personal reasons. I simply did not have even a chance to open the project in the past
+two weeks. I must cut simultaneous turns entirely and not even think about a random
+generated map at this point. I must implement my own grid system because that of O1's does
+not work and I will most likely have to utilize all the time I have, meaning that I will
+not be able to return the project a week before. Plenty of sleepless nights lie ahead!
