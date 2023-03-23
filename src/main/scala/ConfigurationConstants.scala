@@ -1,3 +1,6 @@
+import o1.grid.CompassDir.*
+import o1.grid.GridPos
+
 /** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
  *
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
@@ -5,6 +8,10 @@
 /** Map properties */
 val MapWidth = 3    // 32
 val MapHeight = 2   // 18
+
+/** Player properties */
+// Player 1
+val Player1BattleUnitsFormation = Vector[BattleUnit](TankUnit(GridPos(1,1), East), TankUnit(GridPos(1, 2), East))
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass
@@ -31,9 +38,9 @@ val TankWeight = 60000
 val TankVolume = 80
 val TankRange = 2
 val TankArmor = 100
-val TankDamageGradient = LazyList.iterate(200)( x => x / 2 ).patch(0, Iterable(10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
+val TankBaseDamage = 100
+val TankDamageGradient = LazyList.iterate(TankBaseDamage * 2)( x => x / 2 ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
 
-var TankNumOfUnits = 1
 var TankAmmo = 2
 var TankFuel = 2
 var TankHealth = 100

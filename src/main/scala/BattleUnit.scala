@@ -1,16 +1,17 @@
-import o1.grid.GridPos
+import o1.grid.CompassDir.*
+import o1.grid.{CompassDir, GridPos}
 
-trait BattleUnit(commandingPlayer: Player, gridPos: GridPos):
+sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
 
-  val commander: Player = commandingPlayer
   val weight: Int
   val volume: Int
   val range: Int
   val armor: Int
+  val baseDamage: Int
   val damageGradient: LazyList[Int]
 
-  var position: GridPos = gridPos
-  var numOfUnits: Int
+  var position: GridPos = initialGridPos
+  var orientation: CompassDir = initialFacing
   var ammo: Int
   var fuel: Int
   var health: Int
@@ -27,9 +28,6 @@ trait BattleUnit(commandingPlayer: Player, gridPos: GridPos):
                    ): ActionSet =
     ???
 
-  def breakUnits(q: Int): Unit =
-    numOfUnits -= q
-
   def useAmmo(q: Int): Unit =
     ammo -= q
 
@@ -44,15 +42,15 @@ trait BattleUnit(commandingPlayer: Player, gridPos: GridPos):
 
 end BattleUnit
 
-case class TankUnit(commandingPlayer: Player, gridPos: GridPos) extends BattleUnit(commandingPlayer, gridPos):
+case class TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
 
   val weight = TankWeight
   val volume = TankVolume
   val range = TankRange
   val armor = TankArmor
+  val baseDamage = TankBaseDamage
   val damageGradient = TankDamageGradient
 
-  var numOfUnits = TankNumOfUnits
   var ammo = TankAmmo
   var fuel = TankFuel
   var health = TankHealth

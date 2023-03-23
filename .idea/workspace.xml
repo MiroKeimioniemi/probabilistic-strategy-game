@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets.">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/SupplyChain.scala" afterDir="false" />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Updated progress_log.txt to reflect the current plan of approach.">
+      <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Player.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +85,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-C2120 - Programming Studio A/Strategy game project/strategy-game/O1Library.jar",
+    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 4/A1120-scala3-r04-sequential/build.sbt",
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -144,8 +146,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.GUI" />
-        <item itemvalue="Scala REPL.REPL for strategy-game" />
-        <item itemvalue="Scala REPL.REPL for strategy-game" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.ScalaFXHelloWorld" />
       </list>
@@ -198,7 +198,21 @@
       <option name="project" value="LOCAL" />
       <updated>1678115291342</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files.">
+      <created>1678121179501</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1678121179501</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Updated progress_log.txt to reflect the current plan of approach.">
+      <created>1679305407172</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679305407172</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -218,6 +232,18 @@
     <MESSAGE value="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources." />
     <MESSAGE value="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row." />
     <MESSAGE value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
+    <MESSAGE value="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files." />
+    <MESSAGE value="Updated progress_log.txt to reflect the current plan of approach." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated progress_log.txt to reflect the current plan of approach." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ClassNotFoundException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

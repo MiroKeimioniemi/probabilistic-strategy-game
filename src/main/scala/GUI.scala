@@ -4,7 +4,6 @@ import scalafx.scene.Scene
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.GridPane
 import math.min
-
 import java.io.FileInputStream
 
 object GUI extends JFXApp3:
@@ -36,9 +35,26 @@ object GUI extends JFXApp3:
   end drawPic
 
 
-  /** Returns a vector of ImageView objects corresponding to the map tiles, which
-   * can be used to display images corresponding to the tiles in the GUI */
-  private def drawMapTiles(root: GridPane): Unit =
+  // Add ImageView objects to GridPane children to be displayed in a scene
+  def displayInGrid(drawn: Vector[ImageView], node: GridPane) =
+
+    var columnIndex = 0
+    var rowIndex = 0
+    var tileIndex = 0
+
+    while rowIndex < MapHeight do
+      while columnIndex < MapWidth do
+        node.add(drawn(tileIndex), columnIndex, rowIndex)
+        columnIndex += 1
+        tileIndex += 1
+      rowIndex += 1
+      columnIndex = 0
+
+  end displayInGrid
+
+
+  /** Displays images corresponding to the map tiles in the GUI */
+  private def drawMapTiles(node: GridPane): Unit =
 
     val drawables: Vector[TerrainTile] = game.gameMap.tiles
     var drawn: Vector[ImageView] = Vector[ImageView]()
@@ -56,26 +72,23 @@ object GUI extends JFXApp3:
           val imageStream = FileInputStream("src/main/resources/desert-tile.png")
           drawn = drawn :+ drawPic(Image(imageStream))
 
-    // Add ImageView objects to GridPane children to be displayed in a scene
-    def displayMapTiles(drawn: Vector[ImageView]) =
-
-      var columnIndex = 0
-      var rowIndex = 0
-      var tileIndex = 0
-
-      while rowIndex < MapHeight do
-        while columnIndex < MapWidth do
-          root.add(drawn(tileIndex), columnIndex, rowIndex)
-          columnIndex += 1
-          tileIndex += 1
-        rowIndex += 1
-        columnIndex = 0
-
-    end displayMapTiles
-
-    displayMapTiles(drawn)
+    displayInGrid(drawn, node)
 
   end drawMapTiles
 
+  /** Displays images corresponding to the battle units in the GUI */
+  private def drawBattleUnits(node: GridPane, player: Player): Unit =
+
+    val drawables: Vector[BattleUnit] = player.battleUnits
+    var drawn: Vector[ImageView] = Vector[ImageView]()
+
+    // Match tile type with image and append corresponding ImageView to drawn
+    for drawable <- drawables do
+      drawable match
+        case tankUnit: TankUnit =>
+          val imageStream = FileInputStream("src/main/resources/green-tank.png")
+          drawn = drawn :+ drawPic(Image(imageStream))
+
+    displayInGrid(drawn, node)
 
 end GUI
