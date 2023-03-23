@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Updated progress_log.txt to reflect the current plan of approach.">
-      <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Player.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Map.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,17 +79,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 4/A1120-scala3-r04-sequential/build.sbt",
-    "project.structure.last.edited": "Global Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 4/A1120-scala3-r04-sequential/build.sbt&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\o1" />
@@ -212,7 +210,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679305407172</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes.">
+      <created>1679598265118</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679598265118</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes.">
+      <created>1679598355776</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1679598355776</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -234,7 +246,9 @@
     <MESSAGE value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
     <MESSAGE value="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files." />
     <MESSAGE value="Updated progress_log.txt to reflect the current plan of approach." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated progress_log.txt to reflect the current plan of approach." />
+    <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many other player- and BattleUnit-related classes as well as adding swing as a dependency." />
+    <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes." />
+    <option name="LAST_COMMIT_MESSAGE" value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

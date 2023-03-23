@@ -45,4 +45,6 @@ not be able to return the project a week before. Plenty of sleepless nights lie 
 Various changes to facilitate displaying BattleUnits on the map including refactoring GUI
 methods and many other player- and BattleUnit-related classes. Due to the lack of time,
 CompassDir issue was solved by caving in and adding swing as a dependency as a quick
-bandaid solution.
+bandaid solution. displayInGrid method was rewritten to draw TerrainTiles and BattleUnits
+alike based on their positions in the grid instead of index in a vector, resulting in
+BattleUnits finally being displayed on top of the map in the GUI.

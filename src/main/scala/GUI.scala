@@ -5,6 +5,7 @@ import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.GridPane
 import math.min
 import java.io.FileInputStream
+import o1.GridPos
 
 object GUI extends JFXApp3:
 
@@ -22,6 +23,7 @@ object GUI extends JFXApp3:
     stage.scene = scene
 
     drawMapTiles(root)
+    drawBattleUnits(root, game.player1)
 
 
   /** Returns an ImageView object corresponding to a given image */
@@ -36,19 +38,10 @@ object GUI extends JFXApp3:
 
 
   // Add ImageView objects to GridPane children to be displayed in a scene
-  def displayInGrid(drawn: Vector[ImageView], node: GridPane) =
+  private def displayInGrid(drawn: Vector[ImageView], positions: Vector[GridPos], node: GridPane) =
 
-    var columnIndex = 0
-    var rowIndex = 0
-    var tileIndex = 0
-
-    while rowIndex < MapHeight do
-      while columnIndex < MapWidth do
-        node.add(drawn(tileIndex), columnIndex, rowIndex)
-        columnIndex += 1
-        tileIndex += 1
-      rowIndex += 1
-      columnIndex = 0
+    for element <- drawn zip positions do
+      node.add(element._1, element._2.x, element._2.y)
 
   end displayInGrid
 
@@ -57,6 +50,7 @@ object GUI extends JFXApp3:
   private def drawMapTiles(node: GridPane): Unit =
 
     val drawables: Vector[TerrainTile] = game.gameMap.tiles
+    val positions: Vector[GridPos] = drawables.map(_.position)
     var drawn: Vector[ImageView] = Vector[ImageView]()
 
     // Match tile type with image and append corresponding ImageView to drawn
@@ -72,7 +66,7 @@ object GUI extends JFXApp3:
           val imageStream = FileInputStream("src/main/resources/desert-tile.png")
           drawn = drawn :+ drawPic(Image(imageStream))
 
-    displayInGrid(drawn, node)
+    displayInGrid(drawn, positions, node)
 
   end drawMapTiles
 
@@ -80,6 +74,7 @@ object GUI extends JFXApp3:
   private def drawBattleUnits(node: GridPane, player: Player): Unit =
 
     val drawables: Vector[BattleUnit] = player.battleUnits
+    val positions: Vector[GridPos] = drawables.map(_.position)
     var drawn: Vector[ImageView] = Vector[ImageView]()
 
     // Match tile type with image and append corresponding ImageView to drawn
@@ -89,6 +84,6 @@ object GUI extends JFXApp3:
           val imageStream = FileInputStream("src/main/resources/green-tank.png")
           drawn = drawn :+ drawPic(Image(imageStream))
 
-    displayInGrid(drawn, node)
+    displayInGrid(drawn, positions, node)
 
 end GUI

@@ -11,7 +11,7 @@ val MapHeight = 2   // 18
 
 /** Player properties */
 // Player 1
-val Player1BattleUnitsFormation = Vector[BattleUnit](TankUnit(GridPos(1,1), East), TankUnit(GridPos(1, 2), East))
+val Player1BattleUnitsFormation = Vector[BattleUnit](TankUnit(GridPos(2,1), East), TankUnit(GridPos(1, 2), East))
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass

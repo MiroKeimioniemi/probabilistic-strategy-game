@@ -1,9 +1,12 @@
 import scala.math.max
 import scala.math.min
 import scala.util.Random
+import o1.grid.GridPos
 
-sealed trait TerrainTile:
+sealed trait TerrainTile(gridPos: GridPos):
 
+  val position: GridPos = gridPos
+  
   var flatness: Int
   var solidity: Int
   var vegetationDensity: Int
@@ -13,7 +16,7 @@ sealed trait TerrainTile:
 
 end TerrainTile
 
-case class GrassTile() extends TerrainTile:
+case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   var flatness = GrassFlatness
   var solidity = GrassSolidity
@@ -30,7 +33,7 @@ case class GrassTile() extends TerrainTile:
 
 end GrassTile
 
-case class RockTile() extends TerrainTile:
+case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   var flatness = RockFlatness
   var solidity = RockSolidity
@@ -47,7 +50,7 @@ case class RockTile() extends TerrainTile:
 
 end RockTile
 
-case class SandTile() extends TerrainTile:
+case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   var flatness = SandFlatness
   var solidity = SandSolidity
