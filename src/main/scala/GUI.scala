@@ -39,10 +39,8 @@ object GUI extends JFXApp3:
 
   // Add ImageView objects to GridPane children to be displayed in a scene
   private def displayInGrid(drawn: Vector[ImageView], positions: Vector[GridPos], node: GridPane) =
-
     for element <- drawn zip positions do
       node.add(element._1, element._2.x, element._2.y)
-
   end displayInGrid
 
 

@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="displayInGrid method was rewritten to draw TerrainTiles and BattleUnits alike based on their positions in the grid instead of index in a vector, resulting in BattleUnits finally being displayed on top of the map in the GUI.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Map.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
@@ -224,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679598355776</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="displayInGrid method was rewritten to draw TerrainTiles and BattleUnits alike based on their positions in the grid instead of index in a vector, resulting in BattleUnits finally being displayed on top of the map in the GUI.">
+      <created>1679601121310</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1679601121310</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -248,7 +255,8 @@
     <MESSAGE value="Updated progress_log.txt to reflect the current plan of approach." />
     <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many other player- and BattleUnit-related classes as well as adding swing as a dependency." />
     <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes." />
+    <MESSAGE value="displayInGrid method was rewritten to draw TerrainTiles and BattleUnits alike based on their positions in the grid instead of index in a vector, resulting in BattleUnits finally being displayed on top of the map in the GUI." />
+    <option name="LAST_COMMIT_MESSAGE" value="displayInGrid method was rewritten to draw TerrainTiles and BattleUnits alike based on their positions in the grid instead of index in a vector, resulting in BattleUnits finally being displayed on top of the map in the GUI." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
