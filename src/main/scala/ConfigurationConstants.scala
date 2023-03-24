@@ -6,23 +6,21 @@ import o1.grid.GridPos
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
 /** Map properties */
-val MapWidth = 3    // 32
-val MapHeight = 2   // 18
+val MapWidth = 6    // 32
+val MapHeight = 4   // 18
 val MapTiles =
-  Vector(
-      GrassTile(GridPos(1, 1)), 
-      SandTile( GridPos(2, 1)), 
-      SandTile( GridPos(3, 1)), 
-      GrassTile(GridPos(1, 2)), 
-      GrassTile(GridPos(2, 2)), 
-      RockTile( GridPos(3, 2))
-    )
+  GameMap.tileUpdater(
+    GameMap.tileGenerator(MapWidth, MapHeight),
+    Vector[TerrainTile](
+    SandTile(GridPos(2, 1)),
+    RockTile(GridPos(3, 3))
+  ))
 
 /** Player properties */
 // Player 1
-val Player1BattleUnitsFormation = 
+val Player1BattleUnitsFormation =
   Vector[BattleUnit](
-    TankUnit(GridPos(2, 1), East), 
+    TankUnit(GridPos(2, 1), East),
     TankUnit(GridPos(1, 2), East)
 )
 

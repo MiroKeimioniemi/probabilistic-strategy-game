@@ -48,3 +48,9 @@ CompassDir issue was solved by caving in and adding swing as a dependency as a q
 bandaid solution. displayInGrid method was rewritten to draw TerrainTiles and BattleUnits
 alike based on their positions in the grid instead of index in a vector, resulting in
 BattleUnits finally being displayed on top of the map in the GUI.
+
+24.3.2023
+
+Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and
+flexible map building, as well as a getTile method for the GameMap class in anticipation
+of future use.
