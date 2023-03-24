@@ -55,3 +55,12 @@ Added a GameMap companion object with tileGenerator and tileUpdater methods for 
 flexible map building, as well as a getTile method for the GameMap class in anticipation
 of future use. Added the symmetricTileUpdater method, which necessitated the ability for
 TerrainTiles to copy themselves as well, so that only half of the map must be specified.
+This also serves my original idea for the gameplay as identical sides give equal
+opportunities to both players. However, I might want to change this symmetry later to be
+only about the y-axis to encourage more interesting encounters and conflict. Furthermore,
+I refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the
+latter two contain their own images to achieve better encapsulation and built an initial
+map for testing. I will have to soon look into some optimization already as building and
+launching the GUI takes quite long after the changes. I still have to build the interface
+for giving instructions to the BattleUnits but after that I will finally get to work on
+the game logic. 

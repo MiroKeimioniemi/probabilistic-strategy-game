@@ -12,8 +12,28 @@ val MapTiles =
   GameMap.symmetricTileUpdater(
     GameMap.tileGenerator(MapWidth, MapHeight),
     Vector[TerrainTile](
-    SandTile(GridPos(2, 1)),
-    RockTile(GridPos(3, 3))
+      RockTile(GridPos(4, 2)),
+      RockTile(GridPos(5, 2)),
+      RockTile(GridPos(3, 8)),
+      RockTile(GridPos(7, 4)),
+      RockTile(GridPos(7, 6)),
+      RockTile(GridPos(8, 6)),
+      SandTile(GridPos(7, 1)),
+      SandTile(GridPos(8, 1)),
+      SandTile(GridPos(8, 2)),
+      SandTile(GridPos(8, 7)),
+      SandTile(GridPos(8, 8)),
+      SandTile(GridPos(8, 9)),
+      SandTile(GridPos(7, 9)),
+      ForestTile(GridPos(6, 4)),
+      ForestTile(GridPos(4, 5)),
+      ForestTile(GridPos(5, 5)),
+      ForestTile(GridPos(6, 5)),
+      ForestTile(GridPos(7, 5)),
+      ForestTile(GridPos(5, 6)),
+      ForestTile(GridPos(6, 6)),
+      ForestTile(GridPos(6, 7)),
+      ForestTile(GridPos(7, 7))
   ))
 
 /** Player properties */
@@ -26,10 +46,16 @@ val Player1BattleUnitsFormation =
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass
-val GrassFlatness =          90
-val GrassSolidity =          90
+val GrassFlatness =          95
+val GrassSolidity =          95
 val GrassVegetationDensity = 5
 val GrassElevation =         0
+
+// Forest
+val ForestFlatness =          25
+val ForestSolidity =          85
+val ForestVegetationDensity = 95
+val ForestElevation =         5
 
 // Rock
 val RockFlatness =          5

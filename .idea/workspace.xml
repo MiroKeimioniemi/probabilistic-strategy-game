@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and flexible map building, as well as a getTile method for the GameMap class in anticipation of future use.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Map.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -244,7 +245,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679658917706</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified.">
+      <created>1679676155377</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1679676155377</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -271,7 +279,8 @@
     <MESSAGE value="displayInGrid method was rewritten to draw TerrainTiles and BattleUnits alike based on their positions in the grid instead of index in a vector, resulting in BattleUnits finally being displayed on top of the map in the GUI." />
     <MESSAGE value="Refactoring" />
     <MESSAGE value="Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and flexible map building, as well as a getTile method for the GameMap class in anticipation of future use." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and flexible map building, as well as a getTile method for the GameMap class in anticipation of future use." />
+    <MESSAGE value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

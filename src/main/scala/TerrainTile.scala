@@ -2,9 +2,13 @@ import scala.math.max
 import scala.math.min
 import scala.util.Random
 import o1.grid.GridPos
+import scalafx.scene.image.Image
+
+import java.io.FileInputStream
 
 sealed trait TerrainTile(gridPos: GridPos):
 
+  val image: Image
   val position: GridPos = gridPos
 
   var flatness:          Int
@@ -13,12 +17,13 @@ sealed trait TerrainTile(gridPos: GridPos):
   var elevation:         Int
 
   def degrade(damage: Int): Unit
-
   def copySelf(newPosition: GridPos): TerrainTile
 
 end TerrainTile
 
 case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
+
+  val image = Image(FileInputStream("src/main/resources/grass-tile.png"))
 
   var flatness =          GrassFlatness
   var solidity =          GrassSolidity
@@ -38,7 +43,31 @@ case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
 end GrassTile
 
+case class ForestTile(gridPos: GridPos) extends TerrainTile(gridPos):
+
+  val image = Image(FileInputStream("src/main/resources/forest-tile.png"))
+
+  var flatness =          ForestFlatness
+  var solidity =          ForestSolidity
+  var vegetationDensity = ForestVegetationDensity
+  var elevation =         ForestElevation
+
+  // TODO: Refactor the method to not contain any magic numbers ------------- !
+  def degrade(damage: Int) =
+    flatness =          max(0, flatness - damage)
+    solidity =          max(0, solidity - damage)
+    vegetationDensity = max(0, vegetationDensity - damage)
+    elevation =         0
+  end degrade
+
+  def copySelf(newPosition: GridPos): ForestTile =
+    ForestTile(newPosition)
+
+end ForestTile
+
 case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
+
+  val image = Image(FileInputStream("src/main/resources/rock-tile.png"))
 
   var flatness =          RockFlatness
   var solidity =          RockSolidity
@@ -59,6 +88,8 @@ case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
 end RockTile
 
 case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
+
+  val image = Image(FileInputStream("src/main/resources/desert-tile.png"))
 
   var flatness =          SandFlatness
   var solidity =          SandSolidity

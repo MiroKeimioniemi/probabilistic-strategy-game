@@ -51,18 +51,7 @@ object GUI extends JFXApp3:
     val positions: Vector[GridPos] = drawables.map(_.position)
     var drawn: Vector[ImageView] = Vector[ImageView]()
 
-    // Match tile type with image and append corresponding ImageView to drawn
-    for drawable <- drawables do
-      drawable match
-        case grassTile: GrassTile =>
-          val imageStream = FileInputStream("src/main/resources/grass-tile.png")
-          drawn = drawn :+ drawPic(Image(imageStream))
-        case rockTile: RockTile  =>
-          val imageStream = FileInputStream("src/main/resources/rock-tile.png")
-          drawn = drawn :+ drawPic(Image(imageStream))
-        case sandTile: SandTile  =>
-          val imageStream = FileInputStream("src/main/resources/desert-tile.png")
-          drawn = drawn :+ drawPic(Image(imageStream))
+    drawables.foreach(drawable => drawn = drawn :+ drawPic(drawable.image))
 
     displayInGrid(drawn, positions, node)
 
@@ -75,12 +64,7 @@ object GUI extends JFXApp3:
     val positions: Vector[GridPos] = drawables.map(_.position)
     var drawn: Vector[ImageView] = Vector[ImageView]()
 
-    // Match tile type with image and append corresponding ImageView to drawn
-    for drawable <- drawables do
-      drawable match
-        case tankUnit: TankUnit =>
-          val imageStream = FileInputStream("src/main/resources/green-tank.png")
-          drawn = drawn :+ drawPic(Image(imageStream))
+    drawables.foreach(drawable => drawn = drawn :+ drawPic(drawable.image))
 
     displayInGrid(drawn, positions, node)
 
