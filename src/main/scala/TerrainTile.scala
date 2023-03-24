@@ -6,13 +6,15 @@ import o1.grid.GridPos
 sealed trait TerrainTile(gridPos: GridPos):
 
   val position: GridPos = gridPos
-  
+
   var flatness:          Int
   var solidity:          Int
   var vegetationDensity: Int
   var elevation:         Int
 
   def degrade(damage: Int): Unit
+
+  def copySelf(newPosition: GridPos): TerrainTile
 
 end TerrainTile
 
@@ -31,6 +33,9 @@ case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
     elevation =         0
   end degrade
 
+  def copySelf(newPosition: GridPos): GrassTile =
+    GrassTile(newPosition)
+
 end GrassTile
 
 case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
@@ -48,6 +53,9 @@ case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
     elevation =         max(0, elevation - damage)
   end degrade
 
+  def copySelf(newPosition: GridPos): RockTile =
+    RockTile(newPosition)
+
 end RockTile
 
 case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
@@ -64,5 +72,8 @@ case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
     vegetationDensity = 0
     elevation =         min(100, elevation * Random().nextInt(10) / Random().nextInt(10))
   end degrade
+
+  def copySelf(newPosition: GridPos): SandTile =
+    SandTile(newPosition)
 
 end SandTile

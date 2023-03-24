@@ -15,8 +15,8 @@ object GUI extends JFXApp3:
 
     stage = new JFXApp3.PrimaryStage:
       title = "Strategy Game"
-      width = 600
-      height = 450
+      width = 1600
+      height = 900
 
     val root = GridPane()
     val scene = Scene(parent = root)

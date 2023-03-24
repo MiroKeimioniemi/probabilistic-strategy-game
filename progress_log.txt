@@ -53,4 +53,5 @@ BattleUnits finally being displayed on top of the map in the GUI.
 
 Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and
 flexible map building, as well as a getTile method for the GameMap class in anticipation
-of future use.
+of future use. Added the symmetricTileUpdater method, which necessitated the ability for
+TerrainTiles to copy themselves as well, so that only half of the map must be specified.

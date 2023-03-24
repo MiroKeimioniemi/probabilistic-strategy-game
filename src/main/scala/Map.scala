@@ -2,6 +2,7 @@ import o1.grid.*
 
 object GameMap:
 
+  /** Returns a vector full of GrassTiles filling the entire area of the map */
   def tileGenerator(width: Int, height: Int): Vector[TerrainTile] =
     var tiles: Vector[TerrainTile] = Vector[TerrainTile]()
 
@@ -15,17 +16,35 @@ object GameMap:
 
   end tileGenerator
 
+  /** Updates the map tiles */
   def tileUpdater(tiles: Vector[TerrainTile], updates: Vector[TerrainTile]): Vector[TerrainTile] =
     var newTiles = tiles
 
     for updateTile <- updates do
-      var replaceTile = tiles.find(_.position == updateTile.position)
-      if replaceTile.isDefined then
-        newTiles = newTiles.updated(tiles.indexOf(replaceTile.getOrElse(tiles.head)), updateTile)
+      var replaceTile = tiles.find(_.position == updateTile.position).getOrElse(tiles.head)
+      newTiles = newTiles.updated(tiles.indexOf(replaceTile), updateTile)
 
     newTiles
 
   end tileUpdater
+
+  /** Updates the map tiles symmetrically about the origin */
+  def symmetricTileUpdater(tiles: Vector[TerrainTile], updates: Vector[TerrainTile]): Vector[TerrainTile] =
+
+    // returns a TerrainTile of the same type mirrored symmetrically with respect to the origin
+    def mirrorPositionedTile(tile: TerrainTile): TerrainTile =
+      var mirrorPosition = GridPos(MapWidth + 1 - tile.position.x, MapHeight + 1 - tile.position.y)
+      tile.copySelf(mirrorPosition)
+
+    var newTiles = tiles
+
+    for updateTile <- updates do
+      var replaceTile1 = tiles.find(_.position == updateTile.position).getOrElse(tiles.head)
+      var replaceTile2 = tiles.find(_.position == mirrorPositionedTile(updateTile).position).getOrElse(tiles.head)
+      newTiles = newTiles.updated(tiles.indexOf(replaceTile1), updateTile)
+      newTiles = newTiles.updated(tiles.indexOf(replaceTile2), mirrorPositionedTile(updateTile))
+
+    newTiles
 
 
 

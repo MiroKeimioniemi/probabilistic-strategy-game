@@ -6,10 +6,10 @@ import o1.grid.GridPos
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
 /** Map properties */
-val MapWidth = 6    // 32
-val MapHeight = 4   // 18
+val MapWidth = 16    // 32
+val MapHeight = 9   // 18
 val MapTiles =
-  GameMap.tileUpdater(
+  GameMap.symmetricTileUpdater(
     GameMap.tileGenerator(MapWidth, MapHeight),
     Vector[TerrainTile](
     SandTile(GridPos(2, 1)),
