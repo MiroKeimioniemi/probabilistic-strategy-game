@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
@@ -252,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679676155377</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing.">
+      <created>1679689037526</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1679689037526</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -280,7 +287,8 @@
     <MESSAGE value="Refactoring" />
     <MESSAGE value="Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and flexible map building, as well as a getTile method for the GameMap class in anticipation of future use." />
     <MESSAGE value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
+    <MESSAGE value="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

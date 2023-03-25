@@ -1,12 +1,11 @@
 import o1.grid.CompassDir.*
 import o1.grid.{CompassDir, GridPos}
 import scalafx.scene.image.Image
-
 import java.io.FileInputStream
 
 sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   
-  val image: Image
+  val image: FileInputStream
 
   val weight:         Int
   val volume:         Int
@@ -49,7 +48,7 @@ end BattleUnit
 
 case class TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
   
-  val image = Image(FileInputStream("src/main/resources/green-tank.png"))
+  val image = FileInputStream("src/main/resources/green-tank.png")
 
   val weight =         TankWeight
   val volume =         TankVolume

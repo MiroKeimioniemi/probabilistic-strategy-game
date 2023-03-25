@@ -63,4 +63,11 @@ latter two contain their own images to achieve better encapsulation and built an
 map for testing. I will have to soon look into some optimization already as building and
 launching the GUI takes quite long after the changes. I still have to build the interface
 for giving instructions to the BattleUnits but after that I will finally get to work on
-the game logic. 
+the game logic.
+
+25.3.2023
+
+Imporved game performance seen as shorter startup times and higher window responsivity by
+enabling hardware acceleration and by moving the image generation back to the GUI functions,
+leaving only the FileInputStreams to the TerrainTIle and BattleUnit case classes, which
+resulted in most performance gains.

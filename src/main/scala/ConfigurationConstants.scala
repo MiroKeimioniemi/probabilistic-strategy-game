@@ -5,6 +5,10 @@ import o1.grid.GridPos
  *
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
+/** Game window properties */
+val GameWindowWidth = 1600
+val GameWindowHeight = 900
+
 /** Map properties */
 val MapWidth = 16    // 32
 val MapHeight = 9   // 18
