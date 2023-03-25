@@ -3,12 +3,11 @@ import scala.math.min
 import scala.util.Random
 import o1.grid.GridPos
 import scalafx.scene.image.Image
-
 import java.io.FileInputStream
 
 sealed trait TerrainTile(gridPos: GridPos):
 
-  val image: Image
+  val image: FileInputStream
   val position: GridPos = gridPos
 
   var flatness:          Int
@@ -23,7 +22,7 @@ end TerrainTile
 
 case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = Image(FileInputStream("src/main/resources/grass-tile.png"))
+  val image = FileInputStream("src/main/resources/grass-tile.png")
 
   var flatness =          GrassFlatness
   var solidity =          GrassSolidity
@@ -45,7 +44,7 @@ end GrassTile
 
 case class ForestTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = Image(FileInputStream("src/main/resources/forest-tile.png"))
+  val image = FileInputStream("src/main/resources/forest-tile.png")
 
   var flatness =          ForestFlatness
   var solidity =          ForestSolidity
@@ -67,7 +66,7 @@ end ForestTile
 
 case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = Image(FileInputStream("src/main/resources/rock-tile.png"))
+  val image = FileInputStream("src/main/resources/rock-tile.png")
 
   var flatness =          RockFlatness
   var solidity =          RockSolidity
@@ -89,7 +88,7 @@ end RockTile
 
 case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = Image(FileInputStream("src/main/resources/desert-tile.png"))
+  val image = FileInputStream("src/main/resources/desert-tile.png")
 
   var flatness =          SandFlatness
   var solidity =          SandSolidity

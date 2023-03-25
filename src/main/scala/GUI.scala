@@ -9,14 +9,17 @@ import o1.GridPos
 
 object GUI extends JFXApp3:
 
+  // Attempt to use hardware acceleration
+  System.setProperty("prism.order", "sw")
+
   private val game = new Game
 
   def start(): Unit =
 
     stage = new JFXApp3.PrimaryStage:
       title = "Strategy Game"
-      width = 1600
-      height = 900
+      width = GameWindowWidth
+      height = GameWindowHeight
 
     val root = GridPane()
     val scene = Scene(parent = root)
@@ -51,7 +54,7 @@ object GUI extends JFXApp3:
     val positions: Vector[GridPos] = drawables.map(_.position)
     var drawn: Vector[ImageView] = Vector[ImageView]()
 
-    drawables.foreach(drawable => drawn = drawn :+ drawPic(drawable.image))
+    drawables.foreach(drawable => drawn = drawn :+ drawPic(Image(drawable.image)))
 
     displayInGrid(drawn, positions, node)
 
@@ -64,7 +67,7 @@ object GUI extends JFXApp3:
     val positions: Vector[GridPos] = drawables.map(_.position)
     var drawn: Vector[ImageView] = Vector[ImageView]()
 
-    drawables.foreach(drawable => drawn = drawn :+ drawPic(drawable.image))
+    drawables.foreach(drawable => drawn = drawn :+ drawPic(Image(drawable.image)))
 
     displayInGrid(drawn, positions, node)
 

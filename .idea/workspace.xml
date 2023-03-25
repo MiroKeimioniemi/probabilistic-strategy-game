@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
-    </list>
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -252,7 +245,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679676155377</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing.">
+      <created>1679689037526</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1679689037526</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions.">
+      <created>1679726574752</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1679726574752</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -280,7 +287,9 @@
     <MESSAGE value="Refactoring" />
     <MESSAGE value="Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and flexible map building, as well as a getTile method for the GameMap class in anticipation of future use." />
     <MESSAGE value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
+    <MESSAGE value="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing." />
+    <MESSAGE value="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
