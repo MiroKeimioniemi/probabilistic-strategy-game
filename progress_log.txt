@@ -73,4 +73,9 @@ leaving only the FileInputStreams to the TerrainTIle and BattleUnit case classes
 resulted in most performance gains. Added the first element of interactivity through the
 drawRectangleAround method, which draws a red rectangle around a selected image. This will
 be rewritten pretty much immediately for something more actionable in terms of game logic,
-potentially in the game class.
+potentially in the game class. Added various GUI methods for selecting and highlighting
+BattleUnits and map tiles by rewriting drawRectangleAround. I am not entirely satisfied
+with having essentially three versions of a method does very similar things, but it is
+necessary to comply with type-specific behavior at this point. highlightTiles currently
+places the highlighted tiles on top of the map, which does not allow the original ones
+to be selected by the player. It is therefore necessary to modify these methods further.

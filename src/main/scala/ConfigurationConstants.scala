@@ -1,5 +1,6 @@
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
+import scalafx.scene.paint.Color
 
 /** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
  *
@@ -9,6 +10,7 @@ import o1.grid.GridPos
 val GameWindowWidth = 1600
 val GameWindowHeight = 900
 val SelectionRectangleThickness = 4
+val HighlightColor = Color.Red
 
 /** Map properties */
 val MapWidth = 16    // 32

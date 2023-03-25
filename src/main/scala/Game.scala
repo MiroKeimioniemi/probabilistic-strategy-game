@@ -10,4 +10,8 @@ class Game:
   var turnCount = 0
   var gameOver = false
 
+  var selectedBattleUnits: Vector[BattleUnit] = Vector[BattleUnit]()
+  var fovTiles: Vector[TerrainTile] = gameMap.tiles.takeRight(4)
+  var selectedTiles: Vector[TerrainTile] = Vector[TerrainTile]()
+
 end Game
