@@ -70,4 +70,7 @@ the game logic.
 Improved game performance seen as shorter startup times and higher window responsivity by
 enabling hardware acceleration and by moving the image generation back to the GUI functions,
 leaving only the FileInputStreams to the TerrainTIle and BattleUnit case classes, which
-resulted in most performance gains.
+resulted in most performance gains. Added the first element of interactivity through the
+drawRectangleAround method, which draws a red rectangle around a selected image. This will
+be rewritten pretty much immediately for something more actionable in terms of game logic,
+potentially in the game class.

@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,17 +75,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 4/A1120-scala3-r04-sequential/build.sbt&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-C2120 - Programming Studio A/ProScalaFX-master/build.sbt",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\o1" />
@@ -259,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679726574752</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions.">
+      <created>1679726672805</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1679726672805</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -267,7 +277,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -289,7 +311,8 @@
     <MESSAGE value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
     <MESSAGE value="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing." />
     <MESSAGE value="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
-    <option name="LAST_COMMIT_MESSAGE" value="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
+    <MESSAGE value="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

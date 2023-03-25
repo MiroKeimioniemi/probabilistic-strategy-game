@@ -2,10 +2,12 @@ import scalafx.Includes.*
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.layout.GridPane
+import scalafx.scene.layout.{GridPane, StackPane}
 import math.min
 import java.io.FileInputStream
 import o1.GridPos
+import scalafx.scene.paint.Color
+import scalafx.scene.shape.Rectangle
 
 object GUI extends JFXApp3:
 
@@ -30,18 +32,45 @@ object GUI extends JFXApp3:
 
 
   /** Returns an ImageView object corresponding to a given image */
-  private def drawPic(pic: Image): ImageView =
-    val imageView = ImageView(pic)
+  private def drawPic(pic: FileInputStream): ImageView =
+    val imageView = ImageView(Image(pic))
     imageView.setX(10)
     imageView.setY(10)
     imageView.setFitWidth(100)
+    imageView.setFitHeight(100)
     imageView.setPreserveRatio(true)
     imageView
   end drawPic
 
+  private def drawRectangleAround(image: ImageView): StackPane =
 
-  // Add ImageView objects to GridPane children to be displayed in a scene
-  private def displayInGrid(drawn: Vector[ImageView], positions: Vector[GridPos], node: GridPane) =
+    val border = new Rectangle {
+      width <== image.fitWidth - strokeWidth
+      height <== image.fitHeight - strokeWidth
+      strokeWidth = SelectionRectangleThickness
+      stroke = Color.Transparent
+      fill = Color.Transparent
+    }
+
+    var selected = false
+
+    val encircled = StackPane()
+    encircled.children.addAll(image, border)
+
+    encircled.onMouseClicked = _ => {
+      if selected then
+        border.stroke = Color.Transparent
+        selected = false
+      else
+        border.stroke = Color.Red
+        selected = true
+    }
+
+    encircled
+
+
+  /** Add ImageView objects to GridPane children to be displayed in a scene */
+  private def displayInGrid(drawn: Vector[StackPane], positions: Vector[GridPos], node: GridPane) =
     for element <- drawn zip positions do
       node.add(element._1, element._2.x, element._2.y)
   end displayInGrid
@@ -52,9 +81,9 @@ object GUI extends JFXApp3:
 
     val drawables: Vector[TerrainTile] = game.gameMap.tiles
     val positions: Vector[GridPos] = drawables.map(_.position)
-    var drawn: Vector[ImageView] = Vector[ImageView]()
+    var drawn: Vector[StackPane] = Vector[StackPane]()
 
-    drawables.foreach(drawable => drawn = drawn :+ drawPic(Image(drawable.image)))
+    drawables.foreach(drawable => drawn = drawn :+ drawRectangleAround(drawPic(drawable.image)))
 
     displayInGrid(drawn, positions, node)
 
@@ -65,9 +94,9 @@ object GUI extends JFXApp3:
 
     val drawables: Vector[BattleUnit] = player.battleUnits
     val positions: Vector[GridPos] = drawables.map(_.position)
-    var drawn: Vector[ImageView] = Vector[ImageView]()
+    var drawn: Vector[StackPane] = Vector[StackPane]()
 
-    drawables.foreach(drawable => drawn = drawn :+ drawPic(Image(drawable.image)))
+    drawables.foreach(drawable => drawn = drawn :+ drawRectangleAround(drawPic(drawable.image)))
 
     displayInGrid(drawn, positions, node)
 

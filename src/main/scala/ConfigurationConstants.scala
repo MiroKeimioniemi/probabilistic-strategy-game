@@ -8,6 +8,7 @@ import o1.grid.GridPos
 /** Game window properties */
 val GameWindowWidth = 1600
 val GameWindowHeight = 900
+val SelectionRectangleThickness = 4
 
 /** Map properties */
 val MapWidth = 16    // 32
