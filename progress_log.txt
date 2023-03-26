@@ -79,3 +79,11 @@ with having essentially three versions of a method does very similar things, but
 necessary to comply with type-specific behavior at this point. highlightTiles currently
 places the highlighted tiles on top of the map, which does not allow the original ones
 to be selected by the player. It is therefore necessary to modify these methods further.
+
+27.3.2023
+
+Rewrote selectableBattleUnit method's mouse click event listener and removed the
+selectTiles method. No new tiles are drawn but instead, colored rectangles are added
+between the image and the transparent highlight rectangle of each tile within the field
+of view of the selected BattleUnit, which fully enables the necessary communication with
+the Game object to finally start building the internal logic.

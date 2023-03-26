@@ -10,6 +10,7 @@ import scalafx.scene.paint.Color
 val GameWindowWidth = 1600
 val GameWindowHeight = 900
 val SelectionRectangleThickness = 4
+val BattleUnitHighlightColor = Color.Blue
 val HighlightColor = Color.Red
 
 /** Map properties */

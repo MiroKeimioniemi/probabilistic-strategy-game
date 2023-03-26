@@ -1,6 +1,6 @@
 import scalafx.Includes.*
 import scalafx.application.JFXApp3
-import scalafx.scene.Scene
+import scalafx.scene.{Scene, layout}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{GridPane, StackPane}
 import math.min
@@ -41,29 +41,6 @@ object GUI extends JFXApp3:
     imageView.setPreserveRatio(true)
     imageView
   end drawPic
-
-  /** Returns a vector of StackPanes containing the original images with colored borderse drawn on top */
-  private def highlightTiles(tiles: Vector[TerrainTile]): Vector[StackPane] =
-
-    val images = tiles.map(tile => drawPic(tile.image))
-    var encircledImages = Vector[StackPane]()
-
-    for image <- images do
-      val border = new Rectangle {
-        width <== images(0).fitWidth - strokeWidth
-        height <== images(0).fitHeight - strokeWidth
-        strokeWidth = SelectionRectangleThickness
-        stroke = HighlightColor
-        fill = Color.Transparent
-      }
-
-      val selectable = StackPane()
-      selectable.children.addAll(image, border)
-      encircledImages = encircledImages :+ selectable
-
-    encircledImages
-
-  end highlightTiles
 
   /** Add StackPane objects to GridPane children to be displayed in a scene */
   private def displayInGrid(drawn: Vector[StackPane], positions: Vector[GridPos], node: GridPane) =
@@ -141,19 +118,41 @@ object GUI extends JFXApp3:
 
       var selected = false
 
+      // Attaches a mouse click event listener to each BattleUnit that toggles the highlighting of that
+      // unit and the tiles in its field of view and adds them to the selectedBattleUnits and
+      // selectedTiles vectors in the Game object
       selectable.onMouseClicked = _ => {
+
         if selected then
           border.stroke = Color.Transparent
           selected = false
           game.selectedBattleUnits = game.selectedBattleUnits.filterNot(_ == battleUnit)
-          for i <- game.fovTiles.indices do
-            node.children.remove(node.children.last)
+
+          // Removes the colored rectangles between the image and the transparent highlight rectangle
+          // from each tile associated with the BattleUnit
+          for tile <- game.fovTiles do
+            node.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
+            .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
+
         else
-          border.stroke = HighlightColor
+          border.stroke = BattleUnitHighlightColor
           selected = true
           game.selectedBattleUnits = game.selectedBattleUnits :+ battleUnit
-          // displays the highlighted fov tiles on top of the original tiles
-          displayInGrid(highlightTiles(game.fovTiles), game.fovTiles.map(_.position), node)
+
+          // Adds colored rectangles between the image and the transparent highlight rectangle to each
+          // tile within the field of view of the selected BattleUnit
+          for tile <- game.fovTiles do
+
+            val highlight = new Rectangle {
+            width <== image.fitWidth - strokeWidth
+            height <== image.fitHeight - strokeWidth
+            strokeWidth = SelectionRectangleThickness
+            stroke = BattleUnitHighlightColor
+            fill = Color.Transparent
+            }
+
+            node.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
+            .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.add(1, highlight)
       }
 
       selectable
