@@ -87,3 +87,13 @@ selectTiles method. No new tiles are drawn but instead, colored rectangles are a
 between the image and the transparent highlight rectangle of each tile within the field
 of view of the selected BattleUnit, which fully enables the necessary communication with
 the Game object to finally start building the internal logic.
+
+2.4.2023
+
+Added fovTiles method to Game class that displays the tiles available for direct actions by
+a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method
+such that only one BattleUnit can be selected at any time. Due to not wanting to fully commit
+to this decision just yet and not being a fan of options, I left the selectedBattleUnits in
+Game class in vector form still at this point. I was also unsure whether the limitation of
+selecting only one BattleUnit at a time should be in the GUI class or in the Game class but
+this was significantly easier and therefore justified when the decision is not yet final.

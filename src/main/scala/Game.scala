@@ -11,7 +11,16 @@ class Game:
   var gameOver = false
 
   var selectedBattleUnits: Vector[BattleUnit] = Vector[BattleUnit]()
-  var fovTiles: Vector[TerrainTile] = gameMap.tiles.takeRight(4)
   var selectedTiles: Vector[TerrainTile] = Vector[TerrainTile]()
+
+  /** Returns the tiles in the field of view of a given BattleUnit */
+  def fovTiles(battleUnit: BattleUnit): Vector[TerrainTile] =
+    val coordinatesOfCardinalDirections =
+      battleUnit.position.pathTowards(East).take(MapWidth) ++
+      battleUnit.position.pathTowards(South).take(MapWidth) ++
+      battleUnit.position.pathTowards(West).take(MapWidth) ++
+      battleUnit.position.pathTowards(North).take(MapWidth)
+
+    gameMap.tiles.filter(tile => coordinatesOfCardinalDirections.contains(tile.position))
 
 end Game

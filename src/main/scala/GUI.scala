@@ -116,32 +116,42 @@ object GUI extends JFXApp3:
       val selectable = StackPane()
       selectable.children.addAll(image, border)
 
-      var selected = false
-
       // Attaches a mouse click event listener to each BattleUnit that toggles the highlighting of that
       // unit and the tiles in its field of view and adds them to the selectedBattleUnits and
-      // selectedTiles vectors in the Game object
+      // selectedTiles vectors in the Game object such that selectedBattleUnits can contain only a
+      // single BattleUnit at a time
       selectable.onMouseClicked = _ => {
 
-        if selected then
-          border.stroke = Color.Transparent
-          selected = false
-          game.selectedBattleUnits = game.selectedBattleUnits.filterNot(_ == battleUnit)
+        if game.selectedBattleUnits.contains(battleUnit) then
 
           // Removes the colored rectangles between the image and the transparent highlight rectangle
           // from each tile associated with the BattleUnit
-          for tile <- game.fovTiles do
-            node.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
+          for tile <- game.fovTiles(battleUnit) do
+            node.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
             .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
 
+          border.stroke = Color.Transparent
+          game.selectedBattleUnits = Vector()
+
         else
+
+          // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
+          if game.selectedBattleUnits.nonEmpty then
+            for tile <- game.fovTiles(game.selectedBattleUnits(0)) do
+                node.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
+                .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
+
+            node.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1)
+            .asInstanceOf[javafx.scene.layout.StackPane].children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+
+            game.selectedBattleUnits = Vector()
+
+          game.selectedBattleUnits = Vector(battleUnit)
           border.stroke = BattleUnitHighlightColor
-          selected = true
-          game.selectedBattleUnits = game.selectedBattleUnits :+ battleUnit
 
           // Adds colored rectangles between the image and the transparent highlight rectangle to each
           // tile within the field of view of the selected BattleUnit
-          for tile <- game.fovTiles do
+          for tile <- game.fovTiles(battleUnit) do
 
             val highlight = new Rectangle {
             width <== image.fitWidth - strokeWidth
@@ -151,7 +161,7 @@ object GUI extends JFXApp3:
             fill = Color.Transparent
             }
 
-            node.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
+            node.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
             .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.add(1, highlight)
       }
 
