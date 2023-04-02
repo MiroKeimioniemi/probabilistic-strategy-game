@@ -1,13 +1,19 @@
 import scalafx.Includes.*
 import scalafx.application.JFXApp3
-import scalafx.scene.{Scene, layout}
+import scalafx.scene.{Scene, layout, text}
 import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.layout.{GridPane, StackPane}
+import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
+
 import math.min
 import java.io.FileInputStream
 import o1.GridPos
+import scalafx.beans.property.{BooleanProperty, StringProperty}
+import scalafx.collections.ObservableBuffer
+import scalafx.geometry.Insets
+import scalafx.scene.control.{Button, ChoiceBox, Label}
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
+import scalafx.scene.text.{Font, FontWeight}
 
 object GUI extends JFXApp3:
 
@@ -15,42 +21,86 @@ object GUI extends JFXApp3:
   System.setProperty("prism.order", "sw")
 
   private val game = new Game
+  private val selectedUnitType = StringProperty("Choose unit")
+  private val turnCount = StringProperty(game.turnCount.toString)
 
+  /** Defines and draws the layout of the Game GUI */
   def start(): Unit =
 
     stage = new JFXApp3.PrimaryStage:
       title = "Strategy Game"
-      width = GameWindowWidth
-      height = GameWindowHeight
 
-    val root = GridPane()
-    val scene = Scene(parent = root)
+    val grid = new GridPane()
+
+    val rightPane = new VBox():
+      minWidth = GameWindowWidth
+      padding = Insets(20)
+      spacing = 20
+      var unitLabel = new Label():
+          font = HeadingFont
+          text <== selectedUnitType
+      var primaryAction = new ChoiceBox[String]():
+          maxWidth = 80
+          maxHeight = 50
+          var showItems = ObservableBuffer[String]()
+          Action.values.foreach(action => showItems = showItems :+ action.toString)
+          items = showItems
+          selectionModel().selectFirst()
+      children.addAll(unitLabel, primaryAction)
+
+    val bottomPane = new HBox():
+      minHeight = GameWindowHeight
+      padding = Insets(20)
+      spacing = 20
+      var playTurnButton = new Button():
+          font = HeadingFont
+          text = "Play turn"
+      playTurnButton.onMouseClicked = _ => {
+        game.playTurn()
+        turnCount.value = game.turnCount.toString
+      }
+      var turnCounter = new Label():
+          font = Font.font("Arial", FontWeight.Bold, 20)
+          text <== turnCount
+      children.addAll(playTurnButton, turnCounter)
+
+    val rootPane = new BorderPane():
+      left = grid
+      right = rightPane
+      bottom = bottomPane
+
+    val scene = new Scene(GameWindowWidth, GameWindowHeight):
+      content = rootPane
+
     stage.scene = scene
 
-    drawMapTiles(root)
-    drawBattleUnits(root, game.player1)
+    drawMapTiles(scene)
+    drawBattleUnits(scene, game.player1)
+
+  end start
+
 
 
   /** Returns an ImageView object corresponding to a given image */
-  private def drawPic(pic: FileInputStream): ImageView =
-    val imageView = ImageView(Image(pic))
-    imageView.setX(10)
-    imageView.setY(10)
-    imageView.setFitWidth(100)
-    imageView.setFitHeight(100)
-    imageView.setPreserveRatio(true)
+  private def drawPic(pic: FileInputStream, gameScene: Scene): ImageView =
+    val imageView = new ImageView(Image(pic)) {
+      fitWidth <== ((gameScene.widthProperty()) / 16) - (RightPaneWidth / 16)
+      fitHeight <== ((gameScene.widthProperty()) / 16) - (RightPaneWidth / 16)
+      maxHeight((gameScene.widthProperty() / 16).toDouble)
+      preserveRatio = true
+    }
     imageView
   end drawPic
 
   /** Add StackPane objects to GridPane children to be displayed in a scene */
-  private def displayInGrid(drawn: Vector[StackPane], positions: Vector[GridPos], node: GridPane) =
+  private def displayInGrid(drawn: Vector[StackPane], positions: Vector[GridPos], grid: GridPane) =
     for element <- drawn zip positions do
-      node.add(element._1, element._2.x, element._2.y)
+      grid.add(element._1, element._2.x, element._2.y)
   end displayInGrid
 
 
   /** Displays selectable images corresponding to the map tiles in the GUI */
-  private def drawMapTiles(node: GridPane): Unit =
+  private def drawMapTiles(scene: Scene): Unit =
 
     val tiles: Vector[TerrainTile] = game.gameMap.tiles
     val positions: Vector[GridPos] = tiles.map(_.position)
@@ -60,7 +110,7 @@ object GUI extends JFXApp3:
      * a mouse click event listener that toggles the highlighting (border) of the tile */
     def selectableTiles(tile: TerrainTile): StackPane =
 
-      val image = drawPic(tile.image)
+      val image = drawPic(tile.image, scene)
       val border = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
@@ -89,23 +139,25 @@ object GUI extends JFXApp3:
     end selectableTiles
 
     tiles.foreach(drawable => drawn = drawn :+ selectableTiles(drawable))
-    displayInGrid(drawn, positions, node)
+    displayInGrid(drawn, positions, scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane])
 
   end drawMapTiles
 
   /** Displays selectable images corresponding to the battle units in the GUI */
-  private def drawBattleUnits(node: GridPane, player: Player): Unit =
+  private def drawBattleUnits(scene: Scene, player: Player): Unit =
 
     val battleUnits: Vector[BattleUnit] = player.battleUnits
     val positions: Vector[GridPos] = battleUnits.map(_.position)
     var drawn: Vector[StackPane] = Vector[StackPane]()
+
+    val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
 
     /** Returns a StackPane containing the image of the battle unit, an initially transparent border
      * and a mouse click event listener that toggles the highlighting (border) of the BattleUnit and
      * the highlightTiles in the Game class associated with it */
     def selectableBattleUnit(battleUnit: BattleUnit): StackPane =
 
-      val image = drawPic(battleUnit.image)
+      val image = drawPic(battleUnit.image, scene)
       val border = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
@@ -127,21 +179,23 @@ object GUI extends JFXApp3:
           // Removes the colored rectangles between the image and the transparent highlight rectangle
           // from each tile associated with the BattleUnit
           for tile <- game.fovTiles(battleUnit) do
-            node.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
-            .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
+            grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
+            .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
 
           border.stroke = Color.Transparent
           game.selectedBattleUnits = Vector()
+
+          selectedUnitType.value = "Choose unit"
 
         else
 
           // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
           if game.selectedBattleUnits.nonEmpty then
             for tile <- game.fovTiles(game.selectedBattleUnits(0)) do
-                node.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
-                .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
+                grid.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
+                .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
 
-            node.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1)
+            grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1)
             .asInstanceOf[javafx.scene.layout.StackPane].children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
 
             game.selectedBattleUnits = Vector()
@@ -154,15 +208,17 @@ object GUI extends JFXApp3:
           for tile <- game.fovTiles(battleUnit) do
 
             val highlight = new Rectangle {
-            width <== image.fitWidth - strokeWidth
-            height <== image.fitHeight - strokeWidth
-            strokeWidth = SelectionRectangleThickness
-            stroke = BattleUnitHighlightColor
-            fill = Color.Transparent
+              width <== image.fitWidth - strokeWidth
+              height <== image.fitHeight - strokeWidth
+              strokeWidth = SelectionRectangleThickness
+              stroke = BattleUnitHighlightColor
+              fill = Color.Transparent
             }
 
-            node.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
-            .getOrElse(node.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.add(1, highlight)
+            grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
+            .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.add(1, highlight)
+
+            selectedUnitType.value = battleUnit.unitType
       }
 
       selectable
@@ -170,7 +226,7 @@ object GUI extends JFXApp3:
     end selectableBattleUnit
 
     battleUnits.foreach(battleUnit => drawn = drawn :+ selectableBattleUnit(battleUnit))
-    displayInGrid(drawn, positions, node)
+    displayInGrid(drawn, positions, grid)
 
   end drawBattleUnits
 

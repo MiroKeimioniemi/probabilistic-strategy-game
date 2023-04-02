@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Rewrote selectableBattleUnit method's mouse click event listener and removed the selectTiles method.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added fovTiles method to Game class that displays the tiles available for direct actions by a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method such that only one BattleUnit can be selected at any time.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Action.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
     </list>
@@ -306,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679865021901</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Added fovTiles method to Game class that displays the tiles available for direct actions by a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method such that only one BattleUnit can be selected at any time.">
+      <created>1680426538771</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1680426538771</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -353,7 +363,8 @@
     <MESSAGE value="Added selectTiles method to the GUI to be able to highlight groups of selected tiles from the Game class. Major refactoring necessary, however." />
     <MESSAGE value="Added various GUI methods for selecting and highlighting BattleUnits and map tiles by rewriting drawRectangleAround." />
     <MESSAGE value="Rewrote selectableBattleUnit method's mouse click event listener and removed the selectTiles method." />
-    <option name="LAST_COMMIT_MESSAGE" value="Rewrote selectableBattleUnit method's mouse click event listener and removed the selectTiles method." />
+    <MESSAGE value="Added fovTiles method to Game class that displays the tiles available for direct actions by a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method such that only one BattleUnit can be selected at any time." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added fovTiles method to Game class that displays the tiles available for direct actions by a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method such that only one BattleUnit can be selected at any time." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

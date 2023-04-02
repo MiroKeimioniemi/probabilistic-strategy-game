@@ -6,6 +6,7 @@ import java.io.FileInputStream
 sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   
   val image: FileInputStream
+  val unitType: String
 
   val weight:         Int
   val volume:         Int
@@ -46,9 +47,10 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
 
 end BattleUnit
 
-case class TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
+case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
   
-  val image = FileInputStream("src/main/resources/green-tank.png")
+  val image = FileInputStream("src/main/resources/blue-tank.png")
+  val unitType = "Tank"
 
   val weight =         TankWeight
   val volume =         TankVolume
@@ -63,4 +65,4 @@ case class TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends 
   var supplyChain = None
   // TODO: Implement var actionSet: ActionSet
 
-end TankUnit
+end Player1TankUnit

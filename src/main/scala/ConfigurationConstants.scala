@@ -1,17 +1,21 @@
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
 import scalafx.scene.paint.Color
+import scalafx.scene.text.{Font, FontWeight}
 
 /** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
  *
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
 /** Game window properties */
-val GameWindowWidth = 1600
-val GameWindowHeight = 900
+val GameWindowWidth = 1280
+val GameWindowHeight = 720
+val RightPaneWidth = GameWindowWidth / 4
+val BottomPaneHeight = GameWindowHeight / 15
 val SelectionRectangleThickness = 4
 val BattleUnitHighlightColor = Color.Blue
 val HighlightColor = Color.Red
+val HeadingFont = Font.font("Arial", FontWeight.Bold, 20)
 
 /** Map properties */
 val MapWidth = 16    // 32
@@ -48,8 +52,8 @@ val MapTiles =
 // Player 1
 val Player1BattleUnitsFormation =
   Vector[BattleUnit](
-    TankUnit(GridPos(2, 1), East),
-    TankUnit(GridPos(1, 2), East)
+    Player1TankUnit(GridPos(2, 1), East),
+    Player1TankUnit(GridPos(1, 2), East)
 )
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */

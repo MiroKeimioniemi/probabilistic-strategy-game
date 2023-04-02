@@ -97,3 +97,10 @@ to this decision just yet and not being a fan of options, I left the selectedBat
 Game class in vector form still at this point. I was also unsure whether the limitation of
 selecting only one BattleUnit at a time should be in the GUI class or in the Game class but
 this was significantly easier and therefore justified when the decision is not yet final.
+
+3.4.2023
+
+Rewrote the GUI to be scalable and overhauled the layout by adding more panes for presenting
+information and interacting with the game, the first example of which is the updating turnCounter.
+Highlighting will most likely have to be updated once again in order to clear out all selections
+between turns. Building the UI like this, I really start to miss HTML and CSS...

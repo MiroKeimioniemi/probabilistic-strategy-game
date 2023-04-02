@@ -20,7 +20,13 @@ class Game:
       battleUnit.position.pathTowards(South).take(MapWidth) ++
       battleUnit.position.pathTowards(West).take(MapWidth) ++
       battleUnit.position.pathTowards(North).take(MapWidth)
-
     gameMap.tiles.filter(tile => coordinatesOfCardinalDirections.contains(tile.position))
+  end fovTiles
+    
+    def playTurn(): Unit =
+      
+//      selectedBattleUnits = Vector()
+//      selectedTiles = Vector()
+      turnCount += 1
 
 end Game
