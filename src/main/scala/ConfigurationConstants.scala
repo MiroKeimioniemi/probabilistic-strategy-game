@@ -18,8 +18,8 @@ val HighlightColor = Color.Red
 val HeadingFont = Font.font("Arial", FontWeight.Bold, 20)
 
 /** Map properties */
-val MapWidth = 16    // 32
-val MapHeight = 9   // 18
+val MapWidth = 16
+val MapHeight = 9
 val MapTiles =
   GameMap.symmetricTileUpdater(
     GameMap.tileGenerator(MapWidth, MapHeight),
@@ -46,7 +46,7 @@ val MapTiles =
       ForestTile(GridPos(6, 6)),
       ForestTile(GridPos(6, 7)),
       ForestTile(GridPos(7, 7))
-  ))
+  ), "origin")
 
 /** Player properties */
 // Player 1

@@ -28,12 +28,19 @@ object GameMap:
 
   end tileUpdater
 
-  /** Updates the map tiles symmetrically about the origin */
-  def symmetricTileUpdater(tiles: Vector[TerrainTile], updates: Vector[TerrainTile]): Vector[TerrainTile] =
+  /** Updates the map tiles symmetrically about the origin
+   * @param tiles TerrainTiles to be updated
+   * @param updates Replacing tiles
+   * @param mirrorMethod the axis or point about which the tiles will be mirrored with options "origin", "y-axis", "x-axis" and "none" */
+  def symmetricTileUpdater(tiles: Vector[TerrainTile], updates: Vector[TerrainTile], mirrorMethod: String): Vector[TerrainTile] =
 
     // returns a TerrainTile of the same type mirrored symmetrically with respect to the origin
     def mirrorPositionedTile(tile: TerrainTile): TerrainTile =
-      var mirrorPosition = GridPos(MapWidth + 1 - tile.position.x, MapHeight + 1 - tile.position.y)
+      var mirrorPosition =
+        if mirrorMethod.toLowerCase.contains("g") then GridPos(MapWidth + 1 - tile.position.x, MapHeight + 1 - tile.position.y)
+        else if mirrorMethod.toLowerCase.contains("y") then GridPos(MapWidth + 1 - tile.position.x, tile.position.y)
+        else if mirrorMethod.toLowerCase.contains("x") then GridPos(tile.position.x, MapHeight + 1 - tile.position.y)
+        else tile.position
       tile.copySelf(mirrorPosition)
 
     var newTiles = tiles

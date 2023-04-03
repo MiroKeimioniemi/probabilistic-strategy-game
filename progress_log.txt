@@ -104,6 +104,8 @@ Rewrote the GUI to be scalable and overhauled the layout by adding more panes fo
 information and interacting with the game, the first example of which is the updating turnCounter.
 Highlighting will most likely have to be updated once again in order to clear out all selections
 between turns. Building the UI like this, I really start to miss HTML and CSS...
+Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of
+map building.
 
 
 Interim report:
