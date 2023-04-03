@@ -104,3 +104,32 @@ Rewrote the GUI to be scalable and overhauled the layout by adding more panes fo
 information and interacting with the game, the first example of which is the updating turnCounter.
 Highlighting will most likely have to be updated once again in order to clear out all selections
 between turns. Building the UI like this, I really start to miss HTML and CSS...
+
+
+Interim report:
+
+The user interface starts to finally be implemented but the game is still missing. Because time is
+running out and I am starting to get really fed up with ScalaFX and have therefore not implemented
+a zoom feature, the map scale will be cut back to around 16 * 9 or slightly larger, which enables
+me to cut back quality of life features such as selecting and commanding multiple battle units at
+once, saving me development time. As there are now fewer units to control, they do not need to store
+default action sets and these can be set separately by the player on each turn. This also enables me
+to restrict available move sets based on selected actions and to cut at least the "patrol" action.
+
+None of these majorly affect the spirit of the game but rather simply restrict its scale to perhaps
+even a more coherent demo. All this makes simultaneous turns easier to implement but I must still
+keep it on hold until the requirements imposed by the Programming Studio A course have been fully met.
+I still have hope for being able to pull it off although this project will most certainly not be
+completed by 19.4. as I really need all the time I can get up until 26.4. In order to streamline the
+development, I will most likely have to rewrite the dreaded GUI draw functions yet again to further
+enhance encapsulation of the Game and GUI classes to gain more control for the former so that I do
+not have to make every change simultanously in two places.
+
+In terms of the planned timeline, I am pretty much at the start of week 3 although the GUI should soon
+be on week 4 level with relatively little work. The GUI will, however, remain less polished than my
+initial idea (different from illustration) in favor of more rich gameplay rather than better graphics.
+Due to my frustrations with ScalaFX, main menu and pause menu are both dropped already now and as I
+envisioned the game to be closer to chess from the beginning anyway, its cut back demo version does
+not need a save game feature either. Instead, the game's configurability will be about customizing the
+GUI and the initial state of the game in terms of locations and properties of the predefined map tiles
+and battle units with maximum freedom and expressivity.
