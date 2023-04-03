@@ -3,7 +3,6 @@ enum Action:
   case Stay
   case Attack
   case Defend
-  case Patrol
 end Action
 
 enum Condition:

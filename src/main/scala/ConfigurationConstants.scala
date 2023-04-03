@@ -7,7 +7,7 @@ import scalafx.scene.text.{Font, FontWeight}
  *
  * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
 
-/** Game window properties */
+/** GUI properties */
 val GameWindowWidth = 1280
 val GameWindowHeight = 720
 val RightPaneWidth = GameWindowWidth / 4
@@ -16,6 +16,11 @@ val SelectionRectangleThickness = 4
 val BattleUnitHighlightColor = Color.Blue
 val HighlightColor = Color.Red
 val HeadingFont = Font.font("Arial", FontWeight.Bold, 20)
+
+/** Text */
+val GameTitle = "Strategy Game"
+val SelectedUnitDefault = "Choose unit"
+val PlayTurnButton = "Play Turn"
 
 /** Map properties */
 val MapWidth = 16

@@ -11,6 +11,7 @@ import scalafx.beans.property.{BooleanProperty, StringProperty}
 import scalafx.collections.ObservableBuffer
 import scalafx.geometry.Insets
 import scalafx.scene.control.{Button, ChoiceBox, Label}
+import scalafx.scene.input.MouseEvent
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.text.{Font, FontWeight}
@@ -21,14 +22,14 @@ object GUI extends JFXApp3:
   System.setProperty("prism.order", "sw")
 
   private val game = new Game
-  private val selectedUnitType = StringProperty("Choose unit")
+  private val selectedUnitType = StringProperty(SelectedUnitDefault)
   private val turnCount = StringProperty(game.turnCount.toString)
 
   /** Defines and draws the layout of the Game GUI */
   def start(): Unit =
 
     stage = new JFXApp3.PrimaryStage:
-      title = "Strategy Game"
+      title = GameTitle
 
     val grid = new GridPane()
 
@@ -54,13 +55,21 @@ object GUI extends JFXApp3:
       spacing = 20
       var playTurnButton = new Button():
           font = HeadingFont
-          text = "Play turn"
-      playTurnButton.onMouseClicked = _ => {
+          text = PlayTurnButton
+      // Resets all selections and invokes the PlayTurn method of Game
+      playTurnButton.onMouseClicked = (event: MouseEvent) => {
+        if game.selectedBattleUnits.nonEmpty then
+          grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1)
+          .asInstanceOf[javafx.scene.layout.StackPane].fireEvent(event)
+        if game.selectedTiles.nonEmpty then
+          for tile <- game.selectedTiles do
+            grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
+            .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
         game.playTurn()
         turnCount.value = game.turnCount.toString
       }
       var turnCounter = new Label():
-          font = Font.font("Arial", FontWeight.Bold, 20)
+          font = HeadingFont
           text <== turnCount
       children.addAll(playTurnButton, turnCounter)
 
@@ -123,7 +132,7 @@ object GUI extends JFXApp3:
 
       var selected = false
 
-      selectable.onMouseClicked = _ => {
+      selectable.onMouseClicked = (event: MouseEvent) => {
         if selected then
           border.stroke = Color.Transparent
           selected = false
@@ -132,6 +141,7 @@ object GUI extends JFXApp3:
           border.stroke = HighlightColor
           selected = true
           game.selectedTiles = game.selectedTiles :+ tile
+        event.consume()
       }
 
       selectable
@@ -172,7 +182,7 @@ object GUI extends JFXApp3:
       // unit and the tiles in its field of view and adds them to the selectedBattleUnits and
       // selectedTiles vectors in the Game object such that selectedBattleUnits can contain only a
       // single BattleUnit at a time
-      selectable.onMouseClicked = _ => {
+      selectable.onMouseClicked = (event: MouseEvent) => {
 
         if game.selectedBattleUnits.contains(battleUnit) then
 
@@ -219,6 +229,8 @@ object GUI extends JFXApp3:
             .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.add(1, highlight)
 
             selectedUnitType.value = battleUnit.unitType
+
+        event.consume()
       }
 
       selectable

@@ -135,3 +135,11 @@ envisioned the game to be closer to chess from the beginning anyway, its cut bac
 not need a save game feature either. Instead, the game's configurability will be about customizing the
 GUI and the initial state of the game in terms of locations and properties of the predefined map tiles
 and battle units with maximum freedom and expressivity.
+
+4.4.2023
+
+Changed the GUI so that the "Play Turn" button now visibly resets all selections. It ain't much but it's
+honest work (although not too pretty looking) and now that I learned to use the "fireEvent" method, I
+believe to finally have gained control over the GUI with the Game class. The only GUI changes necessary
+now are to show and restrict the selections of tiles based on the currently selected action and to add
+the rest of the ActionSet fields and a visualization for win progress of both players.
