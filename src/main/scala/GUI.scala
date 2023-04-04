@@ -1,7 +1,7 @@
 import Action.Move
 import scalafx.Includes.*
 import scalafx.application.JFXApp3
-import scalafx.scene.{Scene, layout, text}
+import scalafx.scene.{Node, Scene, layout, text}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
 
@@ -26,6 +26,16 @@ object GUI extends JFXApp3:
   private val selectedUnitType = StringProperty(SelectedUnitDefault)
   private val turnCount = StringProperty(game.turnCount.toString)
 
+  private def selectedBattleUnitPane(grid: GridPane): StackPane =
+    grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
+
+  private def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
+    grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
+
+  private def syntheticMouseClick(target: Node): MouseEvent =
+    MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(target.delegate, target.localToScene(0, 0, 0), 0.0))
+
+
   /** Defines and draws the layout of the Game GUI */
   def start(): Unit =
 
@@ -49,13 +59,14 @@ object GUI extends JFXApp3:
           Action.values.foreach(action => showItems = showItems :+ action.toString)
           items = showItems
           selectionModel().selectFirst()
+          // Updates the currently selected action and associated GUI highlights
           onAction = () => {
-            val battleUnitPane = grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
+            val targetPane = selectedBattleUnitPane(grid)
             if game.selectedBattleUnits.nonEmpty then
-              battleUnitPane.fireEvent(MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(battleUnitPane.delegate, battleUnitPane.localToScene(0, 0, 0), 0.0)))
+              targetPane.fireEvent(syntheticMouseClick(targetPane))
             game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
             if game.selectedBattleUnits.isEmpty then
-              battleUnitPane.fireEvent(MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(battleUnitPane.delegate, battleUnitPane.localToScene(0, 0, 0), 0.0)))
+              targetPane.fireEvent(syntheticMouseClick(targetPane))
           }
       children.addAll(unitLabel, primaryActionDropdown)
 
@@ -70,12 +81,10 @@ object GUI extends JFXApp3:
       // Resets all selections and invokes the PlayTurn method of Game
       playTurnButton.onMouseClicked = (event: MouseEvent) => {
         if game.selectedBattleUnits.nonEmpty then
-          grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1)
-          .asInstanceOf[javafx.scene.layout.StackPane].fireEvent(event)
+          selectedBattleUnitPane(grid).fireEvent(event)
         if game.selectedTiles.nonEmpty then
           for tile <- game.selectedTiles do
-            grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
-            .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+            selectedTilePane(grid, tile).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
         game.playTurn()
         turnCount.value = game.turnCount.toString
       }
@@ -129,6 +138,8 @@ object GUI extends JFXApp3:
     val positions: Vector[GridPos] = tiles.map(_.position)
     var drawn: Vector[StackPane] = Vector[StackPane]()
 
+    val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
+
     /** Returns a StackPane containing the image of the tile, an initially transparent border and
      * a mouse click event listener that toggles the highlighting (border) of the tile */
     def selectableTiles(tile: TerrainTile): StackPane =
@@ -163,7 +174,7 @@ object GUI extends JFXApp3:
     end selectableTiles
 
     tiles.foreach(drawable => drawn = drawn :+ selectableTiles(drawable))
-    displayInGrid(drawn, positions, scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane])
+    displayInGrid(drawn, positions, grid)
 
   end drawMapTiles
 
@@ -203,24 +214,21 @@ object GUI extends JFXApp3:
           // Removes the colored rectangles between the image and the transparent highlight rectangle
           // from each tile associated with the BattleUnit
           for tile <- game.tilesInRange(battleUnit) do
-            grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
-            .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
+            selectedTilePane(grid, tile).children.remove(1)
 
           border.stroke = Color.Transparent
           game.selectedBattleUnits = Vector()
 
-          selectedUnitType.value = "Choose unit"
+          selectedUnitType.value = SelectedUnitDefault
 
         else
 
           // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
           if game.selectedBattleUnits.nonEmpty then
             for tile <- game.tilesInRange(game.selectedBattleUnits(0)) do
-                grid.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
-                .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
+                selectedTilePane(grid, tile).children.remove(1)
 
-            grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1)
-            .asInstanceOf[javafx.scene.layout.StackPane].children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+            selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
 
             game.selectedBattleUnits = Vector()
 
@@ -239,8 +247,7 @@ object GUI extends JFXApp3:
               fill = Color.Transparent
             }
 
-            grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
-            .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.add(1, highlight)
+            selectedTilePane(grid, tile).children.add(1, highlight)
 
             selectedUnitType.value = battleUnit.unitType
 

@@ -143,4 +143,6 @@ honest work (although not too pretty looking) and now that I learned to use the 
 believe to finally have gained control over the GUI with the Game class. The only GUI changes necessary
 now are to show and restrict the selections of tiles based on the currently selected action and to add
 the rest of the ActionSet fields and a visualization for win progress of both players. Modified the GUI
-to show action-dependent highlights.
+to show action-dependent highlights. Refactored the GUI by writing a few utility functions for getting
+the selected battle units and map tiles and to synthesize a mouse click in order to condense and clarify
+the GUI code.
