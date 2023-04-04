@@ -142,4 +142,5 @@ Changed the GUI so that the "Play Turn" button now visibly resets all selections
 honest work (although not too pretty looking) and now that I learned to use the "fireEvent" method, I
 believe to finally have gained control over the GUI with the Game class. The only GUI changes necessary
 now are to show and restrict the selections of tiles based on the currently selected action and to add
-the rest of the ActionSet fields and a visualization for win progress of both players.
+the rest of the ActionSet fields and a visualization for win progress of both players. Modified the GUI
+to show action-dependent highlights.

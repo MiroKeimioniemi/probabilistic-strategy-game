@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Action.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
@@ -79,17 +77,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 5/A1120-scala3-r05-armlet/build.sbt",
-    "project.structure.last.edited": "Global Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 5/A1120-scala3-r05-armlet/build.sbt&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\o1" />
@@ -336,7 +334,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680530073613</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections.">
+      <created>1680556789375</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1680556789375</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -387,7 +392,8 @@
     <MESSAGE value="Rewrote the GUI to be scalable and overhauled the layout by adding more panes for presenting information and interacting with the game, the first example of which is the updating turnCounter." />
     <MESSAGE value="Interim report 3.4." />
     <MESSAGE value="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building." />
+    <MESSAGE value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

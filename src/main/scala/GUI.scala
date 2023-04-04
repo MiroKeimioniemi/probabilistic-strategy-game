@@ -1,3 +1,4 @@
+import Action.Move
 import scalafx.Includes.*
 import scalafx.application.JFXApp3
 import scalafx.scene.{Scene, layout, text}
@@ -11,7 +12,7 @@ import scalafx.beans.property.{BooleanProperty, StringProperty}
 import scalafx.collections.ObservableBuffer
 import scalafx.geometry.Insets
 import scalafx.scene.control.{Button, ChoiceBox, Label}
-import scalafx.scene.input.MouseEvent
+import scalafx.scene.input.{MouseButton, MouseEvent, PickResult}
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.text.{Font, FontWeight}
@@ -33,6 +34,7 @@ object GUI extends JFXApp3:
 
     val grid = new GridPane()
 
+
     val rightPane = new VBox():
       minWidth = GameWindowWidth
       padding = Insets(20)
@@ -40,14 +42,23 @@ object GUI extends JFXApp3:
       var unitLabel = new Label():
           font = HeadingFont
           text <== selectedUnitType
-      var primaryAction = new ChoiceBox[String]():
+      var primaryActionDropdown = new ChoiceBox[String]():
           maxWidth = 80
           maxHeight = 50
           var showItems = ObservableBuffer[String]()
           Action.values.foreach(action => showItems = showItems :+ action.toString)
           items = showItems
           selectionModel().selectFirst()
-      children.addAll(unitLabel, primaryAction)
+          onAction = () => {
+            val battleUnitPane = grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
+            if game.selectedBattleUnits.nonEmpty then
+              battleUnitPane.fireEvent(MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(battleUnitPane.delegate, battleUnitPane.localToScene(0, 0, 0), 0.0)))
+            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
+            if game.selectedBattleUnits.isEmpty then
+              battleUnitPane.fireEvent(MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(battleUnitPane.delegate, battleUnitPane.localToScene(0, 0, 0), 0.0)))
+          }
+      children.addAll(unitLabel, primaryActionDropdown)
+
 
     val bottomPane = new HBox():
       minHeight = GameWindowHeight
@@ -73,15 +84,18 @@ object GUI extends JFXApp3:
           text <== turnCount
       children.addAll(playTurnButton, turnCounter)
 
+
     val rootPane = new BorderPane():
       left = grid
       right = rightPane
       bottom = bottomPane
 
+
     val scene = new Scene(GameWindowWidth, GameWindowHeight):
       content = rootPane
 
     stage.scene = scene
+
 
     drawMapTiles(scene)
     drawBattleUnits(scene, game.player1)
@@ -188,7 +202,7 @@ object GUI extends JFXApp3:
 
           // Removes the colored rectangles between the image and the transparent highlight rectangle
           // from each tile associated with the BattleUnit
-          for tile <- game.fovTiles(battleUnit) do
+          for tile <- game.tilesInRange(battleUnit) do
             grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)
             .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
 
@@ -201,7 +215,7 @@ object GUI extends JFXApp3:
 
           // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
           if game.selectedBattleUnits.nonEmpty then
-            for tile <- game.fovTiles(game.selectedBattleUnits(0)) do
+            for tile <- game.tilesInRange(game.selectedBattleUnits(0)) do
                 grid.children.find(x => GridPane.getRowIndex(x) == tile.position.y && GridPane.getColumnIndex(x) == tile.position.x)
                 .getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane].children.remove(1)
 
@@ -215,7 +229,7 @@ object GUI extends JFXApp3:
 
           // Adds colored rectangles between the image and the transparent highlight rectangle to each
           // tile within the field of view of the selected BattleUnit
-          for tile <- game.fovTiles(battleUnit) do
+          for tile <- game.tilesInRange(battleUnit) do
 
             val highlight = new Rectangle {
               width <== image.fitWidth - strokeWidth

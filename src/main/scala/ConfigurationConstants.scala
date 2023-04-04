@@ -90,7 +90,7 @@ val SandElevation =         10
 // Tank
 val TankWeight =         60000
 val TankVolume =         80
-val TankRange =          2
+val TankRange =          1
 val TankArmor =          100
 val TankBaseDamage =     100
 val TankDamageGradient = LazyList.iterate(TankBaseDamage * 2)( x => x / 2 ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
