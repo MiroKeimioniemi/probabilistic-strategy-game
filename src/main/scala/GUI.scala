@@ -61,12 +61,13 @@ object GUI extends JFXApp3:
           selectionModel().selectFirst()
           // Updates the currently selected action and associated GUI highlights
           onAction = () => {
-            val targetPane = selectedBattleUnitPane(grid)
             if game.selectedBattleUnits.nonEmpty then
+              val targetPane = selectedBattleUnitPane(grid)
               targetPane.fireEvent(syntheticMouseClick(targetPane))
-            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
-            if game.selectedBattleUnits.isEmpty then
+              game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
               targetPane.fireEvent(syntheticMouseClick(targetPane))
+            else
+              game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
           }
       children.addAll(unitLabel, primaryActionDropdown)
 
@@ -155,16 +156,16 @@ object GUI extends JFXApp3:
       val selectable = StackPane()
       selectable.children.addAll(image, border)
 
-      var selected = false
-
+      // Selects and highlights the clicked tile if it is in the range of the selected battle unit's selected action
       selectable.onMouseClicked = (event: MouseEvent) => {
-        if selected then
+        if game.selectedTiles.contains(tile) then
           border.stroke = Color.Transparent
-          selected = false
-          game.selectedTiles = game.selectedTiles.filterNot(_ == tile)
-        else
+          game.selectedTiles = Vector()
+        else if game.selectedBattleUnits.nonEmpty && game.tilesInRange(game.selectedBattleUnits(0)).contains(tile) then
+          if game.selectedTiles.nonEmpty then
+            selectedTilePane(grid, game.selectedTiles(0)).children(2).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+            game.selectedTiles = Vector()
           border.stroke = HighlightColor
-          selected = true
           game.selectedTiles = game.selectedTiles :+ tile
         event.consume()
       }
@@ -217,6 +218,8 @@ object GUI extends JFXApp3:
             selectedTilePane(grid, tile).children.remove(1)
 
           border.stroke = Color.Transparent
+          if game.selectedTiles.nonEmpty then
+            selectedTilePane(grid, game.selectedTiles(0)).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedTiles(0))))
           game.selectedBattleUnits = Vector()
 
           selectedUnitType.value = SelectedUnitDefault
@@ -229,6 +232,9 @@ object GUI extends JFXApp3:
                 selectedTilePane(grid, tile).children.remove(1)
 
             selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+
+            if game.selectedTiles.nonEmpty then
+              selectedTilePane(grid, game.selectedTiles(0)).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedTiles(0))))
 
             game.selectedBattleUnits = Vector()
 

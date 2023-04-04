@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Modified the GUI to show action-dependent highlights.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
@@ -347,7 +347,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680638623432</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click.">
+      <created>1680641125932</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1680641125932</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -374,7 +381,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented the TerrainTile trait with a couple of example terrain tile classes implementing it with different degrade methods based on their nature and ConfigurationConstants. Also created and added the progress_log.txt file." />
     <MESSAGE value="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources." />
     <MESSAGE value="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row." />
     <MESSAGE value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
@@ -399,7 +405,8 @@
     <MESSAGE value="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building." />
     <MESSAGE value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
     <MESSAGE value="Modified the GUI to show action-dependent highlights." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified the GUI to show action-dependent highlights." />
+    <MESSAGE value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -146,3 +146,9 @@ the rest of the ActionSet fields and a visualization for win progress of both pl
 to show action-dependent highlights. Refactored the GUI by writing a few utility functions for getting
 the selected battle units and map tiles and to synthesize a mouse click in order to condense and clarify
 the GUI code.
+
+5.4.2023
+
+Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit
+and action respectively. Additionally fixed a bug introduced in the latest refactorizations that caused
+and index out of bounds error when changing the selected action without a battle unit selected.
