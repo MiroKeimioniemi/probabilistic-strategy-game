@@ -5,7 +5,7 @@ import java.io.FileInputStream
 
 sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   
-  val image: FileInputStream
+  val image: String
   val unitType: String
 
   val weight:         Int
@@ -49,7 +49,7 @@ end BattleUnit
 
 case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
   
-  val image = FileInputStream("src/main/resources/blue-tank.png")
+  val image = "src/main/resources/blue-tank.png"
   val unitType = "Tank"
 
   val weight =         TankWeight

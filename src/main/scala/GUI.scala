@@ -1,15 +1,17 @@
 import Action.Move
 import scalafx.Includes.*
-import scalafx.application.JFXApp3
+import scalafx.application.{JFXApp3, Platform}
 import scalafx.scene.{Node, Scene, layout, text}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
 
 import math.min
 import java.io.FileInputStream
-import o1.GridPos
+import o1.{East, GridPos, South, West}
+import o1.grid.CompassDir.North
 import scalafx.beans.property.{BooleanProperty, StringProperty}
 import scalafx.collections.ObservableBuffer
+import scalafx.concurrent.Task
 import scalafx.geometry.Insets
 import scalafx.scene.control.{Button, ChoiceBox, Label}
 import scalafx.scene.input.{MouseButton, MouseEvent, PickResult}
@@ -39,67 +41,26 @@ object GUI extends JFXApp3:
   /** Defines and draws the layout of the Game GUI */
   def start(): Unit =
 
+    /** Layout components */
     stage = new JFXApp3.PrimaryStage:
       title = GameTitle
 
     val grid = new GridPane()
 
-
     val rightPane = new VBox():
       minWidth = GameWindowWidth
       padding = Insets(20)
       spacing = 20
-      var unitLabel = new Label():
-          font = HeadingFont
-          text <== selectedUnitType
-      var primaryActionDropdown = new ChoiceBox[String]():
-          maxWidth = 80
-          maxHeight = 50
-          var showItems = ObservableBuffer[String]()
-          Action.values.foreach(action => showItems = showItems :+ action.toString)
-          items = showItems
-          selectionModel().selectFirst()
-          // Updates the currently selected action and associated GUI highlights
-          onAction = () => {
-            if game.selectedBattleUnits.nonEmpty then
-              val targetPane = selectedBattleUnitPane(grid)
-              targetPane.fireEvent(syntheticMouseClick(targetPane))
-              game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
-              targetPane.fireEvent(syntheticMouseClick(targetPane))
-            else
-              game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
-          }
-      children.addAll(unitLabel, primaryActionDropdown)
-
 
     val bottomPane = new HBox():
       minHeight = GameWindowHeight
       padding = Insets(20)
       spacing = 20
-      var playTurnButton = new Button():
-          font = HeadingFont
-          text = PlayTurnButton
-      // Resets all selections and invokes the PlayTurn method of Game
-      playTurnButton.onMouseClicked = (event: MouseEvent) => {
-        if game.selectedBattleUnits.nonEmpty then
-          selectedBattleUnitPane(grid).fireEvent(event)
-        if game.selectedTiles.nonEmpty then
-          for tile <- game.selectedTiles do
-            selectedTilePane(grid, tile).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
-        game.playTurn()
-        turnCount.value = game.turnCount.toString
-      }
-      var turnCounter = new Label():
-          font = HeadingFont
-          text <== turnCount
-      children.addAll(playTurnButton, turnCounter)
-
 
     val rootPane = new BorderPane():
       left = grid
       right = rightPane
       bottom = bottomPane
-
 
     val scene = new Scene(GameWindowWidth, GameWindowHeight):
       content = rootPane
@@ -107,16 +68,74 @@ object GUI extends JFXApp3:
     stage.scene = scene
 
 
+    /** Display and control components */
+    var unitLabel = new Label():
+        font = HeadingFont
+        text <== selectedUnitType
+
+    var primaryActionDropdown = new ChoiceBox[String]():
+        maxWidth = 80
+        maxHeight = 50
+        var showItems = ObservableBuffer[String]()
+        Action.values.foreach(action => showItems = showItems :+ action.toString)
+        items = showItems
+        selectionModel().selectFirst()
+        // Updates the currently selected action and associated GUI highlights
+        onAction = () => {
+          if game.selectedBattleUnits.nonEmpty then
+            val targetPane = selectedBattleUnitPane(grid)
+            targetPane.fireEvent(syntheticMouseClick(targetPane))
+            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
+            targetPane.fireEvent(syntheticMouseClick(targetPane))
+          else
+            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
+        }
+
+    var turnCounter = new Label():
+          font = HeadingFont
+          text <== turnCount
+
+    var playTurnButton = new Button():
+      font = HeadingFont
+      text = PlayTurnButton
+
+    // Resets all selections and invokes the PlayTurn method of Game
+    playTurnButton.onMouseClicked = (event: MouseEvent) => {
+      game.pendingActions = game.selectedBattleUnits
+      game.pendingTargets = game.selectedTiles
+
+      if game.selectedBattleUnits.nonEmpty then
+        selectedBattleUnitPane(grid).fireEvent(syntheticMouseClick(selectedBattleUnitPane(grid)))
+      if game.selectedTiles.nonEmpty then
+        for tile <- game.selectedTiles do
+          selectedTilePane(grid, tile).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+
+      turnCount.value = game.turnCount.toString
+
+      game.playTurn()
+
+      game.selectedBattleUnits = Vector()
+      game.selectedTiles = Vector()
+
+      grid.children.remove(MapWidth * MapHeight, game.player1.battleUnits.length)
+      drawBattleUnits(scene, game.player1)
+    }
+
+    rightPane.children.addAll(unitLabel, primaryActionDropdown)
+    bottomPane.children.addAll(playTurnButton, turnCounter)
+
     drawMapTiles(scene)
     drawBattleUnits(scene, game.player1)
+
+    stage.show()
 
   end start
 
 
 
   /** Returns an ImageView object corresponding to a given image */
-  private def drawPic(pic: FileInputStream, gameScene: Scene): ImageView =
-    val imageView = new ImageView(Image(pic)) {
+  private def drawPic(pic: String, gameScene: Scene): ImageView =
+    val imageView = new ImageView(new Image(FileInputStream(pic))) {
       fitWidth <== ((gameScene.widthProperty()) / 16) - (RightPaneWidth / 16)
       fitHeight <== ((gameScene.widthProperty()) / 16) - (RightPaneWidth / 16)
       maxHeight((gameScene.widthProperty() / 16).toDouble)
@@ -169,7 +188,6 @@ object GUI extends JFXApp3:
           game.selectedTiles = game.selectedTiles :+ tile
         event.consume()
       }
-
       selectable
 
     end selectableTiles
@@ -201,7 +219,7 @@ object GUI extends JFXApp3:
         stroke = Color.Transparent
         fill = Color.Transparent
       }
-      val selectable = StackPane()
+      val selectable = new StackPane()
       selectable.children.addAll(image, border)
 
       // Attaches a mouse click event listener to each BattleUnit that toggles the highlighting of that
@@ -265,6 +283,12 @@ object GUI extends JFXApp3:
     end selectableBattleUnit
 
     battleUnits.foreach(battleUnit => drawn = drawn :+ selectableBattleUnit(battleUnit))
+    battleUnits.map(_.orientation).zipWithIndex.foreach(o => drawn(o._2).rotate = o._1 match
+      case North => -90
+      case East  => 0
+      case South => 90
+      case West  => 180
+      case _     => 0)
     displayInGrid(drawn, positions, grid)
 
   end drawBattleUnits

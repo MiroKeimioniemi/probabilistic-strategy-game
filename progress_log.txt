@@ -152,3 +152,22 @@ the GUI code.
 Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit
 and action respectively. Additionally fixed a bug introduced in the latest refactorizations that caused
 and index out of bounds error when changing the selected action without a battle unit selected.
+
+11.4.2023
+
+BattleUnits move! ..method is now implemented so that one battleUnit at a time can move 'range' tiles
+per turn. This was supposed to be a quick one but ended up taking two whole days to write. The first
+was entirely wasted hunting for a bug that, upon re-rendering the StackPanes in the grid, would not
+display the images at all. I searched the entire internet, spent hours rubberducking with ChatGPT and
+finally, entirely on my own realized that the root cause of the issue was an arbitrary but now very
+stupid decision to associate the BattleUnit and TerrainTile images with their respective classes in
+the form of FileInputStreams instead of the strings containing the images' file paths, which is how
+it is now done. This caused the mysterious behavior of the GUI draw functions working the first time
+they are called but not on the second, despite complete removal of grid children, clearing of all
+caches and whatever I could come up with. The first half of the second day was still spent on the
+same problem, this time from the angle of concurrency but to no avail until the breakthrough. I also
+refactored the GUI by separating layout components from display and interaction components.
+
+The move method is currently implemented in the Game class but might be moved to the BattleUnit class
+along with the implementation of the ActionSet to facilitate easier management of the multiple actions
+for multiple BattleUnits.

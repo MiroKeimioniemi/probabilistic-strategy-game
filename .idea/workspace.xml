@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,17 +79,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 5/A1120-scala3-r05-armlet/build.sbt&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 6/A1120-scala3-r06-functions/build.sbt",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\o1" />
@@ -354,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680641125932</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively.">
+      <created>1680643466191</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1680643466191</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -381,7 +391,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources." />
     <MESSAGE value="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row." />
     <MESSAGE value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
     <MESSAGE value="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files." />
@@ -406,7 +415,8 @@
     <MESSAGE value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
     <MESSAGE value="Modified the GUI to show action-dependent highlights." />
     <MESSAGE value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
+    <MESSAGE value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
+    <option name="LAST_COMMIT_MESSAGE" value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
