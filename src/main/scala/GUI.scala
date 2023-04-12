@@ -4,7 +4,6 @@ import scalafx.application.{JFXApp3, Platform}
 import scalafx.scene.{Node, Scene, layout, text}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
-
 import math.min
 import java.io.FileInputStream
 import o1.{East, GridPos, South, West}
@@ -36,6 +35,16 @@ object GUI extends JFXApp3:
 
   private def syntheticMouseClick(target: Node): MouseEvent =
     MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(target.delegate, target.localToScene(0, 0, 0), 0.0))
+
+  private def clearHighlights(grid: GridPane): Unit =
+    if game.selectedBattleUnits.nonEmpty then
+      selectedBattleUnitPane(grid).fireEvent(syntheticMouseClick(selectedBattleUnitPane(grid)))
+    if game.selectedTiles.nonEmpty then
+      for tile <- game.selectedTiles do
+        selectedTilePane(grid, tile).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+
+    game.selectedBattleUnits = Vector()
+    game.selectedTiles = Vector()
 
 
   /** Defines and draws the layout of the Game GUI */
@@ -91,6 +100,17 @@ object GUI extends JFXApp3:
             game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
         }
 
+    var setActionSetButton = new Button():
+      font = HeadingFont
+      text = SetActionSetButton
+
+    setActionSetButton.onMouseClicked = (event: MouseEvent) => {
+      game.pendingActions = game.pendingActions ++ game.selectedBattleUnits
+      game.pendingTargets = game.pendingTargets ++ game.selectedTiles
+      grid.add(drawPic("src/main/resources/done-symbol.png", scene), game.selectedBattleUnits(0).position.x, game.selectedBattleUnits(0).position.y)
+      clearHighlights(grid)
+    }
+
     var turnCounter = new Label():
           font = HeadingFont
           text <== turnCount
@@ -101,27 +121,19 @@ object GUI extends JFXApp3:
 
     // Resets all selections and invokes the PlayTurn method of Game
     playTurnButton.onMouseClicked = (event: MouseEvent) => {
-      game.pendingActions = game.selectedBattleUnits
-      game.pendingTargets = game.selectedTiles
-
-      if game.selectedBattleUnits.nonEmpty then
-        selectedBattleUnitPane(grid).fireEvent(syntheticMouseClick(selectedBattleUnitPane(grid)))
-      if game.selectedTiles.nonEmpty then
-        for tile <- game.selectedTiles do
-          selectedTilePane(grid, tile).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
-
+      clearHighlights(grid)
       turnCount.value = game.turnCount.toString
 
       game.playTurn()
 
-      game.selectedBattleUnits = Vector()
-      game.selectedTiles = Vector()
+      game.pendingActions = Vector()
+      game.pendingTargets = Vector()
 
-      grid.children.remove(MapWidth * MapHeight, game.player1.battleUnits.length)
+      grid.children.removeRange(MapWidth * MapHeight, grid.children.length)
       drawBattleUnits(scene, game.player1)
     }
 
-    rightPane.children.addAll(unitLabel, primaryActionDropdown)
+    rightPane.children.addAll(unitLabel, primaryActionDropdown, setActionSetButton)
     bottomPane.children.addAll(playTurnButton, turnCounter)
 
     drawMapTiles(scene)

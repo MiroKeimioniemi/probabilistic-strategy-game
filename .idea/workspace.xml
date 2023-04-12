@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="BattleUnits move!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Action.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -364,7 +366,21 @@
       <option name="project" value="LOCAL" />
       <updated>1680643466191</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively.">
+      <created>1681241640723</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1681241640723</updated>
+    </task>
+    <task id="LOCAL-00031" summary="BattleUnits move!">
+      <created>1681241708772</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1681241708772</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -391,7 +407,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row." />
     <MESSAGE value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
     <MESSAGE value="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files." />
     <MESSAGE value="Updated progress_log.txt to reflect the current plan of approach." />
@@ -416,7 +431,8 @@
     <MESSAGE value="Modified the GUI to show action-dependent highlights." />
     <MESSAGE value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
     <MESSAGE value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
-    <option name="LAST_COMMIT_MESSAGE" value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
+    <MESSAGE value="BattleUnits move!" />
+    <option name="LAST_COMMIT_MESSAGE" value="BattleUnits move!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,6 +1,7 @@
 import Action.*
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
+import javax.print.attribute.standard.Destination
 
 class Game:
 
@@ -38,6 +39,11 @@ class Game:
       case Stay => fovTiles(battleUnit, 0)
       case Defend => fovTiles(battleUnit, 0)
 
+  /** Returns the probability of a given BattleUnit successfully moving to destination */
+  def calculateMoveProbability(battleUnit: BattleUnit, destination: TerrainTile): Int =
+    destination.flatness
+
+  /** changes the position of a BattleUnit from the current one to the one given */
   def move(battleUnit: BattleUnit, destination: TerrainTile): Unit =
 
     if battleUnit.position.x - destination.position.x > 0 then
@@ -56,7 +62,8 @@ class Game:
   /** Updates the game state by executing all pending actions and clearing all selections */
   def playTurn(): Unit =
     if pendingActions.nonEmpty && pendingTargets.nonEmpty then
-      move(pendingActions(0), pendingTargets(0))
+      for battleUnit <- pendingActions do
+        move(battleUnit, pendingTargets(pendingActions.indexOf(battleUnit)))
     turnCount += 1
     currentlyPlaying = if currentlyPlaying == player1 then player2 else player1
   end playTurn

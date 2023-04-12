@@ -21,6 +21,7 @@ val HeadingFont = Font.font("Arial", FontWeight.Bold, 20)
 val GameTitle = "Strategy Game"
 val SelectedUnitDefault = "Choose unit"
 val PlayTurnButton = "Play Turn"
+val SetActionSetButton = "Set Action set"
 
 /** Map properties */
 val MapWidth = 16

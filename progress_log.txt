@@ -171,3 +171,19 @@ refactored the GUI by separating layout components from display and interaction 
 The move method is currently implemented in the Game class but might be moved to the BattleUnit class
 along with the implementation of the ActionSet to facilitate easier management of the multiple actions
 for multiple BattleUnits.
+
+12.4.2023
+
+I realized I had overly complicated the action set as well in anticipation of the various convenience
+features that would be necessary for a really large map but now that they will not be implemented, I
+was able to simplify it much further to only primary and secondary actions and targets. Primary action
+will always be attempted and only if it fails, will the secondary action be attempted.
+
+In anticipation for the implementation of ActionSet, I added a "Set Action set" button to the GUI, which
+would probably be best renamed, that adds battle units to pending actions and pending targets in place
+of the soon-to-be-implemented ActionSet handling and signals the success of this by adding a green
+checkmark to the corner of the tile where the battle unit resides. This temporary patchwork solution
+enables the moving of multiple battle units per turn.
+
+Next steps include first, finally building tests for the game mechanics, second, implementing ActionSet
+handling and third, calculating and displaying the probabilities of different actions.
