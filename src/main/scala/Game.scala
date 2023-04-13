@@ -2,6 +2,7 @@ import Action.*
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
 import javax.print.attribute.standard.Destination
+import math.{max, min}
 
 class Game:
 
@@ -33,14 +34,22 @@ class Game:
   /** Returns the tiles in the field of view of a given BattleUnit depending on the currently selected action */
   def tilesInRange(battleUnit: BattleUnit): Vector[TerrainTile] =
     selectedAction match
-      case Move => fovTiles(battleUnit, battleUnit.range + 1)
+      case Move => fovTiles(battleUnit, battleUnit.range)
       case Attack => fovTiles(battleUnit, MapWidth)
       case Stay => fovTiles(battleUnit, 0)
       case Defend => fovTiles(battleUnit, 0)
 
   /** Returns the probability of a given BattleUnit successfully moving to destination */
   def calculateMoveProbability(battleUnit: BattleUnit, destination: TerrainTile): Int =
-    destination.flatness
+    val bw = battleUnit.weight
+    val bv = battleUnit.volume
+
+    val df = destination.flatness
+    val ds = destination.solidity
+    val dv = destination.vegetationDensity
+    val de = destination.elevation
+
+    MoveSuccessProbability(bw, bv, df, ds, dv, de)
 
   /** changes the position of a BattleUnit from the current one to the one given */
   // TODO: Make sure that two battleUnits cannot move to the same tile

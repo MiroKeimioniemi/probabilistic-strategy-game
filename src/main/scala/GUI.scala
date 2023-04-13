@@ -193,7 +193,7 @@ object GUI extends JFXApp3:
           game.selectedTiles = Vector()
         else if game.selectedBattleUnits.nonEmpty && game.tilesInRange(game.selectedBattleUnits(0)).contains(tile) then
           if game.selectedTiles.nonEmpty then
-            selectedTilePane(grid, game.selectedTiles(0)).children(2).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+            selectedTilePane(grid, game.selectedTiles(0)).children(3).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
             game.selectedTiles = Vector()
           border.stroke = HighlightColor
           game.selectedTiles = game.selectedTiles :+ tile
@@ -244,6 +244,7 @@ object GUI extends JFXApp3:
           // Removes the colored rectangles between the image and the transparent highlight rectangle
           // from each tile associated with the BattleUnit
           for tile <- game.tilesInRange(battleUnit) do
+            selectedTilePane(grid, tile).children.remove(2)
             selectedTilePane(grid, tile).children.remove(1)
 
           border.stroke = Color.Transparent
@@ -258,7 +259,8 @@ object GUI extends JFXApp3:
           // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
           if game.selectedBattleUnits.nonEmpty then
             for tile <- game.tilesInRange(game.selectedBattleUnits(0)) do
-                selectedTilePane(grid, tile).children.remove(1)
+              selectedTilePane(grid, tile).children.remove(2)
+              selectedTilePane(grid, tile).children.remove(1)
 
             selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
 
@@ -273,7 +275,6 @@ object GUI extends JFXApp3:
           // Adds colored rectangles between the image and the transparent highlight rectangle to each
           // tile within the field of view of the selected BattleUnit
           for tile <- game.tilesInRange(battleUnit) do
-
             val highlight = new Rectangle {
               width <== image.fitWidth - strokeWidth
               height <== image.fitHeight - strokeWidth
@@ -281,8 +282,14 @@ object GUI extends JFXApp3:
               stroke = BattleUnitHighlightColor
               fill = Color.Transparent
             }
+            val moveProbability = new Label() {
+              font = HeadingFont
+              textFill = BattleUnitHighlightColor
+              text = game.calculateMoveProbability(battleUnit, tile).toString
+            }
 
             selectedTilePane(grid, tile).children.add(1, highlight)
+            selectedTilePane(grid, tile).children.add(2, moveProbability)
 
             selectedUnitType.value = battleUnit.unitType
 

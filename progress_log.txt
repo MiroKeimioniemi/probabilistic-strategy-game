@@ -196,4 +196,6 @@ getting used to, it was far less intimidating in the end than what I initially t
 testing the GUI however as it is and will remain still easy and quick to test manually. Implemented a
 rudimentary ActionSet execution method that only moves units. This might eventually replace playTurn
 partially or fully in order to show the tried, failed and successful actions in the GUI after pressing
-"Play Turn".
+"Play Turn". Implemented a rudimentary calculateMoveProbability function and displayed its results for
+tiles in range of the selected battle unit in the GUI. Next steps include full implemenation of ActionSet,
+visualizing its selection in GUI and showing the progressing of the actions in the GUI after playing a turn.

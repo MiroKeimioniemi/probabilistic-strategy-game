@@ -21,32 +21,45 @@ class GameSpec extends AnyFlatSpec with Matchers:
     }
   }
 
+  // TODO: Add a test for tilesInRange
+
+  "Probabilities" should "range from 1 to 100" in {
+
+    val battleUnit = game.player1.battleUnits(0)
+
+    withClue("tilesInRange probabilities should be between 1 and 100") {
+      for tile <- game.tilesInRange(battleUnit) do
+        game.calculateMoveProbability(battleUnit, tile) should (be >= 0 and be <= 100)
+    }
+  }
+
   "Move" should "work according to specification" in {
 
-    game.player1.battleUnits(0).orientation = East
-    game.player1.battleUnits(0).position = GridPos(2, 2)
+    val battleUnit = game.player1.battleUnits(0)
+    battleUnit.orientation = East
+    battleUnit.position = GridPos(2, 2)
 
     withClue("move should change BattleUnit position to match destination coordinates and orientation to match direction moved") {
-      game.move(game.player1.battleUnits(0), GridPos(3, 2))
-      game.player1.battleUnits(0).position should equal (GridPos(3, 2))
-      game.player1.battleUnits(0).orientation should equal (East)
+      game.move(battleUnit, GridPos(3, 2))
+      battleUnit.position should equal (GridPos(3, 2))
+      battleUnit.orientation should equal (East)
     }
 
     withClue("move should change BattleUnit position to match destination coordinates and orientation to match direction moved") {
-      game.move(game.player1.battleUnits(0), GridPos(3, 3))
-      game.player1.battleUnits(0).position should equal (GridPos(3, 3))
-      game.player1.battleUnits(0).orientation should equal (South)
+      game.move(battleUnit, GridPos(3, 3))
+      battleUnit.position should equal (GridPos(3, 3))
+      battleUnit.orientation should equal (South)
     }
 
     withClue("move should change BattleUnit position to match destination coordinates and orientation to match direction moved") {
-      game.move(game.player1.battleUnits(0), GridPos(2, 3))
-      game.player1.battleUnits(0).position should equal (GridPos(2, 3))
-      game.player1.battleUnits(0).orientation should equal (West)
+      game.move(battleUnit, GridPos(2, 3))
+      battleUnit.position should equal (GridPos(2, 3))
+      battleUnit.orientation should equal (West)
     }
 
     withClue("move should change BattleUnit position to match destination coordinates and orientation to match direction moved") {
-      game.move(game.player1.battleUnits(0), GridPos(2, 2))
-      game.player1.battleUnits(0).position should equal (GridPos(2, 2))
-      game.player1.battleUnits(0).orientation should equal (North)
+      game.move(battleUnit, GridPos(2, 2))
+      battleUnit.position should equal (GridPos(2, 2))
+      battleUnit.orientation should equal (North)
     }
   }

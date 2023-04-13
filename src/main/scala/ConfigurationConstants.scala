@@ -2,6 +2,7 @@ import o1.grid.CompassDir.*
 import o1.grid.GridPos
 import scalafx.scene.paint.Color
 import scalafx.scene.text.{Font, FontWeight}
+import math.max
 
 /** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
  *
@@ -22,6 +23,48 @@ val GameTitle = "Strategy Game"
 val SelectedUnitDefault = "Choose unit"
 val PlayTurnButton = "Play Turn"
 val SetActionSetButton = "Set Action set"
+
+
+
+/** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
+// Grass
+val GrassFlatness =          95
+val GrassSolidity =          95
+val GrassVegetationDensity = 5
+val GrassElevation =         0
+
+// Forest
+val ForestFlatness =          25
+val ForestSolidity =          85
+val ForestVegetationDensity = 95
+val ForestElevation =         5
+
+// Rock
+val RockFlatness =          5
+val RockSolidity =          100
+val RockVegetationDensity = 0
+val RockElevation =         100
+
+// Sand
+val SandFlatness =          50
+val SandSolidity =          20
+val SandVegetationDensity = 0
+val SandElevation =         10
+
+/** BattleUnit properties */
+// Tank
+val TankWeight =         100 // 60000
+val TankVolume =         100 // 80
+val TankRange =          1
+val TankArmor =          100
+val TankBaseDamage =     100
+val TankDamageGradient = LazyList.iterate(TankBaseDamage * 2)( x => x / 2 ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
+
+var TankAmmo =   2
+var TankFuel =   2
+var TankHealth = 100
+
+
 
 /** Map properties */
 val MapWidth = 16
@@ -53,6 +96,11 @@ val MapTiles =
       ForestTile(GridPos(6, 7)),
       ForestTile(GridPos(7, 7))
   ), "origin")
+  
+/** Gameplay properties */
+// Move success probability formula
+def MoveSuccessProbability(bw: Int, bv: Int, df: Int, ds: Int, dv: Int, de: Int): Int = 
+  max(1, (100 - (0.33 * (bw / (ds + bv))) - (0.33 * (dv + bv)) - (de) + (0.33 * df))).toInt
 
 /** Player properties */
 // Player 1
@@ -61,41 +109,3 @@ val Player1BattleUnitsFormation =
     Player1TankUnit(GridPos(2, 1), East),
     Player1TankUnit(GridPos(1, 2), East)
 )
-
-/** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
-// Grass
-val GrassFlatness =          95
-val GrassSolidity =          95
-val GrassVegetationDensity = 5
-val GrassElevation =         0
-
-// Forest
-val ForestFlatness =          25
-val ForestSolidity =          85
-val ForestVegetationDensity = 95
-val ForestElevation =         5
-
-// Rock
-val RockFlatness =          5
-val RockSolidity =          100
-val RockVegetationDensity = 0
-val RockElevation =         100
-
-// Sand
-val SandFlatness =          50
-val SandSolidity =          20
-val SandVegetationDensity = 0
-val SandElevation =         10
-
-/** BattleUnit properties */
-// Tank
-val TankWeight =         60000
-val TankVolume =         80
-val TankRange =          1
-val TankArmor =          100
-val TankBaseDamage =     100
-val TankDamageGradient = LazyList.iterate(TankBaseDamage * 2)( x => x / 2 ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
-
-var TankAmmo =   2
-var TankFuel =   2
-var TankHealth = 100
