@@ -15,9 +15,8 @@ class Game:
   var currentlyPlaying = player1
   var selectedAction: Action = Move
   var selectedBattleUnits: Vector[BattleUnit] = Vector[BattleUnit]()
-  var pendingActions: Vector[BattleUnit] = Vector[BattleUnit]()
   var selectedTiles: Vector[TerrainTile] = Vector[TerrainTile]()
-  var pendingTargets: Vector[TerrainTile] = Vector[TerrainTile]()
+  var pendingActions: Vector[BattleUnit] = Vector[BattleUnit]()
 
 
 
@@ -60,11 +59,16 @@ class Game:
 
   end move
 
+  def executeActionSet(battleUnit: BattleUnit): Unit =
+    battleUnit.actionSet.primaryAction match
+      case Move => move(battleUnit, battleUnit.actionSet.primaryTarget)
+      case _ =>
+
   /** Updates the game state by executing all pending actions and clearing all selections */
   def playTurn(): Unit =
-    if pendingActions.nonEmpty && pendingTargets.nonEmpty then
+    if pendingActions.nonEmpty then
       for battleUnit <- pendingActions do
-        move(battleUnit, pendingTargets(pendingActions.indexOf(battleUnit)).position)
+        executeActionSet(battleUnit)
     turnCount += 1
     currentlyPlaying = if currentlyPlaying == player1 then player2 else player1
   end playTurn

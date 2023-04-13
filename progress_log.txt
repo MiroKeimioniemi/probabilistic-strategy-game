@@ -193,4 +193,7 @@ handling and third, calculating and displaying the probabilities of different ac
 Implemented first tests to test the correct initialization of the game and expected behavior of the move
 method. These were mostly just for practice and although structuring the tests still needs a bit of
 getting used to, it was far less intimidating in the end than what I initially thought. I will not be
-testing the GUI however as it is and will remain still easy and quick to test manually.
+testing the GUI however as it is and will remain still easy and quick to test manually. Implemented a
+rudimentary ActionSet execution method that only moves units. This might eventually replace playTurn
+partially or fully in order to show the tried, failed and successful actions in the GUI after pressing
+"Play Turn".

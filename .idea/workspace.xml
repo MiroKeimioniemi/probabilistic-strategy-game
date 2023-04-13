@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn.">
-      <change afterPath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" afterDir="false" />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented first tests to test the correct initialization of the game and expected behavior of the move method.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -155,8 +157,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="ScalaTest.GameSpec" />
-        <item itemvalue="ScalaTest.GameSpec.Move should work according to specification" />
         <item itemvalue="Application.GUI" />
+        <item itemvalue="ScalaTest.GameSpec.Move should work according to specification" />
         <item itemvalue="ScalaTest.GameSpec.Game should be initialized correctly" />
         <item itemvalue="Application.Main" />
       </list>
@@ -405,7 +407,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681301721020</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Implemented first tests to test the correct initialization of the game and expected behavior of the move method.">
+      <created>1681384152391</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1681384152391</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -432,7 +441,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files." />
     <MESSAGE value="Updated progress_log.txt to reflect the current plan of approach." />
     <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many other player- and BattleUnit-related classes as well as adding swing as a dependency." />
     <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes." />
@@ -457,7 +465,8 @@
     <MESSAGE value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
     <MESSAGE value="BattleUnits move!" />
     <MESSAGE value="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn." />
+    <MESSAGE value="Implemented first tests to test the correct initialization of the game and expected behavior of the move method." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented first tests to test the correct initialization of the game and expected behavior of the move method." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

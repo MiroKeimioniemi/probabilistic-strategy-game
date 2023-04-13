@@ -105,8 +105,8 @@ object GUI extends JFXApp3:
       text = SetActionSetButton
 
     setActionSetButton.onMouseClicked = (event: MouseEvent) => {
+      game.selectedBattleUnits(0).setActionSet(game.selectedAction, game.selectedTiles(0).position)
       game.pendingActions = game.pendingActions ++ game.selectedBattleUnits
-      game.pendingTargets = game.pendingTargets ++ game.selectedTiles
       grid.add(drawPic("src/main/resources/done-symbol.png", scene), game.selectedBattleUnits(0).position.x, game.selectedBattleUnits(0).position.y)
       clearHighlights(grid)
     }
@@ -122,12 +122,11 @@ object GUI extends JFXApp3:
     // Resets all selections and invokes the PlayTurn method of Game
     playTurnButton.onMouseClicked = (event: MouseEvent) => {
       clearHighlights(grid)
-      turnCount.value = game.turnCount.toString
 
       game.playTurn()
 
       game.pendingActions = Vector()
-      game.pendingTargets = Vector()
+      turnCount.value = game.turnCount.toString
 
       grid.children.removeRange(MapWidth * MapHeight, grid.children.length)
       drawBattleUnits(scene, game.player1)

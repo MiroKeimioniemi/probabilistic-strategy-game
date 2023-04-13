@@ -22,15 +22,15 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   var health:      Int
   var experience:  Int = 0
   var supplyChain: Option[SupplyChain]
-  
+
   var actionSet: ActionSet = ActionSet(Action.Stay, position, Action.Stay, position)
 
-  def setActionSet(primaryAction: Action,
-                   primaryTarget: GridPos,
-                   secondaryAction: Action,
-                   secondaryTarget: GridPos
-                   ): ActionSet =
-    new ActionSet(primaryAction, primaryTarget, secondaryAction, secondaryTarget)
+  def setActionSet(primaryAction: Action = Action.Stay,
+                   primaryTarget: GridPos = position,
+                   secondaryAction: Action = Action.Stay,
+                   secondaryTarget: GridPos = position
+                   ): Unit =
+    actionSet = new ActionSet(primaryAction, primaryTarget, secondaryAction, secondaryTarget)
 
   def useAmmo(q: Int): Unit =
     ammo -= q
