@@ -187,3 +187,10 @@ enables the moving of multiple battle units per turn.
 
 Next steps include first, finally building tests for the game mechanics, second, implementing ActionSet
 handling and third, calculating and displaying the probabilities of different actions.
+
+13.4.2023
+
+Implemented first tests to test the correct initialization of the game and expected behavior of the move
+method. These were mostly just for practice and although structuring the tests still needs a bit of
+getting used to, it was far less intimidating in the end than what I initially thought. I will not be
+testing the GUI however as it is and will remain still easy and quick to test manually.

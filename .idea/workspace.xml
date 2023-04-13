@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="BattleUnits move!">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn.">
+      <change afterPath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Action.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ActionSet.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,16 +96,9 @@
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.GUI">
+  <component name="RunManager" selected="ScalaTest.GameSpec">
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="GUI" />
-      <module name="strategy-game" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GameApp" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="GameApp" />
       <module name="strategy-game" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -122,32 +111,54 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ScalaFXHelloWorld" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="ScalaFXHelloWorld" />
-      <module name="strategy-game" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="REPL for strategy-game" type="ScalaScriptConsoleRunConfiguration" factoryName="Enhanced Scala REPL" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+    <configuration name="GameSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="strategy-game" />
       <option name="allowRunningInParallel" value="false" />
-      <option name="javaOptions" value="-Djline.terminal=NONE" />
-      <option name="myConsoleArgs" value="-usejavacp " />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
       </option>
-      <option name="workingDirectory" value="$PROJECT_DIR$/.idea/modules" />
+      <option name="testKind" value="Class" />
+      <option name="testClassPath" value="GameSpec" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GameSpec.Game should be initialized correctly" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="strategy-game" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="testKind" value="Test name" />
+      <option name="testClassPath" value="GameSpec" />
+      <option name="testName" value="Game should be initialized correctly" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GameSpec.Move should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="strategy-game" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="testKind" value="Test name" />
+      <option name="testClassPath" value="GameSpec" />
+      <option name="testName" value="Move should work according to specification" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="ScalaTest.GameSpec" />
+        <item itemvalue="ScalaTest.GameSpec.Move should work according to specification" />
         <item itemvalue="Application.GUI" />
+        <item itemvalue="ScalaTest.GameSpec.Game should be initialized correctly" />
         <item itemvalue="Application.Main" />
-        <item itemvalue="Application.ScalaFXHelloWorld" />
       </list>
     </recent_temporary>
   </component>
@@ -380,7 +391,21 @@
       <option name="project" value="LOCAL" />
       <updated>1681241708772</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn.">
+      <created>1681301686177</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1681301686177</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn.">
+      <created>1681301721020</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1681301721020</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -407,7 +432,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets." />
     <MESSAGE value="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files." />
     <MESSAGE value="Updated progress_log.txt to reflect the current plan of approach." />
     <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many other player- and BattleUnit-related classes as well as adding swing as a dependency." />
@@ -432,7 +456,8 @@
     <MESSAGE value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
     <MESSAGE value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
     <MESSAGE value="BattleUnits move!" />
-    <option name="LAST_COMMIT_MESSAGE" value="BattleUnits move!" />
+    <MESSAGE value="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

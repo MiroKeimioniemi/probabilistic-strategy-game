@@ -44,18 +44,19 @@ class Game:
     destination.flatness
 
   /** changes the position of a BattleUnit from the current one to the one given */
-  def move(battleUnit: BattleUnit, destination: TerrainTile): Unit =
+  // TODO: Make sure that two battleUnits cannot move to the same tile
+  def move(battleUnit: BattleUnit, destination: GridPos): Unit =
 
-    if battleUnit.position.x - destination.position.x > 0 then
+    if battleUnit.position.x - destination.x > 0 then
       battleUnit.orientation = West
-    else if battleUnit.position.x - destination.position.x < 0 then
+    else if battleUnit.position.x - destination.x < 0 then
       battleUnit.orientation = East
-    else if battleUnit.position.y - destination.position.y > 0 then
+    else if battleUnit.position.y - destination.y > 0 then
       battleUnit.orientation = North
     else
       battleUnit.orientation = South
 
-    battleUnit.position = destination.position
+    battleUnit.position = destination
 
   end move
 
@@ -63,7 +64,7 @@ class Game:
   def playTurn(): Unit =
     if pendingActions.nonEmpty && pendingTargets.nonEmpty then
       for battleUnit <- pendingActions do
-        move(battleUnit, pendingTargets(pendingActions.indexOf(battleUnit)))
+        move(battleUnit, pendingTargets(pendingActions.indexOf(battleUnit)).position)
     turnCount += 1
     currentlyPlaying = if currentlyPlaying == player1 then player2 else player1
   end playTurn
