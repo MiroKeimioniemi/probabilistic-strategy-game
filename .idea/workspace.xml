@@ -10,7 +10,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Map.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

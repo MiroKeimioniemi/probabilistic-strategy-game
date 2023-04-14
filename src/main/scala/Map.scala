@@ -16,7 +16,9 @@ object GameMap:
 
   end tileGenerator
 
-  /** Updates the map tiles */
+  /** Updates the map tiles by replacing them with other tiles
+   *  @param tiles Vector of all map tiles
+   *  @param updates Vector of replacement tiles */
   def tileUpdater(tiles: Vector[TerrainTile], updates: Vector[TerrainTile]): Vector[TerrainTile] =
     var newTiles = tiles
 
@@ -28,13 +30,13 @@ object GameMap:
 
   end tileUpdater
 
-  /** Updates the map tiles symmetrically about the origin
+  /** Updates the map tiles symmetrically about the origin, y-axis or x-axis depending on the mirror method selected
    * @param tiles TerrainTiles to be updated
    * @param updates Replacing tiles
    * @param mirrorMethod the axis or point about which the tiles will be mirrored with options "origin", "y-axis", "x-axis" and "none" */
   def symmetricTileUpdater(tiles: Vector[TerrainTile], updates: Vector[TerrainTile], mirrorMethod: String): Vector[TerrainTile] =
 
-    // returns a TerrainTile of the same type mirrored symmetrically with respect to the origin
+    // returns a TerrainTile of the same type mirrored symmetrically according to the mirror method
     def mirrorPositionedTile(tile: TerrainTile): TerrainTile =
       var mirrorPosition =
         if mirrorMethod.toLowerCase.contains("g") then GridPos(MapWidth + 1 - tile.position.x, MapHeight + 1 - tile.position.y)

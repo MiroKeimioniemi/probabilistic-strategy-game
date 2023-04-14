@@ -199,3 +199,9 @@ partially or fully in order to show the tried, failed and successful actions in 
 "Play Turn". Implemented a rudimentary calculateMoveProbability function and displayed its results for
 tiles in range of the selected battle unit in the GUI. Next steps include full implemenation of ActionSet,
 visualizing its selection in GUI and showing the progressing of the actions in the GUI after playing a turn.
+
+14.4.2023
+
+Added selected tiles to the GUI next to action dropdown, made it impossible for more than one BattleUnits to
+move to the same grid tile, such that the latest set ActionSet is always executed. Did some refactorization
+and improved documentation and commenting of code.

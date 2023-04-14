@@ -6,70 +6,75 @@ import math.max
 
 /** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
  *
- * Most values should generally range between 0 and 100 for the gameplay to make sense but there is no explicit limitation for it. */
+ * All Game object values are relative and should therefore generally range between 0 and 100. */
 
 /** GUI properties */
-val GameWindowWidth = 1280
+// Layout properties
+val GameWindowWidth  = 1280
 val GameWindowHeight = 720
-val RightPaneWidth = GameWindowWidth / 4
+val RightPaneWidth   = GameWindowWidth / 4
 val BottomPaneHeight = GameWindowHeight / 15
+
+// Component properties
 val SelectionRectangleThickness = 4
-val BattleUnitHighlightColor = Color.Blue
-val HighlightColor = Color.Red
-val HeadingFont = Font.font("Arial", FontWeight.Bold, 20)
+val BattleUnitHighlightColor    = Color.Blue
+val HighlightColor              = Color.Red
+val HeadingFont                 = Font.font("Arial", FontWeight.Bold, 20)
 
 /** Text */
-val GameTitle = "Strategy Game"
-val SelectedUnitDefault = "Choose unit"
-val PlayTurnButton = "Play Turn"
-val SetActionSetButton = "Set Action set"
+val GameTitle              = "Strategy Game"
+val SelectedUnitDefault    = "Choose unit"
+val PlayTurnButton         = "Play Turn"
+val SetActionSetButton     = "Set Action set"
+val PrimaryAction          = "Primary Action"
+val PrimaryTargetSelection = "Select target"
 
 
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass
-val GrassFlatness =          95
-val GrassSolidity =          95
+val GrassFlatness          = 95
+val GrassSolidity          = 95
 val GrassVegetationDensity = 5
-val GrassElevation =         0
+val GrassElevation         = 0
 
 // Forest
-val ForestFlatness =          25
-val ForestSolidity =          85
+val ForestFlatness          = 25
+val ForestSolidity          = 85
 val ForestVegetationDensity = 95
-val ForestElevation =         5
+val ForestElevation         = 5
 
 // Rock
-val RockFlatness =          5
-val RockSolidity =          100
+val RockFlatness          = 5
+val RockSolidity          = 100
 val RockVegetationDensity = 0
-val RockElevation =         100
+val RockElevation         = 100
 
 // Sand
-val SandFlatness =          50
-val SandSolidity =          20
+val SandFlatness          = 50
+val SandSolidity          = 20
 val SandVegetationDensity = 0
-val SandElevation =         10
+val SandElevation         = 10
 
 /** BattleUnit properties */
 // Tank
-val TankWeight =         100 // 60000
-val TankVolume =         100 // 80
-val TankRange =          1
-val TankArmor =          100
-val TankBaseDamage =     100
+val TankWeight         = 100
+val TankVolume         = 100
+val TankRange          = 1
+val TankArmor          = 100
+val TankBaseDamage     = 100
 val TankDamageGradient = LazyList.iterate(TankBaseDamage * 2)( x => x / 2 ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
 
-var TankAmmo =   2
-var TankFuel =   2
+var TankAmmo   = 2
+var TankFuel   = 2
 var TankHealth = 100
 
 
 
 /** Map properties */
-val MapWidth = 16
+val MapWidth  = 16
 val MapHeight = 9
-val MapTiles =
+val MapTiles  =
   GameMap.symmetricTileUpdater(
     GameMap.tileGenerator(MapWidth, MapHeight),
     Vector[TerrainTile](
