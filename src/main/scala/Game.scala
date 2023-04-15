@@ -18,8 +18,9 @@ class Game:
   // Turn state variables
   var currentlyPlaying = player1
   var selectedAction: Action = Move
-  var selectedBattleUnits: Vector[BattleUnit] = Vector[BattleUnit]()
-  var selectedTiles: Vector[TerrainTile] = Vector[TerrainTile]()
+  var selectedBattleUnit: Option[BattleUnit] = None
+  var selectedPrimaryTile: Option[TerrainTile] = None
+  var selectedSecondaryTile: Option[TerrainTile] = None
   var pendingActions: Vector[BattleUnit] = Vector[BattleUnit]()
 
 
@@ -60,6 +61,11 @@ class Game:
     val de = destination.elevation
 
     MoveSuccessProbability(bw, bv, df, ds, dv, de)
+
+  def calculateSuccessProbability(battleUnit: BattleUnit, destination: TerrainTile): Int =
+    selectedAction match
+      case Move => calculateMoveProbability(battleUnit, destination)
+      case _ => 100
 
   /** changes the position of a BattleUnit from the current one to the one given
    *  @param battleUnit BattleUnit to be moved

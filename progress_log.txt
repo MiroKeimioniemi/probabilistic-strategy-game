@@ -205,3 +205,11 @@ visualizing its selection in GUI and showing the progressing of the actions in t
 Added selected tiles to the GUI next to action dropdown, made it impossible for more than one BattleUnits to
 move to the same grid tile, such that the latest set ActionSet is always executed. Did some refactorization
 and improved documentation and commenting of code.
+
+15.4.2023
+
+Major refactoring of the GUI to change selected units and tiles from vectors to options, which enables the
+implementation of the preferred input method for ActionSet. This introduced various bugs, which took a long
+time to fix and I am cautious of the number of times I had to use the forbidden get method. It should,
+however, be alright because I check that selectedBatleUnit and targetTiles are defined every single time
+before using it.

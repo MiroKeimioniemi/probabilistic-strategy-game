@@ -30,9 +30,10 @@ object GUI extends JFXApp3:
   private val selectedUnitType = StringProperty(SelectedUnitDefault)
   private val turnCount        = StringProperty(game.turnCount.toString)
   private val primaryTarget    = StringProperty(PrimaryTargetSelection)
+  private val secondaryTarget  = StringProperty(SecondaryTargetSelection)
 
   private def selectedBattleUnitPane(grid: GridPane): StackPane =
-    grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnits(0).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnits(0).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
+    grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnit.getOrElse(game.player1.battleUnits.head).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnit.getOrElse(game.player1.battleUnits.head).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
 
   private def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
     grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
@@ -46,14 +47,16 @@ object GUI extends JFXApp3:
     showItems
 
   private def clearHighlights(grid: GridPane): Unit =
-    if game.selectedBattleUnits.nonEmpty then
+    if game.selectedBattleUnit.isDefined then
       selectedBattleUnitPane(grid).fireEvent(syntheticMouseClick(selectedBattleUnitPane(grid)))
-    if game.selectedTiles.nonEmpty then
-      for tile <- game.selectedTiles do
-        selectedTilePane(grid, tile).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+    if game.selectedPrimaryTile.isDefined then
+      selectedTilePane(grid, game.selectedPrimaryTile.get).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+    if game.selectedSecondaryTile.isDefined then
+      selectedTilePane(grid, game.selectedSecondaryTile.get).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
 
-    game.selectedBattleUnits = Vector()
-    game.selectedTiles = Vector()
+    game.selectedBattleUnit = None
+    game.selectedPrimaryTile = None
+    game.selectedSecondaryTile = None
   end clearHighlights
 
 
@@ -69,13 +72,13 @@ object GUI extends JFXApp3:
 
     val rightPane = new VBox():
       minWidth = GameWindowWidth
-      padding = Insets(20)
-      spacing = 20
+      padding = LayoutInset
+      spacing = DefaultSpacing
 
     val bottomPane = new HBox():
       minHeight = GameWindowHeight
-      padding = Insets(20)
-      spacing = 20
+      padding = LayoutInset
+      spacing = DefaultSpacing
 
     val rootPane = new BorderPane():
       left = grid
@@ -92,42 +95,72 @@ object GUI extends JFXApp3:
     var unitLabel = new Label():
       font = HeadingFont
       text <== selectedUnitType
+      margin = Insets(0, 0, 50, 0)
 
     var primaryActionLabel = new Label():
-      font = HeadingFont
+      font = DefaultFont
       text = PrimaryAction
 
     var primaryActionSelector = new HBox()
 
     var primaryActionDropdown = new ChoiceBox[String]():
-      maxWidth = 80
-      maxHeight = 50
+      maxWidth = DropdownWidth
+      maxHeight = DropdownHeight
       items = actionDropdownItems
       selectionModel().selectFirst()
       // Updates the currently selected action and associated GUI highlights
       onAction = () => {
-          val targetPane = selectedBattleUnitPane(grid)
-          targetPane.fireEvent(syntheticMouseClick(targetPane))
-          game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
-          targetPane.fireEvent(syntheticMouseClick(targetPane))
+          if game.selectedBattleUnit.isDefined then
+            val targetPane = selectedBattleUnitPane(grid)
+            targetPane.fireEvent(syntheticMouseClick(targetPane))
+            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
+            targetPane.fireEvent(syntheticMouseClick(targetPane))
+          else
+            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
       }
 
     var primaryActionTarget = new Label():
       font = HeadingFont
       text <== primaryTarget
-      margin = Insets(0, 0, 0, 10)
+      margin = DefaultLeftMargin
+
+    var secondaryActionLabel = new Label():
+      font = DefaultFont
+      text = SecondaryAction
+
+    var secondaryActionSelector = new HBox()
+
+    var secondaryActionDropdown = new ChoiceBox[String]():
+      maxWidth = DropdownWidth
+      maxHeight = DropdownHeight
+      items = actionDropdownItems
+      selectionModel().selectFirst()
+      // Updates the currently selected action and associated GUI highlights
+      onAction = () => {
+//          val targetPane = selectedBattleUnitPane(grid)
+//          targetPane.fireEvent(syntheticMouseClick(targetPane))
+//          game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
+//          targetPane.fireEvent(syntheticMouseClick(targetPane))
+      }
+
+    var secondaryActionTarget = new Label():
+      font = HeadingFont
+      text <== secondaryTarget
+      margin = DefaultLeftMargin
 
     var setActionSetButton = new Button():
       font = HeadingFont
       text = SetActionSetButton
+      margin = Insets(50, 0, 0, 0)
 
     // Sets the ActionSet of the currently selected BattleUnit according to other current selections and indicates the
     // success of this by adding a done symbol to the upper right corner of the BattleUnit whose AcionSet was set
     setActionSetButton.onMouseClicked = (event: MouseEvent) => {
-      game.selectedBattleUnits(0).setActionSet(game.selectedAction, game.selectedTiles(0).position)
-      game.pendingActions = game.pendingActions ++ game.selectedBattleUnits
-      grid.add(drawPic("src/main/resources/done-symbol.png", scene), game.selectedBattleUnits(0).position.x, game.selectedBattleUnits(0).position.y)
-      clearHighlights(grid)
+      if game.selectedBattleUnit.isDefined then
+        game.selectedBattleUnit.get.setActionSet(game.selectedAction, game.selectedPrimaryTile.getOrElse(game.gameMap.tiles.filter(_.position == game.selectedBattleUnit.get.position)).asInstanceOf[TerrainTile].position)
+        game.pendingActions = game.pendingActions :+ game.selectedBattleUnit.get
+        grid.add(drawPic("src/main/resources/done-symbol.png", scene), game.selectedBattleUnit.get.position.x, game.selectedBattleUnit.get.position.y)
+        clearHighlights(grid)
     }
 
     var turnCounter = new Label():
@@ -153,7 +186,8 @@ object GUI extends JFXApp3:
 
     // Builds the GUI layout from the components specified above
     primaryActionSelector.children.addAll(primaryActionDropdown, primaryActionTarget)
-    rightPane.children.addAll(unitLabel, primaryActionLabel, primaryActionSelector, setActionSetButton)
+    secondaryActionSelector.children.addAll(secondaryActionDropdown, secondaryActionTarget)
+    rightPane.children.addAll(unitLabel, primaryActionLabel, primaryActionSelector, secondaryActionLabel, secondaryActionSelector, setActionSetButton)
     bottomPane.children.addAll(playTurnButton, turnCounter)
 
     // Initializes the game grid
@@ -205,29 +239,28 @@ object GUI extends JFXApp3:
         stroke = Color.Transparent
         fill = Color.Transparent
       }
+
       val selectable = StackPane()
       selectable.children.addAll(image, border)
 
-      // Selects and highlights the clicked tile upon a mouse click if it is in the range of the selected battle unit's selected action
+      // Selects and highlights the clicked tile if it is in the range of the selected battle unit's selected action
       selectable.onMouseClicked = (event: MouseEvent) => {
 
-        // Deselects and removes highlighting if tile is already selected
-        if game.selectedTiles.contains(tile) then
-          border.stroke = Color.Transparent
-          primaryTarget.value = PrimaryTargetSelection
-          game.selectedTiles = Vector()
-
-        else if game.selectedBattleUnits.nonEmpty && game.tilesInRange(game.selectedBattleUnits(0)).contains(tile) then
-
-          // Deselects and removes highlighting from potential previous selections
-          if game.selectedTiles.nonEmpty then
-            selectedTilePane(grid, game.selectedTiles(0)).children(3).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
-            game.selectedTiles = Vector()
-
-          // Selects and highlights the clicked tile both with color in grid and with text in the right pane
+        def highlightTile() =
           border.stroke = HighlightColor
+          game.selectedPrimaryTile = Some(tile)
           primaryTarget.value = tile.position.toString
-          game.selectedTiles = game.selectedTiles :+ tile
+
+        game.selectedPrimaryTile match
+          case Some(sPT) =>
+            selectedTilePane(grid, sPT).children(3).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+            game.selectedPrimaryTile = None
+            primaryTarget.value = PrimaryTargetSelection
+            if sPT != tile && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) then
+              highlightTile()
+          case None =>
+            if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) then
+              highlightTile()
 
         event.consume()
       }
@@ -272,39 +305,10 @@ object GUI extends JFXApp3:
       // single BattleUnit at a time
       selectable.onMouseClicked = (event: MouseEvent) => {
 
-        if game.selectedBattleUnits.contains(battleUnit) then
-
-          // Removes the colored rectangles and probability indicators between the image and the
-          // transparent highlight rectangle from each tile associated with the BattleUnit
-          for tile <- game.tilesInRange(battleUnit) do
-            selectedTilePane(grid, tile).children.remove(2)
-            selectedTilePane(grid, tile).children.remove(1)
-
-          // Deselects the BattleUnit and selected tiles
-          border.stroke = Color.Transparent
-          if game.selectedTiles.nonEmpty then
-            selectedTilePane(grid, game.selectedTiles(0)).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedTiles(0))))
-          game.selectedBattleUnits = Vector()
-
-          selectedUnitType.value = SelectedUnitDefault
-
-        else
-
-          // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
-          if game.selectedBattleUnits.nonEmpty then
-            for tile <- game.tilesInRange(game.selectedBattleUnits(0)) do
-              selectedTilePane(grid, tile).children.remove(2)
-              selectedTilePane(grid, tile).children.remove(1)
-
-            selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
-
-            if game.selectedTiles.nonEmpty then
-              selectedTilePane(grid, game.selectedTiles(0)).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedTiles(0))))
-
-            game.selectedBattleUnits = Vector()
+        def highlightBattleUnit() =
 
           // Selects a BattleUnit
-          game.selectedBattleUnits = Vector(battleUnit)
+          game.selectedBattleUnit = Some(battleUnit)
           border.stroke = BattleUnitHighlightColor
 
           // Adds colored rectangles and probability labels between the image and the transparent
@@ -320,7 +324,7 @@ object GUI extends JFXApp3:
             val moveProbability = new Label() {
               font = HeadingFont
               textFill = BattleUnitHighlightColor
-              text = game.calculateMoveProbability(battleUnit, tile).toString
+              text = game.calculateSuccessProbability(battleUnit, tile).toString
             }
 
             selectedTilePane(grid, tile).children.add(1, highlight)
@@ -328,6 +332,47 @@ object GUI extends JFXApp3:
 
             // Updates unit selection label with the type of the selected unit
             selectedUnitType.value = battleUnit.unitType
+
+        end highlightBattleUnit
+
+        game.selectedBattleUnit match
+          case Some(sBU) =>
+            if sBU == battleUnit then
+
+              // Deselects the BattleUnit and selected tiles
+              border.stroke = Color.Transparent
+              if game.selectedPrimaryTile.isDefined then
+                selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
+              game.selectedBattleUnit = None
+
+              // Removes the colored rectangles and probability indicators between the image and the
+              // transparent highlight rectangle from each tile associated with the BattleUnit
+              for tile <- game.tilesInRange(battleUnit) do
+                selectedTilePane(grid, tile).children.remove(2)
+                selectedTilePane(grid, tile).children.remove(1)
+
+              selectedUnitType.value = SelectedUnitDefault
+
+            if sBU != battleUnit then
+
+              if game.selectedPrimaryTile.isDefined then
+                  selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
+
+              // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
+              if game.selectedBattleUnit.isDefined then
+                for tile <- game.tilesInRange(sBU) do
+                  selectedTilePane(grid, tile).children.remove(2)
+                  selectedTilePane(grid, tile).children.remove(1)
+
+                selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+
+                game.selectedBattleUnit = None
+
+                highlightBattleUnit()
+
+          case None =>
+
+            highlightBattleUnit()
 
         event.consume()
       }

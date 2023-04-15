@@ -1,7 +1,9 @@
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
+import scalafx.geometry.Insets
 import scalafx.scene.paint.Color
 import scalafx.scene.text.{Font, FontWeight}
+
 import math.max
 
 /** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
@@ -19,15 +21,23 @@ val BottomPaneHeight = GameWindowHeight / 15
 val SelectionRectangleThickness = 4
 val BattleUnitHighlightColor    = Color.Blue
 val HighlightColor              = Color.Red
-val HeadingFont                 = Font.font("Arial", FontWeight.Bold, 20)
+val HeadingFont                 = Font.font("Open Sans", FontWeight.Bold, 20)
+val DefaultFont                 = Font.font("Open Sans", 20)
+val DefaultSpacing              = 20
+val LayoutInset                 = Insets(20)
+val DefaultLeftMargin           = Insets(0, 0, 0, 10)
+val DropdownWidth               = 80
+val DropdownHeight              = 50
 
 /** Text */
-val GameTitle              = "Strategy Game"
-val SelectedUnitDefault    = "Choose unit"
-val PlayTurnButton         = "Play Turn"
-val SetActionSetButton     = "Set Action set"
-val PrimaryAction          = "Primary Action"
-val PrimaryTargetSelection = "Select target"
+val GameTitle                = "Strategy Game"
+val SelectedUnitDefault      = "Choose unit"
+val PlayTurnButton           = "Play Turn"
+val SetActionSetButton       = "Set Action set"
+val PrimaryAction            = "Primary Action"
+val PrimaryTargetSelection   = "Select target"
+val SecondaryAction          = "Secondary target"
+val SecondaryTargetSelection = "Select target"
 
 
 
