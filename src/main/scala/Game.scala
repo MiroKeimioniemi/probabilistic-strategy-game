@@ -21,6 +21,7 @@ class Game:
   var selectedBattleUnit: Option[BattleUnit] = None
   var selectedPrimaryTile: Option[TerrainTile] = None
   var selectedSecondaryTile: Option[TerrainTile] = None
+  var selectingSecondaryTarget: Boolean = false
   var pendingActions: Vector[BattleUnit] = Vector[BattleUnit]()
 
 

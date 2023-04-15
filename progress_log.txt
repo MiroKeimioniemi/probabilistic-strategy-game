@@ -212,4 +212,7 @@ Major refactoring of the GUI to change selected units and tiles from vectors to 
 implementation of the preferred input method for ActionSet. This introduced various bugs, which took a long
 time to fix and I am cautious of the number of times I had to use the forbidden get method. It should,
 however, be alright because I check that selectedBatleUnit and targetTiles are defined every single time
-before using it.
+before using it. Implemented primary and secondary target selection in the GUI. Secondary target does not do
+anything yet and secondary action is not even visualized yet but when these are added to the mouse click
+event of the "Set Action set" button ActionSet selection will be fully implemented and only its full
+execution remains. 

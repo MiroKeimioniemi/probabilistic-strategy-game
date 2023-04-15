@@ -108,6 +108,9 @@ object GUI extends JFXApp3:
       maxHeight = DropdownHeight
       items = actionDropdownItems
       selectionModel().selectFirst()
+      onMouseClicked = () => {
+        game.selectingSecondaryTarget = false
+      }
       // Updates the currently selected action and associated GUI highlights
       onAction = () => {
           if game.selectedBattleUnit.isDefined then
@@ -135,12 +138,18 @@ object GUI extends JFXApp3:
       maxHeight = DropdownHeight
       items = actionDropdownItems
       selectionModel().selectFirst()
+      onMouseClicked = () => {
+        game.selectingSecondaryTarget = true
+      }
       // Updates the currently selected action and associated GUI highlights
       onAction = () => {
-//          val targetPane = selectedBattleUnitPane(grid)
-//          targetPane.fireEvent(syntheticMouseClick(targetPane))
-//          game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
-//          targetPane.fireEvent(syntheticMouseClick(targetPane))
+//        if game.selectedBattleUnit.isDefined then
+//            val targetPane = selectedBattleUnitPane(grid)
+//            targetPane.fireEvent(syntheticMouseClick(targetPane))
+//            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
+//            targetPane.fireEvent(syntheticMouseClick(targetPane))
+//          else
+//            game.selectedAction = Action.values.find(_.toString == value.value).getOrElse(Move)
       }
 
     var secondaryActionTarget = new Label():
@@ -232,7 +241,14 @@ object GUI extends JFXApp3:
     def selectableTiles(tile: TerrainTile): StackPane =
 
       val image = drawPic(tile.image, scene)
-      val border = new Rectangle {
+      val primaryBorder = new Rectangle {
+        width <== image.fitWidth - strokeWidth
+        height <== image.fitHeight - strokeWidth
+        strokeWidth = SelectionRectangleThickness
+        stroke = Color.Transparent
+        fill = Color.Transparent
+      }
+      val secondaryBorder = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
         strokeWidth = SelectionRectangleThickness
@@ -241,26 +257,46 @@ object GUI extends JFXApp3:
       }
 
       val selectable = StackPane()
-      selectable.children.addAll(image, border)
+      selectable.children.addAll(image, primaryBorder, secondaryBorder)
 
       // Selects and highlights the clicked tile if it is in the range of the selected battle unit's selected action
       selectable.onMouseClicked = (event: MouseEvent) => {
 
-        def highlightTile() =
-          border.stroke = HighlightColor
+        def highlightPrimaryTile() =
+          primaryBorder.stroke = PrimaryHighlightColor
           game.selectedPrimaryTile = Some(tile)
           primaryTarget.value = tile.position.toString
 
-        game.selectedPrimaryTile match
-          case Some(sPT) =>
-            selectedTilePane(grid, sPT).children(3).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
-            game.selectedPrimaryTile = None
-            primaryTarget.value = PrimaryTargetSelection
-            if sPT != tile && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) then
-              highlightTile()
-          case None =>
-            if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) then
-              highlightTile()
+        def highlightSecondaryTile() =
+          secondaryBorder.stroke = SecondaryHighlightColor
+          game.selectedSecondaryTile = Some(tile)
+          secondaryTarget.value = tile.position.toString
+
+        if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) && game.selectingSecondaryTarget then
+          game.selectedSecondaryTile match
+            case Some(sPT) =>
+              if game.selectingSecondaryTarget then
+                selectedTilePane(grid, sPT).children(4).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+                game.selectedSecondaryTile = None
+                secondaryTarget.value = PrimaryTargetSelection
+                if sPT != tile && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) then
+                  highlightSecondaryTile()
+            case None =>
+                highlightSecondaryTile()
+
+        else if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) && !game.selectingSecondaryTarget then
+          game.selectedPrimaryTile match
+            case Some(sPT) =>
+                selectedTilePane(grid, sPT).children(3).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+                game.selectedPrimaryTile = None
+                primaryTarget.value = PrimaryTargetSelection
+                if sPT != tile && game.tilesInRange(game.selectedBattleUnit.get).contains(tile) then
+                  highlightPrimaryTile()
+            case None =>
+              highlightPrimaryTile()
+              game.selectingSecondaryTarget = true
+              // Bring focus to secondary action dropdown
+              scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(4).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]].requestFocus()
 
         event.consume()
       }
@@ -335,15 +371,27 @@ object GUI extends JFXApp3:
 
         end highlightBattleUnit
 
+        def clearHighlightedTiles() =
+          if game.selectedSecondaryTile.isDefined then
+            game.selectingSecondaryTarget = true
+            selectedTilePane(grid, game.selectedSecondaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedSecondaryTile.get)))
+
+          if game.selectedPrimaryTile.isDefined then
+            game.selectingSecondaryTarget = false
+            selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
+
+
         game.selectedBattleUnit match
           case Some(sBU) =>
             if sBU == battleUnit then
 
               // Deselects the BattleUnit and selected tiles
               border.stroke = Color.Transparent
-              if game.selectedPrimaryTile.isDefined then
-                selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
+              clearHighlightedTiles()
               game.selectedBattleUnit = None
+
+              // Bring focus to primary action dropdown
+              scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(2).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]].requestFocus()
 
               // Removes the colored rectangles and probability indicators between the image and the
               // transparent highlight rectangle from each tile associated with the BattleUnit
@@ -355,9 +403,7 @@ object GUI extends JFXApp3:
 
             if sBU != battleUnit then
 
-              if game.selectedPrimaryTile.isDefined then
-                  selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
-
+              clearHighlightedTiles()
               // Returns the previously selected BattleUnit and it's associated tiles to their unselected states
               if game.selectedBattleUnit.isDefined then
                 for tile <- game.tilesInRange(sBU) do

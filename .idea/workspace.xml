@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added selected tiles to the GUI next to action dropdown, fixed move method, refactored code and improved documentation and comments.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Major refactoring of the GUI to change selected units and tiles from vectors to options.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
@@ -427,7 +426,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681467093377</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Major refactoring of the GUI to change selected units and tiles from vectors to options.">
+      <created>1681518006037</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1681518006037</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -454,7 +460,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes." />
     <MESSAGE value="displayInGrid method was rewritten to draw TerrainTiles and BattleUnits alike based on their positions in the grid instead of index in a vector, resulting in BattleUnits finally being displayed on top of the map in the GUI." />
     <MESSAGE value="Refactoring" />
     <MESSAGE value="Added a GameMap companion object with tileGenerator and tileUpdater methods for fast and flexible map building, as well as a getTile method for the GameMap class in anticipation of future use." />
@@ -479,7 +484,8 @@
     <MESSAGE value="Implemented first tests to test the correct initialization of the game and expected behavior of the move method." />
     <MESSAGE value="Implemented a rudimentary ActionSet execution method that only moves units." />
     <MESSAGE value="Added selected tiles to the GUI next to action dropdown, fixed move method, refactored code and improved documentation and comments." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added selected tiles to the GUI next to action dropdown, fixed move method, refactored code and improved documentation and comments." />
+    <MESSAGE value="Major refactoring of the GUI to change selected units and tiles from vectors to options." />
+    <option name="LAST_COMMIT_MESSAGE" value="Major refactoring of the GUI to change selected units and tiles from vectors to options." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

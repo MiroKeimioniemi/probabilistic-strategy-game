@@ -20,7 +20,8 @@ val BottomPaneHeight = GameWindowHeight / 15
 // Component properties
 val SelectionRectangleThickness = 4
 val BattleUnitHighlightColor    = Color.Blue
-val HighlightColor              = Color.Red
+val PrimaryHighlightColor       = Color.Red
+val SecondaryHighlightColor     = Color.Yellow
 val HeadingFont                 = Font.font("Open Sans", FontWeight.Bold, 20)
 val DefaultFont                 = Font.font("Open Sans", 20)
 val DefaultSpacing              = 20
