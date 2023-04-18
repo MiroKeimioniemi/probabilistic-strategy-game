@@ -17,7 +17,8 @@ class Game:
 
   // Turn state variables
   var currentlyPlaying = player1
-  var selectedAction: Action = Move
+  var selectedPrimaryAction: Action = Move
+  var selectedSecondaryAction: Action = Move
   var selectedBattleUnit: Option[BattleUnit] = None
   var selectedPrimaryTile: Option[TerrainTile] = None
   var selectedSecondaryTile: Option[TerrainTile] = None
@@ -42,7 +43,7 @@ class Game:
 
   /** Returns the tiles in the field of view of a given BattleUnit depending on the currently selected action
    *  @param battleUnit BattleUnit considered */
-  def tilesInRange(battleUnit: BattleUnit): Vector[TerrainTile] =
+  def tilesInRange(battleUnit: BattleUnit, selectedAction: Action): Vector[TerrainTile] =
     selectedAction match
       case Move => fovTiles(battleUnit, battleUnit.range)
       case Attack => fovTiles(battleUnit, MapWidth)
@@ -63,10 +64,10 @@ class Game:
 
     MoveSuccessProbability(bw, bv, df, ds, dv, de)
 
-  def calculateSuccessProbability(battleUnit: BattleUnit, destination: TerrainTile): Int =
-    selectedAction match
-      case Move => calculateMoveProbability(battleUnit, destination)
-      case _ => 100
+  def calculateSuccessProbability(battleUnit: BattleUnit, destination: TerrainTile, action: Action): Int =
+      action match
+        case Move => calculateMoveProbability(battleUnit, destination)
+        case _ => 10
 
   /** changes the position of a BattleUnit from the current one to the one given
    *  @param battleUnit BattleUnit to be moved

@@ -215,4 +215,27 @@ however, be alright because I check that selectedBatleUnit and targetTiles are d
 before using it. Implemented primary and secondary target selection in the GUI. Secondary target does not do
 anything yet and secondary action is not even visualized yet but when these are added to the mouse click
 event of the "Set Action set" button ActionSet selection will be fully implemented and only its full
-execution remains. 
+execution remains.
+
+18.4.2023
+
+And so became the GUI spaghettified. Implemented ActionSet selection in the GUI fully. This was waaaayyy more
+difficult than initially anticipated, taking thrice the time expected and leading to a quite ugly result with
+various interdependencies between the methods and the Game and GUI classes. My biggest takeaway from the past
+three days is that the GUI should be at least as well planned as the other logic as I have definitely spent
+the overwhelming amount of development time in one corner of my original UML. However, I have only gotten the
+experience and understanding of ScalaFX now and therefore could not have really planned it much better in the
+beginning whereas I can be quite a bit more efficient with my next project. I guess this is the journey of
+learning. Now, however, the GUI is essentially done in terms of functionality. I might still add healthbars
+and other information related to the BattleUnits or the game state as well as make some slight visual
+improvements but all interavticity is now done and I am very happy with it. It is intuitive and comfortable
+and after tens of hours of debugging, entirely seamless and perfectly predictable and dare I say, enjoyable.
+
+Now if I manage to add enough variety to the gameplay to facilitate a variety of different types of strategies,
+it might become a pretty decent demo of a game that could be really great. Should I continue its development,
+however, I would probably immediately switch to some game engine or rebuild the GUI entirely in a different,
+more flexible way. Now, as long as it works, I will not touch it. Next I will "animate" the progression of a
+turn such that the BattleUnits execute their ActionSets one attempt at a time. Then I will implement the Attack
+and Defend actions, after which I will have to make the AI opponent and implement a file reader for the
+configuration constants in order to fulfill the requirements of the course. After that, if I still have time,
+I will implement the supply chains and potentially simultaneous turns. I will also add more BattleUnit types.

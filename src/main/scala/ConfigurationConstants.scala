@@ -37,7 +37,7 @@ val PlayTurnButton           = "Play Turn"
 val SetActionSetButton       = "Set Action set"
 val PrimaryAction            = "Primary Action"
 val PrimaryTargetSelection   = "Select target"
-val SecondaryAction          = "Secondary target"
+val SecondaryAction          = "Secondary Action"
 val SecondaryTargetSelection = "Select target"
 
 
