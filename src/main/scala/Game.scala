@@ -10,8 +10,8 @@ class Game:
 
   // Initializes the Game
   val gameMap = GameMap(MapWidth, MapHeight)
-  val player1 = Player("Player 1")
-  val player2 = Player("Player 2")
+  val player1 = Player("Player 1", Player1BattleUnitsFormation)
+  val player2 = Player("Player 2", Player2BattleUnitsFormation)
 
   val randomNumberGenerator = new Random(System.nanoTime())
 
@@ -80,7 +80,7 @@ class Game:
    *  @param destination GridPos position in the grid where BattleUnit will be moved */
   def move(battleUnit: BattleUnit, destination: GridPos): Unit =
 
-    if !player1.battleUnits.exists(_.position == destination) then
+    if !player1.battleUnits.exists(_.position == destination) && !player2.battleUnits.exists(_.position == destination) then
       if battleUnit.position.x - destination.x > 0 then
         battleUnit.orientation = West
       else if battleUnit.position.x - destination.x < 0 then

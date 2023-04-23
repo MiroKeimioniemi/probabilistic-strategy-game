@@ -34,7 +34,7 @@ object GUI extends JFXApp3:
 
   // Utility functions
   private def selectedBattleUnitPane(grid: GridPane): StackPane =
-    grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnit.getOrElse(game.player1.battleUnits.head).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnit.getOrElse(game.player1.battleUnits.head).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
+    grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnit.getOrElse(game.currentlyPlaying.battleUnits.head).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnit.getOrElse(game.currentlyPlaying.battleUnits.head).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
 
   private def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
     grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
@@ -225,6 +225,7 @@ object GUI extends JFXApp3:
 
       grid.children.removeRange(MapWidth * MapHeight, grid.children.length)
       drawBattleUnits(scene, game.player1)
+      drawBattleUnits(scene, game.player2)
     }
 
     // Builds the GUI layout from the components specified above
@@ -236,6 +237,7 @@ object GUI extends JFXApp3:
     // Initializes the game grid
     drawMapTiles(scene)
     drawBattleUnits(scene, game.player1)
+    drawBattleUnits(scene, game.player2)
 
     stage.show()
 
@@ -392,6 +394,12 @@ object GUI extends JFXApp3:
       }
       val selectable = new StackPane()
       selectable.children.addAll(image, border)
+
+      // Allows selecting only currently playing player's BattleUnits
+      if !game.currentlyPlaying.battleUnits.contains(battleUnit) then
+        selectable.setMouseTransparent(true)
+      else
+        selectable.setMouseTransparent(false)
 
       // Attaches a mouse click event listener to each BattleUnit that toggles the highlighting of that
       // unit and the tiles in its field of view and adds them to the selectedBattleUnits and

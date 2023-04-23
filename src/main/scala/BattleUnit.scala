@@ -62,6 +62,24 @@ case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) e
   var fuel =        TankFuel
   var health =      TankHealth
   var supplyChain = None
-  // TODO: Implement var actionSet: ActionSet
 
 end Player1TankUnit
+
+case class Player2TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
+  
+  val image = "src/main/resources/red-tank.png"
+  val unitType = "Tank"
+
+  val weight =         TankWeight
+  val volume =         TankVolume
+  val range =          TankRange
+  val armor =          TankArmor
+  val baseDamage =     TankBaseDamage
+  val damageGradient = TankDamageGradient
+
+  var ammo =        TankAmmo
+  var fuel =        TankFuel
+  var health =      TankHealth
+  var supplyChain = None
+
+end Player2TankUnit

@@ -255,3 +255,5 @@ Further to do: conquest gamemode, health bars as rectangles displayed upon chang
 simultaneous turns with ram attacks, meaning that there are no conflicting move sets. Tanks ram over foot
 soldiers and snipers. Foot soldiers and snipers engage in hand-to-hand combat with foot soldiers usually
 beating snipers. Two tanks ram into each other so that one gets destroyed and the other takes damage. 
+
+Gave Player 2 some BattleUnits and made their selection turn based.

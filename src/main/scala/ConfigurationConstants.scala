@@ -126,3 +126,10 @@ val Player1BattleUnitsFormation =
     Player1TankUnit(GridPos(1, 2), East),
     Player1TankUnit(GridPos(7, 8), East)
 )
+
+val Player2BattleUnitsFormation =
+  Vector[BattleUnit](
+    Player2TankUnit(GridPos(14, 1), West),
+    Player2TankUnit(GridPos(15, 2), West),
+    Player2TankUnit(GridPos(9, 8), West)
+)
