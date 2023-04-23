@@ -1,8 +1,10 @@
 import Action.*
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
+
 import javax.print.attribute.standard.Destination
 import math.{max, min}
+import scala.util.Random
 
 class Game:
 
@@ -10,6 +12,8 @@ class Game:
   val gameMap = GameMap(MapWidth, MapHeight)
   val player1 = Player("Player 1")
   val player2 = Player("Player 2")
+
+  val randomNumberGenerator = new Random(System.nanoTime())
 
   // Game state variables
   var turnCount = 0
@@ -53,18 +57,20 @@ class Game:
   /** Returns the probability of a given BattleUnit successfully moving to destination
    *  @param battleUnit BattleUnit considered to be moved
    *  @param destination Potential destination TerrainTile */
-  def calculateMoveProbability(battleUnit: BattleUnit, destination: TerrainTile): Int =
+  def calculateMoveProbability(battleUnit: BattleUnit, destination: GridPos): Int =
+    val targetTile = gameMap.tiles.filter(_.position == destination).head
+
     val bw = battleUnit.weight
     val bv = battleUnit.volume
 
-    val df = destination.flatness
-    val ds = destination.solidity
-    val dv = destination.vegetationDensity
-    val de = destination.elevation
+    val df = targetTile.flatness
+    val ds = targetTile.solidity
+    val dv = targetTile.vegetationDensity
+    val de = targetTile.elevation
 
     MoveSuccessProbability(bw, bv, df, ds, dv, de)
 
-  def calculateSuccessProbability(battleUnit: BattleUnit, destination: TerrainTile, action: Action): Int =
+  def calculateSuccessProbability(battleUnit: BattleUnit, destination: GridPos, action: Action): Int =
       action match
         case Move => calculateMoveProbability(battleUnit, destination)
         case _ => 10
@@ -92,9 +98,19 @@ class Game:
    *  and keeping track of their successes and failures
    *  @param battleUnit BattleUnit whose ActionSet will be executed */
   def executeActionSet(battleUnit: BattleUnit): Unit =
-    battleUnit.actionSet.primaryAction match
-      case Move => move(battleUnit, battleUnit.actionSet.primaryTarget)
-      case _ =>
+
+    if randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.primaryTarget, battleUnit.actionSet.primaryAction) then
+      battleUnit.actionSet.primaryAction match
+        case Move =>
+          move(battleUnit, battleUnit.actionSet.primaryTarget)
+        case _ =>
+      battleUnit.actionSet.primaryActionSuccess = true
+
+    if !battleUnit.actionSet.primaryActionSuccess && randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.secondaryTarget, battleUnit.actionSet.secondaryAction) then
+      battleUnit.actionSet.secondaryAction match
+        case Move =>
+          move(battleUnit, battleUnit.actionSet.secondaryTarget)
+        case _ =>
 
   /** Updates the game state by executing all pending actions and clearing all selections */
   def playTurn(): Unit =

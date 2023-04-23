@@ -239,3 +239,19 @@ turn such that the BattleUnits execute their ActionSets one attempt at a time. T
 and Defend actions, after which I will have to make the AI opponent and implement a file reader for the
 configuration constants in order to fulfill the requirements of the course. After that, if I still have time,
 I will implement the supply chains and potentially simultaneous turns. I will also add more BattleUnit types.
+
+23.4.2023
+
+Implemented probabilistic action execution and improved testing. There is an annoying warning about a
+condition being false in the GUI on line 432 but this is not true as it is very important for the proper
+functioning of the code. Bug in intelliJ code analyzer?
+
+Got an extension till 3.5. which really saved the project as I should now be able to really finish everything.
+In case I will manage to implement simultaneous turns, I will actually forego all animating still until the
+very end where, depending on how the project has turned out and whether it seems necessery or not I may or
+may not do some animations.
+
+Further to do: conquest gamemode, health bars as rectangles displayed upon changes in health, possibly
+simultaneous turns with ram attacks, meaning that there are no conflicting move sets. Tanks ram over foot
+soldiers and snipers. Foot soldiers and snipers engage in hand-to-hand combat with foot soldiers usually
+beating snipers. Two tanks ram into each other so that one gets destroyed and the other takes damage. 

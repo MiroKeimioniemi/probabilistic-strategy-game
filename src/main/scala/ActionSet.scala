@@ -6,11 +6,8 @@ class ActionSet(
   val secondaryAction: Action,
   val secondaryTarget: GridPos
 ):
-  
-  var primaryActionAttempted   = false
-  var primaryActionSuccess     = false
-  var secondaryActionAttempted = false
-  var secondaryActionSuccess   = false
+
+  var primaryActionSuccess = false
   
 end ActionSet
 

@@ -451,7 +451,7 @@ object GUI extends JFXApp3:
             val moveProbability = new Label() {
               font = HeadingFont
               textFill = BattleUnitHighlightColor
-              text = game.calculateSuccessProbability(battleUnit, tile, game.selectedPrimaryAction).toString
+              text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedPrimaryAction).toString
             }
             if !(game.selectedPrimaryAction == Action.Stay || game.selectedPrimaryAction == Action.Defend) then
               selectedTilePane(grid, tile).children.add(1, primaryHighlight)
@@ -471,7 +471,7 @@ object GUI extends JFXApp3:
             val moveProbability = new Label() {
               font = HeadingFont
               textFill = if game.selectingSecondaryTarget then Color.Cyan else Color.Transparent
-              text = game.calculateSuccessProbability(battleUnit, tile, game.selectedSecondaryAction).toString
+              text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedSecondaryAction).toString
             }
             // If tiles in range of secondary action overlap with tiles in range of primary action,
             // the formers' highlights are replaced with the latters'. If not, they are simply

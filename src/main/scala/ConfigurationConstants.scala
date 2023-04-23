@@ -123,5 +123,6 @@ def MoveSuccessProbability(bw: Int, bv: Int, df: Int, ds: Int, dv: Int, de: Int)
 val Player1BattleUnitsFormation =
   Vector[BattleUnit](
     Player1TankUnit(GridPos(2, 1), East),
-    Player1TankUnit(GridPos(1, 2), East)
+    Player1TankUnit(GridPos(1, 2), East),
+    Player1TankUnit(GridPos(7, 8), East)
 )
