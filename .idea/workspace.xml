@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented probabilistic action execution and improved testing.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Gave Player 2 some BattleUnits and made their selection turn based.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Player.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Player.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,8 +164,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.GUI" />
-        <item itemvalue="ScalaTest.GameSpec" />
         <item itemvalue="Scala REPL.Scala REPL" />
+        <item itemvalue="ScalaTest.GameSpec" />
         <item itemvalue="ScalaTest.GameSpec.Move should work according to specification" />
         <item itemvalue="ScalaTest.GameSpec.Game should be initialized correctly" />
       </list>
@@ -463,7 +463,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682257941744</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Gave Player 2 some BattleUnits and made their selection turn based.">
+      <created>1682272551448</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1682272551448</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -490,7 +497,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added the symmetricTileUpdater method, which necessitated the ability for TerrainTiles to copy themselves as well, so that only half of the map must be specified." />
     <MESSAGE value="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing." />
     <MESSAGE value="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
     <MESSAGE value="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
@@ -515,7 +521,8 @@
     <MESSAGE value="Implemented primary and secondary target selection in the GUI." />
     <MESSAGE value="Implemented ActionSet selection in the GUI fully." />
     <MESSAGE value="Implemented probabilistic action execution and improved testing." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented probabilistic action execution and improved testing." />
+    <MESSAGE value="Gave Player 2 some BattleUnits and made their selection turn based." />
+    <option name="LAST_COMMIT_MESSAGE" value="Gave Player 2 some BattleUnits and made their selection turn based." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -13,7 +13,7 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   val range:          Int
   val armor:          Int
   val baseDamage:     Int
-  val damageGradient: LazyList[Int]
+  val damageGradient: LazyList[Double]
 
   var position:    GridPos = initialGridPos
   var orientation: CompassDir = initialFacing

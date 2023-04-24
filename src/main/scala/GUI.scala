@@ -456,14 +456,26 @@ object GUI extends JFXApp3:
               stroke = BattleUnitHighlightColor
               fill = Color.Transparent
             }
-            val moveProbability = new Label() {
+            val actionSuccessProbability = new Label() {
               font = HeadingFont
               textFill = BattleUnitHighlightColor
               text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedPrimaryAction).toString
             }
             if !(game.selectedPrimaryAction == Action.Stay || game.selectedPrimaryAction == Action.Defend) then
               selectedTilePane(grid, tile).children.add(1, primaryHighlight)
-              selectedTilePane(grid, tile).children.add(2, moveProbability)
+              selectedTilePane(grid, tile).children.add(2, actionSuccessProbability)
+            // If there is another BattleUnit in range, displays the probability of beating it in battle by adding a stackpane with that probability on top of it
+            if game.selectedPrimaryAction == Action.Attack && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
+              val winProbability = new Label() {
+                font = HeadingFont
+                textFill = PrimaryHighlightColor
+                text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedPrimaryAction).toString
+              }
+              val winProbabilityContainer = new StackPane() {
+                children = winProbability
+                mouseTransparent = true
+              }
+              displayInGrid(Vector(winProbabilityContainer), Vector(tile.position), grid)
 
           // Adds colored rectangles and probability labels between the image and the transparent
           // highlight rectangle to each tile within the field of view of the selected BattleUnit's
@@ -496,6 +508,18 @@ object GUI extends JFXApp3:
             else
               selectedTilePane(grid, tile).children.add(1, secondaryHighlight)
               selectedTilePane(grid, tile).children.add(2, moveProbability)
+            // If there is another BattleUnit in range, displays the probability of beating it in battle by adding a stackpane with that probability on top of it
+            if (game.selectingSecondaryTarget && game.selectedSecondaryAction == Action.Attack) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
+              val winProbability = new Label() {
+                font = HeadingFont
+                textFill = PrimaryHighlightColor
+                text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedSecondaryAction).toString
+              }
+              val winProbabilityContainer = new StackPane() {
+                children = winProbability
+                mouseTransparent = true
+              }
+              displayInGrid(Vector(winProbabilityContainer), Vector(tile.position), grid)
 
           // Updates unit selection label with the type of the selected unit
           selectedUnitType.value = battleUnit.unitType
@@ -504,24 +528,26 @@ object GUI extends JFXApp3:
 
         // Deselects target selections and updates the selection state accordingly
         def clearHighlightedTiles() =
-            if game.selectedSecondaryTile.isDefined then
-              game.selectingSecondaryTarget = true
-              selectedTilePane(grid, game.selectedSecondaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedSecondaryTile.get)))
+          if game.selectedSecondaryTile.isDefined then
+            game.selectingSecondaryTarget = true
+            selectedTilePane(grid, game.selectedSecondaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedSecondaryTile.get)))
 
-            if game.selectedPrimaryTile.isDefined then
-              game.selectingSecondaryTarget = false
-              selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
+          if game.selectedPrimaryTile.isDefined then
+            game.selectingSecondaryTarget = false
+            selectedTilePane(grid, game.selectedPrimaryTile.get).fireEvent(syntheticMouseClick(selectedTilePane(grid, game.selectedPrimaryTile.get)))
         end clearHighlightedTiles
 
         // Clears the highlighting of all tiles in the range of the selected action of the BattleUnit
         // that has the largest range by dynamically removing the correct number of colored rectangles
         def clearTilesInRange(battleUnit: BattleUnit) =
-            for tile <- game.tilesInRange(battleUnit, if game.tilesInRange(battleUnit, game.selectedPrimaryAction).length > game.tilesInRange(battleUnit, game.selectedSecondaryAction).length then game.selectedPrimaryAction else game.selectedSecondaryAction) do
-              val i = selectedTilePane(grid, tile).children.length - 3
-              var j = i
-              for tileContent <- 1 to i do
-                selectedTilePane(grid, tile).children.remove(j)
-                j -= 1
+          for tile <- game.tilesInRange(battleUnit, if game.tilesInRange(battleUnit, game.selectedPrimaryAction).length > game.tilesInRange(battleUnit, game.selectedSecondaryAction).length then game.selectedPrimaryAction else game.selectedSecondaryAction) do
+            val i = selectedTilePane(grid, tile).children.length - 3
+            var j = i
+            for tileContent <- 1 to i do
+              selectedTilePane(grid, tile).children.remove(j)
+              j -= 1
+          // Clear all extra StackPanes (Attack probabilities)
+          grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.length + game.player2.battleUnits.length, grid.children.length - game.pendingActions.length)
 
         game.selectedBattleUnit match
           case Some(sBU) =>

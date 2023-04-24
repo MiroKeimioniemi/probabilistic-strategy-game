@@ -255,5 +255,16 @@ Further to do: conquest gamemode, health bars as rectangles displayed upon chang
 simultaneous turns with ram attacks, meaning that there are no conflicting move sets. Tanks ram over foot
 soldiers and snipers. Foot soldiers and snipers engage in hand-to-hand combat with foot soldiers usually
 beating snipers. Two tanks ram into each other so that one gets destroyed and the other takes damage. 
+Successfully destroying a rock produces gravel or something traversible and successfully destroying a
+forest or grass leaves dirt.
 
 Gave Player 2 some BattleUnits and made their selection turn based.
+
+25.4.2023
+
+Used the entire day to show probabilities of a succesfull attack on an enemy BattleUnit on the GUI and implemented
+a very inefficient calculateAttackProbability method. Development is significantly slower than desired due to me
+constantly running into dumb issues, some of which are very complex and actually require a ton of work and others
+where having sat for hours staring at the screen simply to change one line a bit make me feel exceptionally stupid.
+Next, attack method itself, which should, again on paper, be a lot more straightforward. And to show that something
+actually happened, I must add healthbars. 

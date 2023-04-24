@@ -46,14 +46,14 @@ val SecondaryTargetSelection = "Select target"
 // Grass
 val GrassFlatness          = 95
 val GrassSolidity          = 95
-val GrassVegetationDensity = 5
+val GrassVegetationDensity = 2
 val GrassElevation         = 0
 
 // Forest
 val ForestFlatness          = 25
 val ForestSolidity          = 85
-val ForestVegetationDensity = 95
-val ForestElevation         = 5
+val ForestVegetationDensity = 75
+val ForestElevation         = 0
 
 // Rock
 val RockFlatness          = 5
@@ -74,7 +74,7 @@ val TankVolume         = 100
 val TankRange          = 1
 val TankArmor          = 100
 val TankBaseDamage     = 100
-val TankDamageGradient = LazyList.iterate(TankBaseDamage * 2)( x => x / 2 ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
+val TankDamageGradient: LazyList[Double] = LazyList.iterate(TankBaseDamage * 2.0)( x => max(1, (x / 2)) ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
 
 var TankAmmo   = 2
 var TankFuel   = 2
@@ -129,7 +129,8 @@ val Player1BattleUnitsFormation =
 
 val Player2BattleUnitsFormation =
   Vector[BattleUnit](
-    Player2TankUnit(GridPos(14, 1), West),
-    Player2TankUnit(GridPos(15, 2), West),
-    Player2TankUnit(GridPos(9, 8), West)
+    Player2TankUnit(GridPos(15, 1), West),
+    Player2TankUnit(GridPos(16, 2), West),
+    Player2TankUnit(GridPos(9, 8), West),
+    Player2TankUnit(GridPos(7, 6), West)
 )

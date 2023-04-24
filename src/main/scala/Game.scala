@@ -3,7 +3,7 @@ import o1.grid.CompassDir.*
 import o1.grid.GridPos
 
 import javax.print.attribute.standard.Destination
-import math.{max, min}
+import math.{max, min, abs}
 import scala.util.Random
 
 class Game:
@@ -69,11 +69,54 @@ class Game:
     val de = targetTile.elevation
 
     MoveSuccessProbability(bw, bv, df, ds, dv, de)
+  end calculateMoveProbability
+
+  def calculateAttackProbability(battleUnit: BattleUnit, target: GridPos): Int =
+
+    val xDistance = battleUnit.position.x - target.x
+    val yDistance = battleUnit.position.y - target.y
+    val absoluteDistance = if abs(xDistance) >= abs(yDistance) then abs(xDistance) else abs(yDistance)
+
+    val opponent = if currentlyPlaying == player1 then player2 else player1
+    val targetBattleUnit = opponent.battleUnits.find(_.position == target)
+    val targetPath =
+      if xDistance >= 0 && yDistance == 0 then
+        gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
+      else if xDistance < 0 && yDistance == 0 then
+        gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
+      else if yDistance >= 0 && xDistance == 0 then
+        gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
+      else if yDistance < 0 && xDistance == 0 then
+        gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
+      else
+        Vector()
+
+    var combatSuccessProbability = 100
+    var successProbability = 100
+    var blockingDegree = 0
+
+    if targetBattleUnit.isDefined then
+      combatSuccessProbability = (((battleUnit.armor * battleUnit.damageGradient(absoluteDistance)) / (battleUnit.armor * battleUnit.damageGradient(absoluteDistance) + (targetBattleUnit.get.armor * targetBattleUnit.get.damageGradient(absoluteDistance)))) * 100).toInt
+
+    // Calculates probabilites for a successful attack based on TerrainTiles' characteristics on the path and the damage gradient
+    if xDistance < 0 || yDistance < 0 then
+      for i <- targetPath.indices do
+        successProbability = max(1, (battleUnit.damageGradient(i)) - blockingDegree).toInt
+        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
+    else if xDistance > 0 || yDistance > 0 then
+      for i <- targetPath.indices.reverse do
+        successProbability = max(1, (battleUnit.damageGradient(targetPath.length - 1 - i)) - blockingDegree).toInt
+        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
+
+    max(1, ((successProbability * combatSuccessProbability) / 100))
+
+  end calculateAttackProbability
 
   def calculateSuccessProbability(battleUnit: BattleUnit, destination: GridPos, action: Action): Int =
       action match
         case Move => calculateMoveProbability(battleUnit, destination)
-        case _ => 10
+        case Attack => calculateAttackProbability(battleUnit, destination)
+        case _ => 100
 
   /** changes the position of a BattleUnit from the current one to the one given
    *  @param battleUnit BattleUnit to be moved
