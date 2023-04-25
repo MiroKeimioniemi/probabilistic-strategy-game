@@ -14,6 +14,7 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   val armor:          Int
   val baseDamage:     Int
   val damageGradient: LazyList[Double]
+  val maxHealth:      Int
 
   var position:    GridPos = initialGridPos
   var orientation: CompassDir = initialFacing
@@ -51,35 +52,37 @@ case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) e
   val image = "src/main/resources/blue-tank.png"
   val unitType = "Tank"
 
-  val weight =         TankWeight
-  val volume =         TankVolume
-  val range =          TankRange
-  val armor =          TankArmor
-  val baseDamage =     TankBaseDamage
+  val weight         = TankWeight
+  val volume         = TankVolume
+  val range          = TankRange
+  val armor          = TankArmor
+  val baseDamage     = TankBaseDamage
   val damageGradient = TankDamageGradient
+  val maxHealth      = TankMaxHealth
 
-  var ammo =        TankAmmo
-  var fuel =        TankFuel
-  var health =      TankHealth
-  var supplyChain = None
+  var ammo           = TankAmmo
+  var fuel           = TankFuel
+  var health         = TankHealth
+  var supplyChain    = None
 
 end Player1TankUnit
 
 case class Player2TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
-  
+
   val image = "src/main/resources/red-tank.png"
   val unitType = "Tank"
 
-  val weight =         TankWeight
-  val volume =         TankVolume
-  val range =          TankRange
-  val armor =          TankArmor
-  val baseDamage =     TankBaseDamage
+  val weight         = TankWeight
+  val volume         = TankVolume
+  val range          = TankRange
+  val armor          = TankArmor
+  val baseDamage     = TankBaseDamage
   val damageGradient = TankDamageGradient
+  val maxHealth      = TankMaxHealth
 
-  var ammo =        TankAmmo
-  var fuel =        TankFuel
-  var health =      TankHealth
-  var supplyChain = None
+  var ammo           = TankAmmo
+  var fuel           = TankFuel
+  var health         = TankHealth
+  var supplyChain    = None
 
 end Player2TankUnit

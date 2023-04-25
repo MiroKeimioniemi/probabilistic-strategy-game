@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Gave Player 2 some BattleUnits and made their selection turn based.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented calculateAttackProbability method of Game and modified GUI to display probabilities for successful attacks.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -470,7 +469,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682272551448</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Implemented calculateAttackProbability method of Game and modified GUI to display probabilities for successful attacks.">
+      <created>1682375523007</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1682375523007</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -497,7 +503,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactored drawMapTiles, drawBattleUnits, TerrainTiles and BattleUnits such that the latter two contain their own images to achieve better encapsulation and built an initial map for testing." />
     <MESSAGE value="Imporved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
     <MESSAGE value="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
     <MESSAGE value="Added a drawRectangleAround method, which draws a red rectangle around a selected image." />
@@ -522,7 +527,8 @@
     <MESSAGE value="Implemented ActionSet selection in the GUI fully." />
     <MESSAGE value="Implemented probabilistic action execution and improved testing." />
     <MESSAGE value="Gave Player 2 some BattleUnits and made their selection turn based." />
-    <option name="LAST_COMMIT_MESSAGE" value="Gave Player 2 some BattleUnits and made their selection turn based." />
+    <MESSAGE value="Implemented calculateAttackProbability method of Game and modified GUI to display probabilities for successful attacks." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented calculateAttackProbability method of Game and modified GUI to display probabilities for successful attacks." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

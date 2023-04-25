@@ -202,7 +202,7 @@ object GUI extends JFXApp3:
           game.selectedSecondaryTile.getOrElse(game.gameMap.tiles.filter(_.position == game.selectedBattleUnit.get.position).head).position
         )
         game.pendingActions = game.pendingActions :+ game.selectedBattleUnit.get
-        grid.add(drawPic("src/main/resources/done-symbol.png", scene), game.selectedBattleUnit.get.position.x, game.selectedBattleUnit.get.position.y)
+        grid.add(drawPic("src/main/resources/done-symbol.png", scene, 0), game.selectedBattleUnit.get.position.x, game.selectedBattleUnit.get.position.y)
         clearHighlights(grid)
     }
 
@@ -246,13 +246,14 @@ object GUI extends JFXApp3:
 
 
   /** Returns an ImageView object corresponding to a given image path, scaled with respect to the game scene */
-  private def drawPic(pic: String, gameScene: Scene): ImageView =
+  private def drawPic(pic: String, gameScene: Scene, rotation: Int): ImageView =
     val imageView = new ImageView(new Image(FileInputStream(pic))) {
       fitWidth <== ((gameScene.widthProperty()) / MapWidth) - (RightPaneWidth / MapWidth)
       fitHeight <== ((gameScene.widthProperty()) / MapWidth) - (RightPaneWidth / MapWidth)
       maxHeight((gameScene.widthProperty() / MapWidth).toDouble)
       preserveRatio = true
     }
+    imageView.rotate = rotation
     imageView
   end drawPic
 
@@ -276,7 +277,7 @@ object GUI extends JFXApp3:
      * a mouse click event listener that toggles the highlighting (border) of the tile */
     def selectableTiles(tile: TerrainTile): StackPane =
 
-      val image = drawPic(tile.image, scene)
+      val image = drawPic(tile.image, scene, 0)
       val primaryBorder = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
@@ -377,7 +378,14 @@ object GUI extends JFXApp3:
      * the highlightTiles in the Game class associated with it */
     def selectableBattleUnit(battleUnit: BattleUnit): StackPane =
 
-      val image = drawPic(battleUnit.image, scene)
+      val orientation = battleUnit.orientation match
+        case North => -90
+        case East  => 0
+        case South => 90
+        case West  => 180
+        case _     => 0
+
+      val image = drawPic(battleUnit.image, scene, orientation)
       val border = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
@@ -392,8 +400,31 @@ object GUI extends JFXApp3:
         stroke = Color.Transparent
         fill = Color.Transparent
       }
+      val healthBarBackground = new Rectangle {
+        width <== (image.fitWidth - strokeWidth) / 1.4
+        height <== (image.fitHeight - strokeWidth) / 40
+        margin = Insets(0, 0, ((image.fitHeight.value - strokeWidth.value) / 10), (((image.fitWidth.value - strokeWidth.value * 1.0) - ((image.fitWidth.value - strokeWidth.value * 1.0) / 1.4)) / 2))
+        arcWidth = HealthBarRounding
+        arcHeight = HealthBarRounding
+        strokeWidth = SelectionRectangleThickness
+        stroke = Color.DarkGrey
+        fill = Color.DarkGrey
+        alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
+      }
+      val healthBar = new Rectangle {
+        width <== ((battleUnit.health * 1.0 / battleUnit.maxHealth) * ((image.fitWidth.value - strokeWidth.value) / 1.4))
+        height <== (image.fitHeight - strokeWidth) / 40
+        margin = Insets(0, 0, ((image.fitHeight.value - strokeWidth.value) / 10), (((image.fitWidth.value - strokeWidth.value * 1.0) - ((image.fitWidth.value - strokeWidth.value * 1.0) / 1.4)) / 2))
+        arcWidth = HealthBarRounding
+        arcHeight = HealthBarRounding
+        strokeWidth = SelectionRectangleThickness
+        stroke = if (battleUnit.health * 1.0 / battleUnit.maxHealth) <= HealthBarCriticalThreshold then HealthBarCriticalColor else HealthBarHealthyColor
+        fill = if (battleUnit.health * 1.0 / battleUnit.maxHealth) <= HealthBarCriticalThreshold then HealthBarCriticalColor else HealthBarHealthyColor
+        alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
+      }
+
       val selectable = new StackPane()
-      selectable.children.addAll(image, border)
+      selectable.children.addAll(image, border, healthBarBackground, healthBar)
 
       // Allows selecting only currently playing player's BattleUnits
       if !game.currentlyPlaying.battleUnits.contains(battleUnit) then
@@ -590,12 +621,6 @@ object GUI extends JFXApp3:
 
     // Displays BattleUnits on the grid with correct orientations
     battleUnits.foreach(battleUnit => drawn = drawn :+ selectableBattleUnit(battleUnit))
-    battleUnits.map(_.orientation).zipWithIndex.foreach(o => drawn(o._2).rotate = o._1 match
-      case North => -90
-      case East  => 0
-      case South => 90
-      case West  => 180
-      case _     => 0)
     displayInGrid(drawn, positions, grid)
 
   end drawBattleUnits

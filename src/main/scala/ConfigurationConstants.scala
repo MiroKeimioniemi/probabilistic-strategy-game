@@ -29,6 +29,10 @@ val LayoutInset                 = Insets(20)
 val DefaultLeftMargin           = Insets(0, 0, 0, 10)
 val DropdownWidth               = 80
 val DropdownHeight              = 50
+val HealthBarRounding           = 5
+val HealthBarCriticalThreshold  = 0.5
+val HealthBarHealthyColor       = Color.LimeGreen
+val HealthBarCriticalColor      = Color.Red
 
 /** Text */
 val GameTitle                = "Strategy Game"
@@ -75,6 +79,7 @@ val TankRange          = 1
 val TankArmor          = 100
 val TankBaseDamage     = 100
 val TankDamageGradient: LazyList[Double] = LazyList.iterate(TankBaseDamage * 2.0)( x => max(1, (x / 2)) ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
+val TankMaxHealth          = 100
 
 var TankAmmo   = 2
 var TankFuel   = 2
