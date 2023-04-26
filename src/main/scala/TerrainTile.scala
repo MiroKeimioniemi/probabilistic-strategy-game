@@ -7,7 +7,7 @@ import java.io.FileInputStream
 
 sealed trait TerrainTile(gridPos: GridPos):
 
-  val image: String
+  var image: String
   val position: GridPos = gridPos
 
   var flatness:          Int
@@ -22,7 +22,7 @@ end TerrainTile
 
 case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = "src/main/resources/grass-tile.png"
+  var image = "src/main/resources/grass-tile.png"
 
   var flatness =          GrassFlatness
   var solidity =          GrassSolidity
@@ -31,10 +31,12 @@ case class GrassTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   // TODO: Refactor the method to not contain any magic numbers ------------- !
   def degrade(damage: Int) =
-    flatness =          max(0, flatness - damage)
-    solidity =          max(0, solidity - damage)
+    flatness =          max(75, flatness - damage)
+    solidity =          max(75, solidity - damage)
     vegetationDensity = 0
     elevation =         0
+    if solidity < 80 then
+      image = "src/main/resources/dirt-tile.png"
   end degrade
 
   def copySelf(newPosition: GridPos): GrassTile =
@@ -44,7 +46,7 @@ end GrassTile
 
 case class ForestTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = "src/main/resources/forest-tile.png"
+  var image = "src/main/resources/forest-tile.png"
 
   var flatness =          ForestFlatness
   var solidity =          ForestSolidity
@@ -53,10 +55,12 @@ case class ForestTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   // TODO: Refactor the method to not contain any magic numbers ------------- !
   def degrade(damage: Int) =
-    flatness =          max(0, flatness - damage)
-    solidity =          max(0, solidity - damage)
+    flatness =          max(25, flatness + damage)
+    solidity =          max(50, solidity - damage)
     vegetationDensity = max(0, vegetationDensity - damage)
     elevation =         0
+    if vegetationDensity < 25 then
+      image = "src/main/resources/degraded-grass-tile.png"
   end degrade
 
   def copySelf(newPosition: GridPos): ForestTile =
@@ -66,7 +70,7 @@ end ForestTile
 
 case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = "src/main/resources/rock-tile.png"
+  var image = "src/main/resources/rock-tile.png"
 
   var flatness =          RockFlatness
   var solidity =          RockSolidity
@@ -79,6 +83,8 @@ case class RockTile(gridPos: GridPos) extends TerrainTile(gridPos):
     solidity =          max(0, solidity - (damage / 10))
     vegetationDensity = 0
     elevation =         max(0, elevation - damage)
+    if elevation < 50 then
+      image = "src/main/resources/gravel-tile.png"
   end degrade
 
   def copySelf(newPosition: GridPos): RockTile =
@@ -88,7 +94,7 @@ end RockTile
 
 case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
-  val image = "src/main/resources/desert-tile.png"
+  var image = "src/main/resources/desert-tile.png"
 
   var flatness =          SandFlatness
   var solidity =          SandSolidity
@@ -97,10 +103,10 @@ case class SandTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   // TODO: Refactor the method to not contain any magic numbers ------------- !
   def degrade(damage: Int) =
-    flatness =          min(100, flatness * Random().nextInt(10) / Random().nextInt(10))
+    flatness =          min(100, flatness * Random().nextInt(11) / (Random().nextInt(10) + 1))
     solidity =          solidity
     vegetationDensity = 0
-    elevation =         min(100, elevation * Random().nextInt(10) / Random().nextInt(10))
+    elevation =         min(100, elevation * Random().nextInt(11) / (Random().nextInt(10) + 1))
   end degrade
 
   def copySelf(newPosition: GridPos): SandTile =

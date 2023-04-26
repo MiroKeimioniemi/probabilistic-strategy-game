@@ -36,10 +36,11 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
       ForestTile(GridPos(7, 7))
   ), "origin")
   game.player1.battleUnits = Vector[BattleUnit](Player1TankUnit(GridPos(7, 8), East))
-  game.player2.battleUnits = Vector[BattleUnit]()
+  game.player2.battleUnits = Vector[BattleUnit](Player2TankUnit(GridPos(9, 8), West))
 
   // BattleUnit used in tests
   val testBattleUnit = game.player1.battleUnits(0)
+  val testEnemyUnit  = game.player2.battleUnits(0)
 
   // Restores game state before each test
   before {
@@ -62,18 +63,27 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
     withClue("Player 1's BattleUnit vector should contain BattleUnits") {
       game.player1.battleUnits.last shouldBe a [BattleUnit]
     }
+
+    withClue("Player 2's BattleUnit vector should contain BattleUnits") {
+      game.player2.battleUnits.last shouldBe a [BattleUnit]
+    }
   }
 
   // TODO: Add a test for tilesInRange
 
-  "probabilities" should "range from 1 to 100" in {
+  "probabilities" should "work according to specification" in {
 
-    withClue("tilesInRange probabilities should be between 1 and 100") {
+    withClue("tilesInRange probabilities should range between 1 and 100") {
       for tile <- game.tilesInRange(testBattleUnit, Action.Move) do
         game.calculateMoveProbability(testBattleUnit, tile.position) should (be >= 1 and be <= 100)
     }
 
-    withClue("randomNumberGenerator should be initialized with seed 1, producing the correct number sequence with numbers ranging from 0 to 100") {
+    withClue("tilesInRange probabilities should range between 1 and 100") {
+      for tile <- game.tilesInRange(testBattleUnit, Action.Move) do
+        game.calculateAttackProbability(testBattleUnit, tile.position) should (be >= 1 and be <= 100)
+    }
+
+    withClue("randomNumberGenerator should produce the correct number sequence with numbers ranging from 0 to 100 when initialized with seed 1") {
       (1 to 100).map(_ => game.randomNumberGenerator.nextInt(101)) should equal (Vector(97, 5, 21, 41, 77, 60, 33, 30, 45, 50, 4, 64, 19, 81, 43, 30, 31, 38, 55, 33, 71, 58, 7, 88, 71, 48, 35, 56, 20, 48, 6, 60, 20, 50, 78, 65, 77, 83, 11, 57, 83, 20, 52, 62, 31, 95, 8, 69, 43, 85, 35, 88, 66, 44, 96, 17, 29, 87, 89, 69, 5, 31, 4, 73, 24, 9, 71, 59, 25, 80, 21, 52, 48, 33, 10, 5, 4, 19, 99, 39, 66, 64, 33, 91, 55, 67, 65, 34, 65, 91, 76, 90, 31, 10, 54, 87, 19, 84, 39, 62))
     }
   }
@@ -103,6 +113,29 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
       testBattleUnit.position should equal (GridPos(7, 8))
       testBattleUnit.orientation should equal (North)
     }
+  }
+
+  "attack" should "work according to specification" in {
+
+    val battleUnitHealthBeforeAttack = testBattleUnit.health
+    val enemyHealthBeforeAttack = testEnemyUnit.health
+
+    withClue("lost attack should decrease the attacking BattleUnit's health") {
+      game.attack(testBattleUnit, GridPos(9, 8))
+      testBattleUnit.health should be < battleUnitHealthBeforeAttack
+    }
+
+    withClue("won attack should decrease the attacked BattleUnit's health") {
+      game.attack(testBattleUnit, GridPos(9, 8))
+      testEnemyUnit.health should be < enemyHealthBeforeAttack
+    }
+
+    withClue("attack should degrade the target tile") {
+      val targetTileFlatnessBeforeAttack = game.gameMap.tiles.filter(_.position == GridPos(9, 8)).head.flatness
+      game.attack(testBattleUnit, GridPos(9, 8))
+      game.gameMap.tiles.filter(_.position == GridPos(9, 8)).head.flatness should be !== targetTileFlatnessBeforeAttack
+    }
+
   }
 
   "executeActionSet" should "work according to specification" in {

@@ -5,8 +5,9 @@ import java.io.FileInputStream
 
 sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   
-  val image: String
-  val unitType: String
+  var image:          String
+  val deadImage:      String
+  val unitType:       String
 
   val weight:         Int
   val volume:         Int
@@ -16,13 +17,14 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   val damageGradient: LazyList[Double]
   val maxHealth:      Int
 
-  var position:    GridPos = initialGridPos
-  var orientation: CompassDir = initialFacing
-  var ammo:        Int
-  var fuel:        Int
-  var health:      Int
-  var experience:  Int = 0
-  var supplyChain: Option[SupplyChain]
+  var alive:          Boolean             = true
+  var position:       GridPos             = initialGridPos
+  var orientation:    CompassDir          = initialFacing
+  var experience:     Int                 = 0
+  var ammo:           Int
+  var fuel:           Int
+  var health:         Int
+  var supplyChain:    Option[SupplyChain]
 
   var actionSet: ActionSet = ActionSet(Action.Stay, position, Action.Stay, position)
 
@@ -41,6 +43,9 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
 
   def takeDamage(q: Int): Unit =
     health -= q
+    if health <= 0 then
+      alive = false
+      image = deadImage
 
   def gainExperience(q: Int): Unit =
     experience += q
@@ -49,8 +54,9 @@ end BattleUnit
 
 case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
   
-  val image = "src/main/resources/blue-tank.png"
-  val unitType = "Tank"
+  var image          = "src/main/resources/blue-tank.png"
+  val deadImage      = "src/main/resources/destroyed-blue-tank.png"
+  val unitType       = "Tank"
 
   val weight         = TankWeight
   val volume         = TankVolume
@@ -69,8 +75,9 @@ end Player1TankUnit
 
 case class Player2TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
 
-  val image = "src/main/resources/red-tank.png"
-  val unitType = "Tank"
+  var image          = "src/main/resources/red-tank.png"
+  val deadImage      = "src/main/resources/destroyed-red-tank.png"
+  val unitType       = "Tank"
 
   val weight         = TankWeight
   val volume         = TankVolume

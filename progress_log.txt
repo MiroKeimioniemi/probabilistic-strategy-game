@@ -270,3 +270,20 @@ Next, attack method itself, which should, again on paper, be a lot more straight
 actually happened, I must add healthbars.
 
 Added responsive healthbars for BattleUnits. Move must be modified to accomodate enemies nearby and enable ramming.
+
+26.4.2023
+
+Implemented attack such that attacking other units causes a duel where the loser takes all the damage. The target
+tile or that of the loser's gets degraded such that grass and forest turn to dirt, rock turns into gravel and sand
+changes form such that the attributes of attacked tiles change such that they are more or less easily traversible.
+The displayed probabilities are those of successfully starting a duel, combining the effects of distance and the
+enemy BattleUnit's stats. The actual winner is calculated within the method based on attackProbabilityAgainstBattleUnit.
+To show the degradations and destroyed BattleUnits on the map, BattleUnit, TerrainTile and the GUI classes were also
+edited. Now I must only implement the conquest game mode and thus the minimum viable product has been created.
+
+After that I still must add the configuration file reader and an artificially intelligent opponent so that the
+requirements of the course are fulfilled. Additionally, there is some balancing and tweaking still to be done such
+as polishing the GUI (by making it prettier and by adding BattleUnit info to the side panel) and giving experience
+and possibly ammo some weight in calculating the probabilities for winning a duel as well as adding the implementation
+for defend, that temporarily boosts a BattleUnit's health. Finally, I do still want to add supply chains and simultaneous
+turns.

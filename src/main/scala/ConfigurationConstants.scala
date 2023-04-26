@@ -77,7 +77,7 @@ val TankWeight         = 100
 val TankVolume         = 100
 val TankRange          = 1
 val TankArmor          = 100
-val TankBaseDamage     = 100
+val TankBaseDamage     = 90
 val TankDamageGradient: LazyList[Double] = LazyList.iterate(TankBaseDamage * 2.0)( x => max(1, (x / 2)) ).patch(0, Iterable(TankBaseDamage / 10), 1) // TDG(0) = 10, TDG(1) = 100, TDG(n) = 100 / 2n
 val TankMaxHealth          = 100
 
@@ -117,11 +117,6 @@ val MapTiles  =
       ForestTile(GridPos(6, 7)),
       ForestTile(GridPos(7, 7))
   ), "origin")
-  
-/** Gameplay properties */
-// Move success probability formula
-def MoveSuccessProbability(bw: Int, bv: Int, df: Int, ds: Int, dv: Int, de: Int): Int = 
-  max(1, (100 - (0.33 * (bw / (ds + bv))) - (0.33 * (dv + bv)) - (de) + (0.33 * df))).toInt
 
 /** Player properties */
 // Player 1

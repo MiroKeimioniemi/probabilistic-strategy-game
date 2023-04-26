@@ -220,6 +220,7 @@ object GUI extends JFXApp3:
 
       game.playTurn()
 
+      updateMapTiles(scene)
       game.pendingActions = Vector()
       turnCount.value = game.turnCount.toString
 
@@ -262,6 +263,17 @@ object GUI extends JFXApp3:
     for element <- drawn zip positions do
       grid.add(element._1, element._2.x, element._2.y)
   end displayInGrid
+
+
+  /** Updates attacked tiles' images based on which tiles are targeted by the Attack action in pendingActions */
+  private def updateMapTiles(scene: Scene) =
+    val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
+    val updateableTiles = game.pendingActions.filter(_.actionSet.primaryAction == Action.Attack).map(_.actionSet.primaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head) ++ game.pendingActions.filter(_.actionSet.secondaryAction == Action.Attack).map(_.actionSet.secondaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head)
+    val updateableImages = updateableTiles.map(t => drawPic(t.image, scene, 0))
+    val updateablePositions = updateableTiles.map(_.position)
+    for tile <- updateablePositions do
+      grid.children.filter(GridPane.getRowIndex(_) == tile.y).find(GridPane.getColumnIndex(_) == tile.x).get.asInstanceOf[javafx.scene.layout.StackPane].children.remove(0)
+      grid.children.filter(GridPane.getRowIndex(_) == tile.y).find(GridPane.getColumnIndex(_) == tile.x).get.asInstanceOf[javafx.scene.layout.StackPane].children.add(0, updateableImages(updateablePositions.indexOf(tile)))
 
 
   /** Displays selectable images corresponding to the map tiles in the GUI */
@@ -424,7 +436,10 @@ object GUI extends JFXApp3:
       }
 
       val selectable = new StackPane()
-      selectable.children.addAll(image, border, healthBarBackground, healthBar)
+      if battleUnit.alive then
+        selectable.children.addAll(image, border, healthBarBackground, healthBar)
+      else
+        selectable.children.addAll(image, border)
 
       // Allows selecting only currently playing player's BattleUnits
       if !game.currentlyPlaying.battleUnits.contains(battleUnit) then
@@ -580,37 +595,38 @@ object GUI extends JFXApp3:
           // Clear all extra StackPanes (Attack probabilities)
           grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.length + game.player2.battleUnits.length, grid.children.length - game.pendingActions.length)
 
-        game.selectedBattleUnit match
-          case Some(sBU) =>
-            if sBU == battleUnit then
+        if battleUnit.alive then
+          game.selectedBattleUnit match
+            case Some(sBU) =>
+              if sBU == battleUnit then
 
-              clearTilesInRange(sBU)
-              // Deselects the BattleUnit and selected tiles
-              border.stroke = Color.Transparent
-              clearHighlightedTiles()
-              game.selectedBattleUnit = None
+                clearTilesInRange(sBU)
+                // Deselects the BattleUnit and selected tiles
+                border.stroke = Color.Transparent
+                clearHighlightedTiles()
+                game.selectedBattleUnit = None
 
-              // Bring focus to primary action dropdown
-              if !game.selectingSecondaryTarget then
-                primaryActionDropdown.requestFocus()
-                secondaryActionDropdown.disable = true
+                // Bring focus to primary action dropdown
+                if !game.selectingSecondaryTarget then
+                  primaryActionDropdown.requestFocus()
+                  secondaryActionDropdown.disable = true
 
-              selectedUnitType.value = SelectedUnitDefault
+                selectedUnitType.value = SelectedUnitDefault
 
-            if sBU != battleUnit then
+              if sBU != battleUnit then
 
-              clearTilesInRange(sBU)
-              clearHighlightedTiles()
+                clearTilesInRange(sBU)
+                clearHighlightedTiles()
 
-              // Unhighlight previously highlighted BattleUnit tile
-              selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
-              game.selectedBattleUnit = None
+                // Unhighlight previously highlighted BattleUnit tile
+                selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+                game.selectedBattleUnit = None
+
+                highlightBattleUnit()
+
+            case None =>
 
               highlightBattleUnit()
-
-          case None =>
-
-            highlightBattleUnit()
 
         event.consume()
       }
