@@ -1,9 +1,11 @@
 import Action.Move
+import javafx.scene.layout.{ColumnConstraints, RowConstraints}
 import scalafx.Includes.*
 import scalafx.application.{JFXApp3, Platform}
 import scalafx.scene.{Node, Scene, layout, text}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
+
 import math.min
 import java.io.FileInputStream
 import o1.{East, GridPos, South, West}
@@ -27,10 +29,14 @@ object GUI extends JFXApp3:
   private val game = new Game
 
   // Initialize bound properties
-  private val selectedUnitType = StringProperty(SelectedUnitDefault)
-  private val turnCount        = StringProperty(game.turnCount.toString)
-  private val primaryTarget    = StringProperty(PrimaryTargetSelection)
-  private val secondaryTarget  = StringProperty(SecondaryTargetSelection)
+  private val selectedUnitType       = StringProperty(SelectedUnitDefault)
+  private val turnCount              = StringProperty(game.turnCount.toString)
+  private val primaryTarget          = StringProperty(PrimaryTargetSelection)
+  private val secondaryTarget        = StringProperty(SecondaryTargetSelection)
+  private val selectedUnitHealth     = StringProperty(Health)
+  private val selectedUnitExperience = StringProperty(Experience)
+  private val selectedUnitAmmo       = StringProperty(Ammo)
+  private val selectedUnitFuel       = StringProperty(Fuel)
 
   // Utility functions
   private def selectedBattleUnitPane(grid: GridPane): StackPane =
@@ -111,18 +117,20 @@ object GUI extends JFXApp3:
     val grid = new GridPane()
 
     val rightPane = new VBox():
+      style    = RightPaneBackgroundStyle
       minWidth = GameWindowWidth
-      padding = LayoutInset
-      spacing = DefaultSpacing
+      padding  = LayoutInset
+      spacing  = DefaultSpacing
 
     val bottomPane = new HBox():
+      style     = BottomPaneBacgroundStyle
       minHeight = GameWindowHeight
-      padding = LayoutInset
-      spacing = DefaultSpacing
+      padding   = LayoutInset
+      spacing   = DefaultSpacing
 
     val rootPane = new BorderPane():
-      left = grid
-      right = rightPane
+      left   = grid
+      right  = rightPane
       bottom = bottomPane
 
     val scene = new Scene(GameWindowWidth, GameWindowHeight):
@@ -135,11 +143,43 @@ object GUI extends JFXApp3:
     var unitLabel = new Label():
       font = HeadingFont
       text <== selectedUnitType
-      margin = Insets(0, 0, 50, 0)
+      margin = Insets(0, 0, (DefaultSpacing / 2), 0)
+    unitLabel.setTextFill(TextColor)
+
+    var infoGrid = new GridPane()
+    infoGrid.columnConstraints.addAll(ColumnConstraints(150), ColumnConstraints(150))
+    infoGrid.rowConstraints.addAll(RowConstraints(50), RowConstraints(50))
+
+    var healthLabel = new Label():
+      font = HeadingFont
+      text <== selectedUnitHealth
+    healthLabel.setTextFill(TextColor)
+
+    var experienceLabel = new Label():
+      font = HeadingFont
+      text <== selectedUnitExperience
+    experienceLabel.setTextFill(TextColor)
+
+    var ammoLabel = new Label():
+      font = HeadingFont
+      text <== selectedUnitAmmo
+    ammoLabel.setTextFill(TextColor)
+
+    var fuelLabel = new Label():
+      font = HeadingFont
+      text <== selectedUnitFuel
+    fuelLabel.setTextFill(TextColor)
+
+    infoGrid.add(healthLabel, 0, 0)
+    infoGrid.add(experienceLabel, 1, 0)
+    infoGrid.add(ammoLabel, 0, 1)
+    infoGrid.add(fuelLabel, 1, 1)
 
     var primaryActionLabel = new Label():
       font = DefaultFont
       text = PrimaryAction
+      margin = Insets(DefaultSpacing, 0, 0, 0)
+    primaryActionLabel.setTextFill(TextColor)
 
     var primaryActionSelector = new HBox()
 
@@ -162,10 +202,12 @@ object GUI extends JFXApp3:
       font = HeadingFont
       text <== primaryTarget
       margin = DefaultLeftMargin
+    primaryActionTarget.setTextFill(TextColor)
 
     var secondaryActionLabel = new Label():
       font = DefaultFont
       text = SecondaryAction
+    secondaryActionLabel.setTextFill(TextColor)
 
     var secondaryActionSelector = new HBox()
 
@@ -185,11 +227,12 @@ object GUI extends JFXApp3:
       font = HeadingFont
       text <== secondaryTarget
       margin = DefaultLeftMargin
+    secondaryActionTarget.setTextFill(TextColor)
 
     var setActionSetButton = new Button():
       font = HeadingFont
       text = SetActionSetButton
-      margin = Insets(50, 0, 0, 0)
+      margin = Insets((DefaultSpacing * 2), 0, 0, 0)
 
     // Sets the ActionSet of the currently selected BattleUnit according to other current selections and indicates the
     // success of this by adding a done symbol to the upper right corner of the BattleUnit whose AcionSet was set
@@ -202,17 +245,32 @@ object GUI extends JFXApp3:
           game.selectedSecondaryTile.getOrElse(game.gameMap.tiles.filter(_.position == game.selectedBattleUnit.get.position).head).position
         )
         game.pendingActions = game.pendingActions :+ game.selectedBattleUnit.get
-        grid.add(drawPic("src/main/resources/done-symbol.png", scene, 0), game.selectedBattleUnit.get.position.x, game.selectedBattleUnit.get.position.y)
         clearHighlights(grid)
     }
-
-    var turnCounter = new Label():
-      font = HeadingFont
-      text <== turnCount
 
     var playTurnButton = new Button():
       font = HeadingFont
       text = PlayTurnButton
+
+    var turnCounter = new Label():
+      font = HeadingFont
+      text <== turnCount
+    turnCounter.setTextFill(TextColor)
+    turnCounter.setPrefWidth(CounterWidth)
+
+    var player1WinProgress = new Label():
+      font = HeadingFont
+      text <== StringProperty(Player1Score + game.player1.winProgress.toString)
+      margin = DefaultLeftMargin
+    player1WinProgress.setTextFill(TextColor)
+    player1WinProgress.setPrefWidth(CounterWidth)
+
+    var player2WinProgress = new Label():
+      font = HeadingFont
+      text <== StringProperty(Player2score + game.player2.winProgress.toString)
+      margin = DefaultLeftMargin
+    player2WinProgress.setTextFill(TextColor)
+    player2WinProgress.setPrefWidth(CounterWidth)
 
     // Resets all selections, invokes the PlayTurn method of Game and refreshes the GUI
     playTurnButton.onMouseClicked = (event: MouseEvent) => {
@@ -232,8 +290,8 @@ object GUI extends JFXApp3:
     // Builds the GUI layout from the components specified above
     primaryActionSelector.children.addAll(primaryActionDropdown, primaryActionTarget)
     secondaryActionSelector.children.addAll(secondaryActionDropdown, secondaryActionTarget)
-    rightPane.children.addAll(unitLabel, primaryActionLabel, primaryActionSelector, secondaryActionLabel, secondaryActionSelector, setActionSetButton)
-    bottomPane.children.addAll(playTurnButton, turnCounter)
+    rightPane.children.addAll(unitLabel, infoGrid, primaryActionLabel, primaryActionSelector, secondaryActionLabel, secondaryActionSelector, setActionSetButton)
+    bottomPane.children.addAll(playTurnButton, turnCounter, player1WinProgress, player2WinProgress)
 
     // Initializes the game grid
     drawMapTiles(scene)
@@ -293,14 +351,14 @@ object GUI extends JFXApp3:
       val primaryBorder = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
-        strokeWidth = SelectionRectangleThickness
+        strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = Color.Transparent
         fill = Color.Transparent
       }
       val secondaryBorder = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
-        strokeWidth = SelectionRectangleThickness
+        strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = Color.Transparent
         fill = Color.Transparent
       }
@@ -311,7 +369,7 @@ object GUI extends JFXApp3:
       // Selects and highlights the clicked tile if it is in the range of the selected battle unit's selected action
       selectable.onMouseClicked = (event: MouseEvent) => {
 
-        val secondaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(4).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
+        val secondaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(5).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
 
         def highlightPrimaryTile() =
           primaryBorder.stroke = PrimaryHighlightColor
@@ -401,14 +459,14 @@ object GUI extends JFXApp3:
       val border = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
-        strokeWidth = SelectionRectangleThickness
+        strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = Color.Transparent
         fill = Color.Transparent
       }
       val secondBorder = new Rectangle {
         width <== image.fitWidth - strokeWidth
         height <== image.fitHeight - strokeWidth
-        strokeWidth = SelectionRectangleThickness
+        strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = Color.Transparent
         fill = Color.Transparent
       }
@@ -418,18 +476,18 @@ object GUI extends JFXApp3:
         margin = Insets(0, 0, ((image.fitHeight.value - strokeWidth.value) / 10), (((image.fitWidth.value - strokeWidth.value * 1.0) - ((image.fitWidth.value - strokeWidth.value * 1.0) / 1.4)) / 2))
         arcWidth = HealthBarRounding
         arcHeight = HealthBarRounding
-        strokeWidth = SelectionRectangleThickness
+        strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = Color.DarkGrey
         fill = Color.DarkGrey
         alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
       }
       val healthBar = new Rectangle {
-        width <== ((battleUnit.health * 1.0 / battleUnit.maxHealth) * ((image.fitWidth.value - strokeWidth.value) / 1.4))
+        width <== (((image.fitWidth - strokeWidth) / 1.4) * (battleUnit.health * 1.0 / battleUnit.maxHealth))
         height <== (image.fitHeight - strokeWidth) / 40
         margin = Insets(0, 0, ((image.fitHeight.value - strokeWidth.value) / 10), (((image.fitWidth.value - strokeWidth.value * 1.0) - ((image.fitWidth.value - strokeWidth.value * 1.0) / 1.4)) / 2))
         arcWidth = HealthBarRounding
         arcHeight = HealthBarRounding
-        strokeWidth = SelectionRectangleThickness
+        strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = if (battleUnit.health * 1.0 / battleUnit.maxHealth) <= HealthBarCriticalThreshold then HealthBarCriticalColor else HealthBarHealthyColor
         fill = if (battleUnit.health * 1.0 / battleUnit.maxHealth) <= HealthBarCriticalThreshold then HealthBarCriticalColor else HealthBarHealthyColor
         alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
@@ -459,8 +517,8 @@ object GUI extends JFXApp3:
         if game.selectedSecondaryTile.isDefined && game.selectedBattleUnit.isDefined && game.selectedSecondaryTile.get == game.gameMap.tiles.filter(_.position == game.selectedBattleUnit.get.position).head then
           secondaryTarget.value = SecondaryTargetSelection
 
-        val secondaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(4).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
-        val primaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(2).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
+        val secondaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(5).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
+        val primaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(3).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
 
         def highlightBattleUnit() =
 
@@ -498,7 +556,7 @@ object GUI extends JFXApp3:
             val primaryHighlight = new Rectangle {
               width <== image.fitWidth - strokeWidth
               height <== image.fitHeight - strokeWidth
-              strokeWidth = SelectionRectangleThickness
+              strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
               stroke = BattleUnitHighlightColor
               fill = Color.Transparent
             }
@@ -530,7 +588,7 @@ object GUI extends JFXApp3:
             val secondaryHighlight = new Rectangle {
               width <== image.fitWidth - strokeWidth
               height <== image.fitHeight - strokeWidth
-              strokeWidth = SelectionRectangleThickness
+              strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
               stroke = if game.selectingSecondaryTarget then Color.Cyan else Color.Transparent
               fill = Color.Transparent
             }
@@ -567,8 +625,13 @@ object GUI extends JFXApp3:
               }
               displayInGrid(Vector(winProbabilityContainer), Vector(tile.position), grid)
 
-          // Updates unit selection label with the type of the selected unit
-          selectedUnitType.value = battleUnit.unitType
+          // Updates uselected unit information
+          val defending = if battleUnit.defending then " (Defending)" else ""
+          selectedUnitType.value = battleUnit.unitType + defending
+          selectedUnitHealth.value = Health + battleUnit.health.toString + "/" + battleUnit.maxHealth
+          selectedUnitExperience.value = Experience + battleUnit.experience.toString
+          selectedUnitAmmo.value = Ammo + battleUnit.ammo.toString + "/" + battleUnit.maxAmmo
+          selectedUnitFuel.value = Fuel + battleUnit.fuel.toString + "/" + battleUnit.maxFuel
 
         end highlightBattleUnit
 
@@ -592,8 +655,11 @@ object GUI extends JFXApp3:
             for tileContent <- 1 to i do
               selectedTilePane(grid, tile).children.remove(j)
               j -= 1
-          // Clear all extra StackPanes (Attack probabilities)
-          grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.length + game.player2.battleUnits.length, grid.children.length - game.pendingActions.length)
+          // Clear all extra StackPanes
+          grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.length + game.player2.battleUnits.length, grid.children.length)
+          // Add back checkmarks for set actions
+          for readyBattleUnit <- game.pendingActions do
+            grid.add(drawPic("src/main/resources/done-symbol.png", scene, 0), readyBattleUnit.position.x, readyBattleUnit.position.y)
 
         if battleUnit.alive then
           game.selectedBattleUnit match
@@ -612,6 +678,10 @@ object GUI extends JFXApp3:
                   secondaryActionDropdown.disable = true
 
                 selectedUnitType.value = SelectedUnitDefault
+                selectedUnitHealth.value = Health
+                selectedUnitExperience.value = Experience
+                selectedUnitAmmo.value = Ammo
+                selectedUnitFuel.value = Fuel
 
               if sBU != battleUnit then
 

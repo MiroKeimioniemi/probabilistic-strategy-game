@@ -291,3 +291,6 @@ turns.
 27.4.2023
 
 Implemented defend, which decreases the damage received upon potential loss by a factor of DefendStrength.
+Finished the GUI fully and fixed a bug causing action set ticks to sometimes disappear and attack probabilities to linger.
+The only coming additions to the GUI are a game over / winner window with a reset button after either player wins and lines
+representing the supply chains.

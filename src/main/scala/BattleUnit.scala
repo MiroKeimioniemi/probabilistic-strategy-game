@@ -16,6 +16,8 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   val baseDamage:     Int
   val damageGradient: LazyList[Double]
   val maxHealth:      Int
+  val maxAmmo:        Int
+  val maxFuel:        Int
 
   var alive:          Boolean             = true
   var defending:      Boolean             = false
@@ -51,10 +53,9 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   def gainExperience(q: Int): Unit =
     experience += q
 
-  
   def defend(): Unit =
     defending = true
-  
+
 end BattleUnit
 
 case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
@@ -69,11 +70,13 @@ case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) e
   val armor          = TankArmor
   val baseDamage     = TankBaseDamage
   val damageGradient = TankDamageGradient
-  val maxHealth      = TankMaxHealth
+  val maxHealth      = TankHealth
+  val maxAmmo        = TankAmmo
+  val maxFuel        = TankFuel
 
-  var ammo           = TankAmmo
-  var fuel           = TankFuel
-  var health         = TankHealth
+  var ammo           = maxAmmo
+  var fuel           = maxFuel
+  var health         = maxHealth
   var supplyChain    = None
 
 end Player1TankUnit
@@ -90,11 +93,13 @@ case class Player2TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) e
   val armor          = TankArmor
   val baseDamage     = TankBaseDamage
   val damageGradient = TankDamageGradient
-  val maxHealth      = TankMaxHealth
+  val maxHealth      = TankHealth
+  val maxAmmo        = TankAmmo
+  val maxFuel        = TankFuel
 
-  var ammo           = TankAmmo
-  var fuel           = TankFuel
-  var health         = TankHealth
+  var ammo           = maxAmmo
+  var fuel           = maxFuel
+  var health         = maxHealth
   var supplyChain    = None
 
 end Player2TankUnit

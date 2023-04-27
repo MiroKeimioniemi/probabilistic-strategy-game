@@ -18,21 +18,25 @@ val RightPaneWidth   = GameWindowWidth / 4
 val BottomPaneHeight = GameWindowHeight / 15
 
 // Component properties
-val SelectionRectangleThickness = 4
+val SelectionRectangleThickness = 6
 val BattleUnitHighlightColor    = Color.Blue
 val PrimaryHighlightColor       = Color.Red
 val SecondaryHighlightColor     = Color.Yellow
 val HeadingFont                 = Font.font("Open Sans", FontWeight.Bold, 20)
 val DefaultFont                 = Font.font("Open Sans", 20)
 val DefaultSpacing              = 20
-val LayoutInset                 = Insets(20)
-val DefaultLeftMargin           = Insets(0, 0, 0, 10)
+val LayoutInset                 = Insets(25)
+val DefaultLeftMargin           = Insets(0, 0, 0, 20)
 val DropdownWidth               = 80
 val DropdownHeight              = 50
 val HealthBarRounding           = 5
 val HealthBarCriticalThreshold  = 0.5
 val HealthBarHealthyColor       = Color.LimeGreen
 val HealthBarCriticalColor      = Color.Red
+val TextColor                   = Color.White
+val RightPaneBackgroundStyle    = "-fx-background-color: #223222"
+val BottomPaneBacgroundStyle    = "-fx-background-color: #273727"
+val CounterWidth                = 200
 
 /** Text */
 val GameTitle                = "Strategy Game"
@@ -43,6 +47,12 @@ val PrimaryAction            = "Primary Action"
 val PrimaryTargetSelection   = "Select target"
 val SecondaryAction          = "Secondary Action"
 val SecondaryTargetSelection = "Select target"
+val Health                   = "HP: "
+val Experience               = "XP: "
+val Ammo                     = "Ammo: "
+val Fuel                     = "Fuel: "
+val Player1Score             = "Player 1 score: "
+val Player2score             = "Player 2 score: "
 
 
 
@@ -134,6 +144,7 @@ val Player2BattleUnitsFormation =
     Player2TankUnit(GridPos(9, 8), West),
     Player2TankUnit(GridPos(7, 6), West)
 )
- 
+
 /** GamePlay properties */
+val ConquestTarget = 100
 val DefendStrength = 2
