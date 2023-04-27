@@ -157,7 +157,9 @@ class Game:
    *  @param destination GridPos position in the grid where BattleUnit will be moved */
   def move(battleUnit: BattleUnit, destination: GridPos): Unit =
     if !player1.battleUnits.exists(_.position == destination) && !player2.battleUnits.exists(_.position == destination) then
+      battleUnit.defending = false
       turn(battleUnit, destination)
+      battleUnit.useFuel(1)
       battleUnit.position = destination
   end move
 
@@ -168,6 +170,8 @@ class Game:
    *  @param battleUnit Attacking BattleUnit
    *  @param target Target coordinates of attack */
   def attack(battleUnit: BattleUnit, target: GridPos): Unit =
+
+    battleUnit.defending = false
 
     turn(battleUnit, target)
 
@@ -186,7 +190,12 @@ class Game:
       targetBattleUnit.get.useAmmo(1)
 
       if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then
-        targetBattleUnit.get.takeDamage(battleUnit.damageGradient(absoluteDistance - 1).toInt)
+
+        if targetBattleUnit.get.defending then
+          targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1) / DefendStrength).toInt)
+        else
+          targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1).toInt))
+
         targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
 
       else
@@ -197,6 +206,13 @@ class Game:
       targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
 
   end attack
+
+
+  /** Sets BattleUnit state as "defending" until it tries to move or attack again. When defending, the BattleUnit will only receive a fraction
+   *  (1 / DefendStrength) of the damage it normally would if it loses a duel
+   *  @param battleUnit Defending BattleUnit */
+  def defend(battleUnit: BattleUnit): Unit =
+    battleUnit.defend()
 
 
   /** Executes the ActionSet of a given BattleUnit by mathcing the actions to correct functions
@@ -210,7 +226,9 @@ class Game:
           move(battleUnit, battleUnit.actionSet.primaryTarget)
         case Attack =>
           attack(battleUnit, battleUnit.actionSet.primaryTarget)
-        case _ =>
+        case Defend =>
+          defend(battleUnit)
+        case Stay =>
       battleUnit.actionSet.primaryActionSuccess = true
 
     if !battleUnit.actionSet.primaryActionSuccess && randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.secondaryTarget, battleUnit.actionSet.secondaryAction) then
@@ -219,7 +237,9 @@ class Game:
           move(battleUnit, battleUnit.actionSet.secondaryTarget)
         case Attack =>
           attack(battleUnit, battleUnit.actionSet.secondaryTarget)
-        case _ =>
+        case Defend =>
+          defend(battleUnit)
+        case Stay =>
 
 
   /** Updates the game state by executing all pending actions and clearing all selections */

@@ -287,3 +287,7 @@ as polishing the GUI (by making it prettier and by adding BattleUnit info to the
 and possibly ammo some weight in calculating the probabilities for winning a duel as well as adding the implementation
 for defend, that temporarily boosts a BattleUnit's health. Finally, I do still want to add supply chains and simultaneous
 turns.
+
+27.4.2023
+
+Implemented defend, which decreases the damage received upon potential loss by a factor of DefendStrength.

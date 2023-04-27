@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added responsive healthbars for BattleUnits.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented the probabilistic attack, refactored Game class and modified BattleUnit, TerrainTile and GUI classes to display the effects of an attack.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +98,7 @@
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\lib" />
     </key>
   </component>
-  <component name="RunManager" selected="ScalaTest.GameSpec">
+  <component name="RunManager" selected="Application.GUI">
     <configuration name="GUI" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="GUI" />
       <module name="strategy-game" />
@@ -135,20 +133,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GameSpec.Move should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="strategy-game" />
-      <option name="allowRunningInParallel" value="false" />
-      <option name="projectPathOnTarget" />
-      <option name="selectedOptions">
-        <list />
-      </option>
-      <option name="testKind" value="Test name" />
-      <option name="testClassPath" value="GameSpec" />
-      <option name="testName" value="Move should work according to specification" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="GameSpec.attack should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="strategy-game" />
       <option name="allowRunningInParallel" value="false" />
@@ -163,13 +147,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="GameSpec.defend should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="strategy-game" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="testKind" value="Test name" />
+      <option name="testClassPath" value="GameSpec" />
+      <option name="testName" value="defend should work according to specification" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="ScalaTest.GameSpec" />
         <item itemvalue="Application.GUI" />
+        <item itemvalue="ScalaTest.GameSpec" />
+        <item itemvalue="ScalaTest.GameSpec.defend should work according to specification" />
         <item itemvalue="Scala REPL.Scala REPL" />
         <item itemvalue="ScalaTest.GameSpec.attack should work according to specification" />
-        <item itemvalue="ScalaTest.GameSpec.Move should work according to specification" />
       </list>
     </recent_temporary>
   </component>
@@ -486,7 +484,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682432465916</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Implemented the probabilistic attack, refactored Game class and modified BattleUnit, TerrainTile and GUI classes to display the effects of an attack.">
+      <created>1682547347419</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1682547347419</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -513,7 +518,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Improved game performance by enabling hardware acceleration and by moving the image generation back to the GUI functions." />
     <MESSAGE value="Added a drawRectangleAround method, which draws a red rectangle around a selected image." />
     <MESSAGE value="Added selectTiles method to the GUI to be able to highlight groups of selected tiles from the Game class. Major refactoring necessary, however." />
     <MESSAGE value="Added various GUI methods for selecting and highlighting BattleUnits and map tiles by rewriting drawRectangleAround." />
@@ -538,7 +542,8 @@
     <MESSAGE value="Gave Player 2 some BattleUnits and made their selection turn based." />
     <MESSAGE value="Implemented calculateAttackProbability method of Game and modified GUI to display probabilities for successful attacks." />
     <MESSAGE value="Added responsive healthbars for BattleUnits." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added responsive healthbars for BattleUnits." />
+    <MESSAGE value="Implemented the probabilistic attack, refactored Game class and modified BattleUnit, TerrainTile and GUI classes to display the effects of an attack." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented the probabilistic attack, refactored Game class and modified BattleUnit, TerrainTile and GUI classes to display the effects of an attack." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

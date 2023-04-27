@@ -46,8 +46,10 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
   before {
     game.randomNumberGenerator.setSeed(1)
     testBattleUnit.orientation = East
-    testBattleUnit.position = GridPos(7, 8)
-    testBattleUnit.actionSet = ActionSet(Action.Stay, testBattleUnit.position, Action.Stay, testBattleUnit.position)
+    testBattleUnit.position    = GridPos(7, 8)
+    testBattleUnit.actionSet   = ActionSet(Action.Stay, testBattleUnit.position, Action.Stay, testBattleUnit.position)
+    testBattleUnit.health      = testBattleUnit.maxHealth
+    testEnemyUnit.health       = testEnemyUnit.maxHealth
   }
 
   "Game" should "be initialized correctly" in {
@@ -134,6 +136,23 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
       val targetTileFlatnessBeforeAttack = game.gameMap.tiles.filter(_.position == GridPos(9, 8)).head.flatness
       game.attack(testBattleUnit, GridPos(9, 8))
       game.gameMap.tiles.filter(_.position == GridPos(9, 8)).head.flatness should be !== targetTileFlatnessBeforeAttack
+    }
+
+  }
+
+  "defend" should "work according to specification" in {
+
+    testBattleUnit.defend()
+    testEnemyUnit.defend()
+
+    withClue("lost attack by formerly defending BattleUnit should decrease the attacking BattleUnit's health as normal") {
+      game.attack(testBattleUnit, GridPos(9, 8))
+      testBattleUnit.health should be (testBattleUnit.maxHealth - testEnemyUnit.damageGradient(1).toInt)
+    }
+
+    withClue("won attack against a defending BattleUnit should decrease the attacked BattleUnit's health less than normal") {
+      game.attack(testBattleUnit, GridPos(9, 8))
+      testEnemyUnit.health should be > (testBattleUnit.maxHealth - testEnemyUnit.damageGradient(1).toInt)
     }
 
   }

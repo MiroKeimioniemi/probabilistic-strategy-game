@@ -18,6 +18,7 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   val maxHealth:      Int
 
   var alive:          Boolean             = true
+  var defending:      Boolean             = false
   var position:       GridPos             = initialGridPos
   var orientation:    CompassDir          = initialFacing
   var experience:     Int                 = 0
@@ -50,6 +51,10 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   def gainExperience(q: Int): Unit =
     experience += q
 
+  
+  def defend(): Unit =
+    defending = true
+  
 end BattleUnit
 
 case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):

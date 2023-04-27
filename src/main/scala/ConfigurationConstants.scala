@@ -134,3 +134,6 @@ val Player2BattleUnitsFormation =
     Player2TankUnit(GridPos(9, 8), West),
     Player2TankUnit(GridPos(7, 6), West)
 )
+ 
+/** GamePlay properties */
+val DefendStrength = 2
