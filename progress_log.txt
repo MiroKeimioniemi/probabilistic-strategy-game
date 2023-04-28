@@ -293,4 +293,23 @@ turns.
 Implemented defend, which decreases the damage received upon potential loss by a factor of DefendStrength.
 Finished the GUI fully and fixed a bug causing action set ticks to sometimes disappear and attack probabilities to linger.
 The only coming additions to the GUI are a game over / winner window with a reset button after either player wins and lines
-representing the supply chains.
+representing the supply chains. Annoyingly, the health bar margins cannot easily be bound to the tile dimensions and
+therefore they remain in the lower left corners of the tiles when scaling up the GUI. It doesn't look the worst and is
+therefore not worthy of spending a lot of time on right now but I might want to revisit it in the end if I have time.
+
+28.4.2023
+
+Added more BattleUnits and TerrainTiles, refactored both classes and made various changes to the Game class to make the
+BattleUnits get along better with different attributes. After sketching out how the supply chains would look like in practice,
+I decided to leave them out after all as they would make the GUI overly crowded. Instead, I am going to implement Reload and
+Rest (formerly Stay) actions that restore ammo and fuel respectively, forcing the unit to stay still (and undefended?) for one
+round.
+
+As a result of the changes, Attack probabilities are a bit harder to explain now. Move probabilities simply signify the
+probabilities of being able to move to the given square whereas Attack probabilities try to capture both the probability of
+initiating a duel and winning it. If a BattleUnit attacks another, the attack method is always called. It first checks for
+obstacles and calculates the probability of succeeding in light of these. If this check is passed, the winner of the duel is
+calculated next and finally, the probability for that winner to actually reach / hit the loser is calculated. If all these
+conditions are passed, only then does the loser take damage. The issue with this is that now the probability number does not
+clearly articulate neither hit probability nor win probability but rather something in between. This, I feel is still more
+straightforward for gameplay however.

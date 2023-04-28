@@ -33,10 +33,11 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
       ForestTile(GridPos(5, 6)),
       ForestTile(GridPos(6, 6)),
       ForestTile(GridPos(6, 7)),
-      ForestTile(GridPos(7, 7))
+      ForestTile(GridPos(7, 7)),
+      ConquestTile(GridPos(8, 5))
   ), "origin")
-  game.player1.battleUnits = Vector[BattleUnit](Player1TankUnit(GridPos(7, 8), East))
-  game.player2.battleUnits = Vector[BattleUnit](Player2TankUnit(GridPos(9, 8), West))
+  game.player1.battleUnits = Vector[BattleUnit](TankUnit(GridPos(7, 8), East, true))
+  game.player2.battleUnits = Vector[BattleUnit](TankUnit(GridPos(9, 8), West, false))
 
   // BattleUnit used in tests
   val testBattleUnit = game.player1.battleUnits(0)

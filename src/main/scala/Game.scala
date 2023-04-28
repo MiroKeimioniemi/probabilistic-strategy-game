@@ -56,11 +56,26 @@ class Game:
       case Defend => fovTiles(battleUnit, 0)
 
 
-  /** Returns the probability of a given BattleUnit successfully moving to destination
+  /** Returns the probability of a given BattleUnit successfully moving to target coordinates
    *  @param battleUnit BattleUnit considered to be moved
-   *  @param destination Potential destination TerrainTile */
-  def calculateMoveProbability(battleUnit: BattleUnit, destination: GridPos): Int =
-    val targetTile = gameMap.tiles.filter(_.position == destination).head
+   *  @param target destination coordinates */
+  def calculateMoveProbability(battleUnit: BattleUnit, target: GridPos): Int =
+
+    val targetTile = gameMap.tiles.filter(_.position == target).head
+
+    val xDistance = battleUnit.position.x - target.x
+    val yDistance = battleUnit.position.y - target.y
+    val targetPath =
+      if xDistance >= 0 && yDistance == 0 then
+        gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
+      else if xDistance < 0 && yDistance == 0 then
+        gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
+      else if yDistance >= 0 && xDistance == 0 then
+        gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
+      else if yDistance < 0 && xDistance == 0 then
+        gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
+      else
+        Vector()
 
     val bw = battleUnit.weight
     val bv = battleUnit.volume
@@ -70,7 +85,20 @@ class Game:
     val dv = targetTile.vegetationDensity
     val de = targetTile.elevation
 
-    max(1, (100 - (0.33 * (bw / (ds + bv))) - (0.33 * (dv + bv)) - (de) + (0.33 * df))).toInt
+    var successProbability = 100
+    var blockingDegree = 100 - min(99, max(1, (100 - (0.33 * (bw / (ds + bv))) - (0.33 * (dv + bv)) - (de) + (0.33 * df))).toInt)
+
+    // Calculates probabilites for a successful attack based on TerrainTiles' characteristics on the path and the damage gradient
+    if xDistance < 0 || yDistance < 0 then
+      for i <- targetPath.indices do
+        successProbability = max(1, successProbability - blockingDegree)
+        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
+    else if xDistance > 0 || yDistance > 0 then
+      for i <- targetPath.indices.reverse do
+        successProbability = max(1, successProbability - blockingDegree)
+        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
+    successProbability
+
   end calculateMoveProbability
 
 
@@ -80,6 +108,43 @@ class Game:
    *  @param distance Distance between the BattleUnits */
   def attackProbabilityAgainstBattleUnit(battleUnit: BattleUnit, targetBattleUnit: BattleUnit, distance: Int) =
     (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt
+
+
+  /** Returns a tuple containing the probability of successfully attacking a target, masked by damageGradient in the first place and the unmasked probability in the second
+   *  @param battleUnit Attacking BattleUnit
+   *  @param target Coordinates to be attacked*/
+  def attackInitiationProbability(battleUnit: BattleUnit, target: GridPos): (Int, Int) =
+
+    val xDistance = battleUnit.position.x - target.x
+    val yDistance = battleUnit.position.y - target.y
+    val targetPath =
+      if xDistance >= 0 && yDistance == 0 then
+        gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
+      else if xDistance < 0 && yDistance == 0 then
+        gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
+      else if yDistance >= 0 && xDistance == 0 then
+        gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
+      else if yDistance < 0 && xDistance == 0 then
+        gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
+      else
+        Vector()
+
+    var successProbability = 100
+    var blockingDegree = 0
+
+    // Calculates probabilites for a successful attack based on TerrainTiles' characteristics on the path and the damage gradient
+    if xDistance < 0 || yDistance < 0 then
+      for i <- targetPath.indices do
+        successProbability = max(1, ((battleUnit.damageGradient(i)) * 100.0 / battleUnit.baseDamage) - (blockingDegree * (battleUnit.baseDamage / 100.0))).toInt
+        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
+    else if xDistance > 0 || yDistance > 0 then
+      for i <- targetPath.indices.reverse do
+        successProbability = max(1, ((battleUnit.damageGradient(targetPath.length - 1 - i)) * 100.0 / battleUnit.baseDamage) - (blockingDegree * (battleUnit.baseDamage / 100.0))).toInt
+        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
+
+    (successProbability, (100 - min(100, blockingDegree)))
+
+  end attackInitiationProbability
 
 
   /** Returns the probability of a given BattleUnit successfully attacking target
@@ -93,36 +158,13 @@ class Game:
 
     val opponent = if currentlyPlaying == player1 then player2 else player1
     val targetBattleUnit = opponent.battleUnits.find(_.position == target)
-    val targetPath =
-      if xDistance >= 0 && yDistance == 0 then
-        gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
-      else if xDistance < 0 && yDistance == 0 then
-        gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
-      else if yDistance >= 0 && xDistance == 0 then
-        gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
-      else if yDistance < 0 && xDistance == 0 then
-        gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
-      else
-        Vector()
 
     var combatSuccessProbability = 100
-    var successProbability = 100
-    var blockingDegree = 0
 
     if targetBattleUnit.isDefined then
       combatSuccessProbability = attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1)
 
-    // Calculates probabilites for a successful attack based on TerrainTiles' characteristics on the path and the damage gradient
-    if xDistance < 0 || yDistance < 0 then
-      for i <- targetPath.indices do
-        successProbability = max(1, ((battleUnit.damageGradient(i)) * 100.0 / battleUnit.baseDamage) - blockingDegree).toInt
-        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
-    else if xDistance > 0 || yDistance > 0 then
-      for i <- targetPath.indices.reverse do
-        successProbability = max(1, ((battleUnit.damageGradient(targetPath.length - 1 - i)) * 100.0 / battleUnit.baseDamage) - blockingDegree).toInt
-        blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
-
-    max(1, ((successProbability * combatSuccessProbability) / 100))
+    min(99, max(1, ((attackInitiationProbability(battleUnit, target)._1 * combatSuccessProbability) / 100)))
 
   end calculateAttackProbability
 
@@ -157,6 +199,7 @@ class Game:
    *  @param destination GridPos position in the grid where BattleUnit will be moved */
   def move(battleUnit: BattleUnit, destination: GridPos): Unit =
     if !player1.battleUnits.exists(_.position == destination) && !player2.battleUnits.exists(_.position == destination) then
+      battleUnit.actionSet.primaryActionSuccess = true
       battleUnit.defending = false
       turn(battleUnit, destination)
       battleUnit.useFuel(1)
@@ -185,25 +228,33 @@ class Game:
 
     if targetBattleUnit.isDefined then
 
-      turn(targetBattleUnit.get, battleUnit.position)
-      battleUnit.useAmmo(1)
-      targetBattleUnit.get.useAmmo(1)
+      if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._2 then
 
-      if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then
+        turn(targetBattleUnit.get, battleUnit.position)
+        battleUnit.useAmmo(1)
+        targetBattleUnit.get.useAmmo(1)
 
-        if targetBattleUnit.get.defending then
-          targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1) / DefendStrength).toInt)
+        if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then
+          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 then
+            battleUnit.actionSet.primaryActionSuccess = true
+
+            if targetBattleUnit.get.defending then
+              targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1) / (max(1, DefendStrength))).toInt)
+            else
+              targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1).toInt))
+
+            if targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage then
+              targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
+
         else
-          targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1).toInt))
-
-        targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
-
-      else
-        battleUnit.takeDamage(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
-        gameMap.tiles.filter(_.position == battleUnit.position).head.degrade(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
+          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(targetBattleUnit.get, battleUnit.position)._1 then
+            battleUnit.takeDamage(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
+            gameMap.tiles.filter(_.position == battleUnit.position).head.degrade(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
 
     else
-      targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
+      if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && (targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage) then
+        battleUnit.actionSet.primaryActionSuccess = true
+        targetTile.degrade(battleUnit.damageGradient(max(0, absoluteDistance - 1)).toInt)
 
   end attack
 
@@ -212,6 +263,7 @@ class Game:
    *  (1 / DefendStrength) of the damage it normally would if it loses a duel
    *  @param battleUnit Defending BattleUnit */
   def defend(battleUnit: BattleUnit): Unit =
+    battleUnit.actionSet.primaryActionSuccess = true
     battleUnit.defend()
 
 
@@ -220,21 +272,21 @@ class Game:
    *  @param battleUnit BattleUnit whose ActionSet will be executed */
   def executeActionSet(battleUnit: BattleUnit): Unit =
 
-    if randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.primaryTarget, battleUnit.actionSet.primaryAction) then
-      battleUnit.actionSet.primaryAction match
-        case Move =>
+    battleUnit.actionSet.primaryAction match
+      case Move =>
+        if randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.primaryTarget, Action.Move) then
           move(battleUnit, battleUnit.actionSet.primaryTarget)
-        case Attack =>
-          attack(battleUnit, battleUnit.actionSet.primaryTarget)
-        case Defend =>
-          defend(battleUnit)
-        case Stay =>
-      battleUnit.actionSet.primaryActionSuccess = true
+      case Attack =>
+        attack(battleUnit, battleUnit.actionSet.primaryTarget)
+      case Defend =>
+        defend(battleUnit)
+      case Stay =>
 
-    if !battleUnit.actionSet.primaryActionSuccess && randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.secondaryTarget, battleUnit.actionSet.secondaryAction) then
+    if !battleUnit.actionSet.primaryActionSuccess && battleUnit.alive then
       battleUnit.actionSet.secondaryAction match
         case Move =>
-          move(battleUnit, battleUnit.actionSet.secondaryTarget)
+          if randomNumberGenerator.nextInt(101) <= calculateSuccessProbability(battleUnit, battleUnit.actionSet.secondaryTarget, Action.Move) then
+            move(battleUnit, battleUnit.actionSet.secondaryTarget)
         case Attack =>
           attack(battleUnit, battleUnit.actionSet.secondaryTarget)
         case Defend =>

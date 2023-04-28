@@ -5,29 +5,30 @@ import java.io.FileInputStream
 
 sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   
-  var image:          String
-  val deadImage:      String
-  val unitType:       String
+  var image:           String
+  val deadImage:       String
+  val unitType:        String
 
-  val weight:         Int
-  val volume:         Int
-  val range:          Int
-  val armor:          Int
-  val baseDamage:     Int
-  val damageGradient: LazyList[Double]
-  val maxHealth:      Int
-  val maxAmmo:        Int
-  val maxFuel:        Int
+  val weight:          Int
+  val volume:          Int
+  val range:           Int
+  val armor:           Int
+  val baseDamage:      Int
+  val explosiveDamage: Boolean
+  val damageGradient:  LazyList[Double]
+  val maxHealth:       Int
+  val maxAmmo:         Int
+  val maxFuel:         Int
 
-  var alive:          Boolean             = true
-  var defending:      Boolean             = false
-  var position:       GridPos             = initialGridPos
-  var orientation:    CompassDir          = initialFacing
-  var experience:     Int                 = 0
-  var ammo:           Int
-  var fuel:           Int
-  var health:         Int
-  var supplyChain:    Option[SupplyChain]
+  var alive:           Boolean             = true
+  var defending:       Boolean             = false
+  var position:        GridPos             = initialGridPos
+  var orientation:     CompassDir          = initialFacing
+  var experience:      Int                 = 0
+  var ammo:            Int
+  var fuel:            Int
+  var health:          Int
+  var supplyChain:     Option[SupplyChain]
 
   var actionSet: ActionSet = ActionSet(Action.Stay, position, Action.Stay, position)
 
@@ -58,48 +59,76 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
 
 end BattleUnit
 
-case class Player1TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
+
+
+case class TankUnit(initialGridPos: GridPos, initialFacing: CompassDir, player1Unit: Boolean) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
   
-  var image          = "src/main/resources/blue-tank.png"
-  val deadImage      = "src/main/resources/destroyed-blue-tank.png"
-  val unitType       = "Tank"
+  var image           = if player1Unit then Player1TankImage else Player2TankImage
+  val deadImage       = if player1Unit then Player1DestroyedTankImage else Player2DestroyedTankImage
+  val unitType        = TankUnitType
 
-  val weight         = TankWeight
-  val volume         = TankVolume
-  val range          = TankRange
-  val armor          = TankArmor
-  val baseDamage     = TankBaseDamage
-  val damageGradient = TankDamageGradient
-  val maxHealth      = TankHealth
-  val maxAmmo        = TankAmmo
-  val maxFuel        = TankFuel
+  val weight          = TankWeight
+  val volume          = TankVolume
+  val range           = TankRange
+  val armor           = TankArmor
+  val baseDamage      = TankBaseDamage
+  val explosiveDamage = TankExplosiveDamage
+  val damageGradient  = TankDamageGradient
+  val maxHealth       = TankHealth
+  val maxAmmo         = TankAmmo
+  val maxFuel         = TankFuel
 
-  var ammo           = maxAmmo
-  var fuel           = maxFuel
-  var health         = maxHealth
-  var supplyChain    = None
+  var ammo            = maxAmmo
+  var fuel            = maxFuel
+  var health          = maxHealth
+  var supplyChain     = None
 
-end Player1TankUnit
+end TankUnit
 
-case class Player2TankUnit(initialGridPos: GridPos, initialFacing: CompassDir) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
+case class SoldiersUnit(initialGridPos: GridPos, initialFacing: CompassDir, player1Unit: Boolean) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
+  
+  var image           = if player1Unit then Player1SoldiersImage else Player2SoldiersImage
+  val deadImage       = if player1Unit then Player1DestroyedSoldiersImage else Player2DestroyedSoldiersImage
+  val unitType        = SoldiersUnitType
 
-  var image          = "src/main/resources/red-tank.png"
-  val deadImage      = "src/main/resources/destroyed-red-tank.png"
-  val unitType       = "Tank"
+  val weight          = SoldiersWeight
+  val volume          = SoldiersVolume
+  val range           = SoldiersRange
+  val armor           = SoldiersArmor
+  val baseDamage      = SoldiersBaseDamage
+  val explosiveDamage = SoldiersExplosiveDamage
+  val damageGradient  = SoldiersDamageGradient
+  val maxHealth       = SoldiersHealth
+  val maxAmmo         = SoldiersAmmo
+  val maxFuel         = SoldiersFuel
 
-  val weight         = TankWeight
-  val volume         = TankVolume
-  val range          = TankRange
-  val armor          = TankArmor
-  val baseDamage     = TankBaseDamage
-  val damageGradient = TankDamageGradient
-  val maxHealth      = TankHealth
-  val maxAmmo        = TankAmmo
-  val maxFuel        = TankFuel
+  var ammo            = maxAmmo
+  var fuel            = maxFuel
+  var health          = maxHealth
+  var supplyChain     = None
 
-  var ammo           = maxAmmo
-  var fuel           = maxFuel
-  var health         = maxHealth
-  var supplyChain    = None
+end SoldiersUnit
 
-end Player2TankUnit
+case class SniperUnit(initialGridPos: GridPos, initialFacing: CompassDir, player1Unit: Boolean) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
+  
+  var image           = if player1Unit then Player1SniperImage else Player2SniperImage
+  val deadImage       = if player1Unit then Player1DestroyedSniperImage else Player2DestroyedSniperImage
+  val unitType        = SniperUnitType
+
+  val weight          = SniperWeight
+  val volume          = SniperVolume
+  val range           = SniperRange
+  val armor           = SniperArmor
+  val baseDamage      = SniperBaseDamage
+  val explosiveDamage = SniperExplosiveDamage
+  val damageGradient  = SniperDamageGradient
+  val maxHealth       = SniperHealth
+  val maxAmmo         = SniperAmmo
+  val maxFuel         = SniperFuel
+
+  var ammo            = maxAmmo
+  var fuel            = maxFuel
+  var health          = maxHealth
+  var supplyChain     = None
+
+end SniperUnit
