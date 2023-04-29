@@ -10,7 +10,8 @@ import math.min
 import java.io.FileInputStream
 import o1.{East, GridPos, South, West}
 import o1.grid.CompassDir.North
-import scalafx.beans.property.{BooleanProperty, StringProperty}
+import scalafx.application.JFXApp3.PrimaryStage
+import scalafx.beans.property.{BooleanProperty, IntegerProperty, StringProperty}
 import scalafx.collections.ObservableBuffer
 import scalafx.concurrent.Task
 import scalafx.geometry.Insets
@@ -19,6 +20,7 @@ import scalafx.scene.input.{MouseButton, MouseEvent, PickResult}
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.text.{Font, FontWeight}
+import scalafx.stage.{Modality, Stage}
 
 object GUI extends JFXApp3:
 
@@ -26,7 +28,7 @@ object GUI extends JFXApp3:
   System.setProperty("prism.order", "sw")
 
   // Initialize game
-  private val game = new Game
+  private var game = new Game
 
   // Initialize bound properties
   private val selectedUnitType       = StringProperty(SelectedUnitDefault)
@@ -37,6 +39,10 @@ object GUI extends JFXApp3:
   private val selectedUnitExperience = StringProperty(Experience)
   private val selectedUnitAmmo       = StringProperty(Ammo)
   private val selectedUnitFuel       = StringProperty(Fuel)
+  private val player1Score           = IntegerProperty(game.player1.winProgress)
+  private val player2Score           = IntegerProperty(game.player2.winProgress)
+  private val player1ScoreText       = StringProperty(Player1Score + game.player1.winProgress.toString + "/" + ConquestTarget)
+  private val player2ScoreText       = StringProperty(Player2Score + game.player2.winProgress.toString + "/" + ConquestTarget)
 
   // Utility functions
   private def selectedBattleUnitPane(grid: GridPane): StackPane =
@@ -133,10 +139,10 @@ object GUI extends JFXApp3:
       right  = rightPane
       bottom = bottomPane
 
-    val scene = new Scene(GameWindowWidth, GameWindowHeight):
+    val gameScene = new Scene(GameWindowWidth, GameWindowHeight):
       content = rootPane
 
-    stage.scene = scene
+    stage.scene = gameScene
 
 
     /** Display and control components */
@@ -258,19 +264,68 @@ object GUI extends JFXApp3:
     turnCounter.setTextFill(TextColor)
     turnCounter.setPrefWidth(CounterWidth)
 
-    var player1WinProgress = new Label():
-      font = HeadingFont
-      text <== StringProperty(Player1Score + game.player1.winProgress.toString)
+    var player1WinProgress = new VBox():
       margin = DefaultLeftMargin
-    player1WinProgress.setTextFill(TextColor)
-    player1WinProgress.setPrefWidth(CounterWidth)
 
-    var player2WinProgress = new Label():
+    var player1WinProgressLabel = new Label():
       font = HeadingFont
-      text <== StringProperty(Player2score + game.player2.winProgress.toString)
+      text <== player1ScoreText
+    player1WinProgressLabel.setTextFill(TextColor)
+    player1WinProgressLabel.setPrefWidth(CounterWidth)
+
+    var player1WinProgressBarBackground = new Rectangle():
+      width <== ProgressBarWidth
+      height <== ProgressBarHeight
+      arcWidth = BarRounding
+      arcHeight = BarRounding
+      stroke = BarBackgroundColor
+      fill = BarBackgroundColor
+      margin = Insets(ProgressBarHeight, 0, 0, 0)
+      alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
+
+    var player1WinProgressBar = new Rectangle():
+      width <== (player1Score * 1.0 / ConquestTarget) * ProgressBarWidth
+      height <== ProgressBarHeight
+      arcWidth = BarRounding
+      arcHeight = BarRounding
+      stroke = Player1Color
+      fill = Player1Color
+      margin = Insets(-ProgressBarHeight - 1.25, 0, 0, 0)
+      alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
+
+    player1WinProgress.children.addAll(player1WinProgressLabel, player1WinProgressBarBackground, player1WinProgressBar)
+
+    var player2WinProgress = new VBox():
       margin = DefaultLeftMargin
-    player2WinProgress.setTextFill(TextColor)
-    player2WinProgress.setPrefWidth(CounterWidth)
+
+    var player2WinProgressLabel = new Label():
+      font = HeadingFont
+      text <== player2ScoreText
+    player2WinProgressLabel.setTextFill(TextColor)
+    player2WinProgressLabel.setPrefWidth(CounterWidth)
+
+    var player2WinProgressBarBackground = new Rectangle():
+      width <== ProgressBarWidth
+      height <== ProgressBarHeight
+      arcWidth = BarRounding
+      arcHeight = BarRounding
+      stroke = BarBackgroundColor
+      fill = BarBackgroundColor
+      margin = Insets(ProgressBarHeight, 0, 0, 0)
+      alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
+
+    var player2WinProgressBar = new Rectangle():
+      width <== (player2Score * 1.0 / ConquestTarget) * ProgressBarWidth
+      height <== ProgressBarHeight
+      arcWidth = BarRounding
+      arcHeight = BarRounding
+      stroke = Player2Color
+      fill = Player2Color
+      margin = Insets(-ProgressBarHeight - 1.25, 0, 0, 0)
+      alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
+
+    player2WinProgress.children.addAll(player2WinProgressLabel, player2WinProgressBarBackground, player2WinProgressBar)
+
 
     // Resets all selections, invokes the PlayTurn method of Game and refreshes the GUI
     playTurnButton.onMouseClicked = (event: MouseEvent) => {
@@ -278,13 +333,53 @@ object GUI extends JFXApp3:
 
       game.playTurn()
 
-      updateMapTiles(scene)
+      updateMapTiles(gameScene)
       game.pendingActions = Vector()
       turnCount.value = game.turnCount.toString
 
+      player1Score.value = game.player1.winProgress
+      player2Score.value = game.player2.winProgress
+      player1ScoreText.value = Player1Score + game.player1.winProgress.toString + "/" + ConquestTarget
+      player2ScoreText.value = Player2Score + game.player2.winProgress.toString + "/" + ConquestTarget
+
       grid.children.removeRange(MapWidth * MapHeight, grid.children.length)
-      drawBattleUnits(scene, game.player1)
-      drawBattleUnits(scene, game.player2)
+      drawBattleUnits(gameScene, game.player1)
+      drawBattleUnits(gameScene, game.player2)
+
+      if game.gameOver then
+        // Game over popup window
+        val popUpBody = new VBox():
+          style = BottomPaneBacgroundStyle
+        popUpBody.alignment = javafx.geometry.Pos.CENTER
+
+        val popupText = new Label():
+          font = PopUpHeadingFont
+          text = if game.player1.winProgress > game.player2.winProgress then "Player 1 wins!" else "Player 2 wins!"
+        popupText.textFill = if game.player1.winProgress > game.player2.winProgress then Player1Color else Player2Color
+
+        val buttonRow = new HBox():
+          margin = Insets((DefaultSpacing), 0, 0, 0)
+        buttonRow.alignment = javafx.geometry.Pos.CENTER
+
+        val quitButton = new Button():
+          font = PopUpButtonFont
+          text = PopUpQuitButton
+        quitButton.onMouseClicked = (event: MouseEvent) => {
+          System.exit(0)
+        }
+
+        buttonRow.children.addAll(quitButton)
+
+        popUpBody.children.addAll(popupText, buttonRow)
+
+        val popUpScene = new Scene(popUpBody, 400, 200)
+        val popUp = new Stage() {
+          scene = popUpScene
+          title = "Game over"
+          initModality(Modality.ApplicationModal)
+          resizable = false
+        }
+        popUp.showAndWait()
     }
 
     // Builds the GUI layout from the components specified above
@@ -294,9 +389,11 @@ object GUI extends JFXApp3:
     bottomPane.children.addAll(playTurnButton, turnCounter, player1WinProgress, player2WinProgress)
 
     // Initializes the game grid
-    drawMapTiles(scene)
-    drawBattleUnits(scene, game.player1)
-    drawBattleUnits(scene, game.player2)
+    drawMapTiles(gameScene)
+    game.updateConquest()
+    updateMapTiles(gameScene)
+    drawBattleUnits(gameScene, game.player1)
+    drawBattleUnits(gameScene, game.player2)
 
     stage.show()
 
@@ -326,7 +423,7 @@ object GUI extends JFXApp3:
   /** Updates attacked tiles' images based on which tiles are targeted by the Attack action in pendingActions */
   private def updateMapTiles(scene: Scene) =
     val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
-    val updateableTiles = game.pendingActions.filter(_.actionSet.primaryAction == Action.Attack).map(_.actionSet.primaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head) ++ game.pendingActions.filter(_.actionSet.secondaryAction == Action.Attack).map(_.actionSet.secondaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head)
+    val updateableTiles = game.pendingActions.filter(_.actionSet.primaryAction == Action.Attack).map(_.actionSet.primaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head) ++ game.pendingActions.filter(_.actionSet.secondaryAction == Action.Attack).map(_.actionSet.secondaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head) ++ game.gameMap.tiles.filter(_.getClass == classOf[ConquestTile])
     val updateableImages = updateableTiles.map(t => drawPic(t.image, scene, 0))
     val updateablePositions = updateableTiles.map(_.position)
     for tile <- updateablePositions do
@@ -474,19 +571,19 @@ object GUI extends JFXApp3:
         width <== (image.fitWidth - strokeWidth) / 1.4
         height <== (image.fitHeight - strokeWidth) / 40
         margin = Insets(0, 0, ((image.fitHeight.value - strokeWidth.value) / 10), (((image.fitWidth.value - strokeWidth.value * 1.0) - ((image.fitWidth.value - strokeWidth.value * 1.0) / 1.4)) / 2))
-        arcWidth = HealthBarRounding
-        arcHeight = HealthBarRounding
+        arcWidth = BarRounding
+        arcHeight = BarRounding
         strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
-        stroke = Color.DarkGrey
-        fill = Color.DarkGrey
+        stroke = BarBackgroundColor
+        fill = BarBackgroundColor
         alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
       }
       val healthBar = new Rectangle {
         width <== (((image.fitWidth - strokeWidth) / 1.4) * (battleUnit.health * 1.0 / battleUnit.maxHealth))
         height <== (image.fitHeight - strokeWidth) / 40
         margin = Insets(0, 0, ((image.fitHeight.value - strokeWidth.value) / 10), (((image.fitWidth.value - strokeWidth.value * 1.0) - ((image.fitWidth.value - strokeWidth.value * 1.0) / 1.4)) / 2))
-        arcWidth = HealthBarRounding
-        arcHeight = HealthBarRounding
+        arcWidth = BarRounding
+        arcHeight = BarRounding
         strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
         stroke = if (battleUnit.health * 1.0 / battleUnit.maxHealth) <= HealthBarCriticalThreshold then HealthBarCriticalColor else HealthBarHealthyColor
         fill = if (battleUnit.health * 1.0 / battleUnit.maxHealth) <= HealthBarCriticalThreshold then HealthBarCriticalColor else HealthBarHealthyColor

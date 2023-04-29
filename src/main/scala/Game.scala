@@ -267,6 +267,21 @@ class Game:
     battleUnit.defend()
 
 
+  def updateConquest() =
+    val conquestTiles = gameMap.tiles.filter(_.getClass == classOf[ConquestTile])
+    if conquestTiles.map(_.position).intersect(player1.battleUnits.filter(_.alive).map(_.position)).nonEmpty && conquestTiles.map(_.position).intersect(player2.battleUnits.filter(_.alive).map(_.position)).isEmpty then
+      for cTile <- conquestTiles do
+        cTile.asInstanceOf[ConquestTile].updateStatus(Some(Player1Color))
+      player1.winProgress += 1
+    else if conquestTiles.map(_.position).intersect(player2.battleUnits.filter(_.alive).map(_.position)).nonEmpty && conquestTiles.map(_.position).intersect(player1.battleUnits.filter(_.alive).map(_.position)).isEmpty then
+      for cTile <- conquestTiles do
+        cTile.asInstanceOf[ConquestTile].updateStatus(Some(Player2Color))
+      player2.winProgress += 1
+    else
+      for cTile <- conquestTiles do
+        cTile.asInstanceOf[ConquestTile].updateStatus(None)
+
+
   /** Executes the ActionSet of a given BattleUnit by mathcing the actions to correct functions
    *  and keeping track of their successes and failures
    *  @param battleUnit BattleUnit whose ActionSet will be executed */
@@ -296,10 +311,18 @@ class Game:
 
   /** Updates the game state by executing all pending actions and clearing all selections */
   def playTurn(): Unit =
-    if pendingActions.nonEmpty then
+
+    if !gameOver && pendingActions.nonEmpty then
       for battleUnit <- pendingActions.reverse do
         executeActionSet(battleUnit)
+
+    updateConquest()
+
+    if player1.winProgress >= 100 || player2.winProgress >= 100 then
+      gameOver = true
+
     turnCount += 1
+
     currentlyPlaying = if currentlyPlaying == player1 then player2 else player1
   end playTurn
 

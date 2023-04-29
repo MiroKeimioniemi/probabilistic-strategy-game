@@ -3,6 +3,8 @@ import scala.math.min
 import scala.util.Random
 import o1.grid.GridPos
 import scalafx.scene.image.Image
+import scalafx.scene.paint.Color
+
 import java.io.FileInputStream
 
 sealed trait TerrainTile(gridPos: GridPos):
@@ -193,5 +195,11 @@ case class ConquestTile(gridPos: GridPos) extends TerrainTile(gridPos):
 
   def copySelf(newPosition: GridPos): ConquestTile =
     ConquestTile(newPosition)
+
+  def updateStatus(conqueror: Option[Color]) =
+    conqueror match
+      case Some(Player1Color) => image = BlueConquestTileImage
+      case Some(Player2Color) => image = RedConquestTileImage
+      case _                  => image = NeutralConquestTileImage
 
 end ConquestTile

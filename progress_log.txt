@@ -313,3 +313,12 @@ calculated next and finally, the probability for that winner to actually reach /
 conditions are passed, only then does the loser take damage. The issue with this is that now the probability number does not
 clearly articulate neither hit probability nor win probability but rather something in between. This, I feel is still more
 straightforward for gameplay however.
+
+29.4.2023
+
+Implemented the Conquest game mode, making the game finally fully playable. In order for it to be actually playable in practice,
+I must fix the move method such that one can move on top of dead/destroyed BattleUnits to prevent blocking of the conquest area.
+The conquest area is shown in the color of the player holding it and once either player has held the objective for ConquestTarget
+turns, a popup declares the winner. I wanted to add a reset button to this as well but upon quick research, it seems that it would
+require major refactorizations for which I do not have time currently. Also made Tanks brighter, which makes them look plastic and
+therefore worse in my opinion but at least they can now be seen.

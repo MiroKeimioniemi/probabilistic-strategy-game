@@ -29,14 +29,19 @@ val LayoutInset                 = Insets(25)
 val DefaultLeftMargin           = Insets(0, 0, 0, 20)
 val DropdownWidth               = 80
 val DropdownHeight              = 50
-val HealthBarRounding           = 5
 val HealthBarCriticalThreshold  = 0.5
 val HealthBarHealthyColor       = Color.LimeGreen
 val HealthBarCriticalColor      = Color.Red
+val BarBackgroundColor          = Color.DarkGrey
+val BarRounding                 = 5
+val ProgressBarWidth            = 200
+val ProgressBarHeight           = 5
 val TextColor                   = Color.White
 val RightPaneBackgroundStyle    = "-fx-background-color: #252825"
 val BottomPaneBacgroundStyle    = "-fx-background-color: #222522"
-val CounterWidth                = 200
+val CounterWidth                = 250
+val PopUpHeadingFont            = Font.font("Open Sans", FontWeight.Bold, 40)
+val PopUpButtonFont             = Font.font("Open Sans", 14)
 
 /** Text */
 val GameTitle                = "Strategy Game"
@@ -52,7 +57,9 @@ val Experience               = "XP: "
 val Ammo                     = "Ammo: "
 val Fuel                     = "Fuel: "
 val Player1Score             = "Player 1 score: "
-val Player2score             = "Player 2 score: "
+val Player2Score             = "Player 2 score: "
+val PopUpRestartButton       = "Restart"
+val PopUpQuitButton          = "Quit"
 
 
 
@@ -108,7 +115,7 @@ val SandElevation         = 10
 
 val NeutralConquestTileImage      = "src/main/resources/neutral-conquest-tile.png"
 val BlueConquestTileImage         = "src/main/resources/captured-blue-conquest-tile.png"
-val RedConquestTileImage          = "src/main/resources/captured-red-conquest-tile-png"
+val RedConquestTileImage          = "src/main/resources/captured-red-conquest-tile.png"
 val ConquestTileFlatness          = 100
 val ConquestTileSolidity          = 100
 val ConquestTileVegetationDensity = 0
@@ -220,9 +227,12 @@ val Player1BattleUnitsFormation =
     TankUnit(GridPos(2, 1), East, true),
     TankUnit(GridPos(1, 2), East, true),
     TankUnit(GridPos(7, 8), East, true),
-    SniperUnit(GridPos(11, 1), East, true)
+    SniperUnit(GridPos(11, 1), East, true),
+    SoldiersUnit(GridPos(8, 5), East, true)
 )
+val Player1Color = Color.web("4d6ef3")
 
+// Player 2
 val Player2BattleUnitsFormation =
   Vector[BattleUnit](
     TankUnit(GridPos(15, 1), West, false),
@@ -232,6 +242,7 @@ val Player2BattleUnitsFormation =
     SoldiersUnit(GridPos(4, 1), West, false),
     SniperUnit(GridPos(2, 3), North, false)
 )
+val Player2Color = Color.web("ed1c23")
 
 
 
