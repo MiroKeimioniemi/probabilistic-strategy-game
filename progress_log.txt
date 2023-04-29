@@ -322,3 +322,15 @@ The conquest area is shown in the color of the player holding it and once either
 turns, a popup declares the winner. I wanted to add a reset button to this as well but upon quick research, it seems that it would
 require major refactorizations for which I do not have time currently. Also made Tanks brighter, which makes them look plastic and
 therefore worse in my opinion but at least they can now be seen.
+
+30.4.2023
+
+Refined the move method so that heavier and more armored units can ram (or engage in hand-to-hand combat with) into lighter units,
+killing them instantly upon moving. Made appropriate changes to Game class and the GUI so that tiles with dead units are accessible
+for alive units so that the conquest area can no longer be blocked.
+
+There is a very rare chance that sometimes both BattleUnits engaging in a duel take damage or one gets a critical hit, dealing more
+damage than usual. This is a bug as I do not understand how it is possible for it to happen but due to lack of time and the additional
+interesting gameplay twist in harmony with other mechanics it brings, it is now declared a feature. I also will not be implementing
+simultaneous turns because the trivial solution would give a slight advantage to either player and a more sophisticated solution
+would require a lot more time.

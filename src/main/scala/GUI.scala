@@ -43,6 +43,8 @@ object GUI extends JFXApp3:
   private val player2Score           = IntegerProperty(game.player2.winProgress)
   private val player1ScoreText       = StringProperty(Player1Score + game.player1.winProgress.toString + "/" + ConquestTarget)
   private val player2ScoreText       = StringProperty(Player2Score + game.player2.winProgress.toString + "/" + ConquestTarget)
+  private var numOfDeadPlayer1Units  = 0
+  private var numOfDeadPlayer2Units  = 0
 
   // Utility functions
   private def selectedBattleUnitPane(grid: GridPane): StackPane =
@@ -108,6 +110,8 @@ object GUI extends JFXApp3:
         game.selectedPrimaryAction = Action.values.find(_ == updateAction).getOrElse(Move)
       else
         game.selectedSecondaryAction = Action.values.find(_ == updateAction).getOrElse(Move)
+
+    System.gc()
 
   end refreshSelection
 
@@ -478,7 +482,7 @@ object GUI extends JFXApp3:
           game.selectedSecondaryTile = Some(tile)
           secondaryTarget.value = tile.position.toString
 
-        // Selects or deselects secondary action
+        // Selects or deselects secondary action target
         if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get, game.selectedSecondaryAction).contains(tile) && game.selectingSecondaryTarget then
           game.selectedSecondaryTile match
             case Some(sPT) =>
@@ -491,7 +495,7 @@ object GUI extends JFXApp3:
             case None =>
                 highlightSecondaryTile()
 
-        // Selects or deselects primary action
+        // Selects or deselects primary action target
         else if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get, game.selectedPrimaryAction).contains(tile) && !game.selectingSecondaryTarget then
           game.selectedPrimaryTile match
             case Some(sPT) =>
@@ -535,15 +539,15 @@ object GUI extends JFXApp3:
   private def drawBattleUnits(scene: Scene, player: Player): Unit =
 
     val battleUnits: Vector[BattleUnit] = player.battleUnits
-    val positions: Vector[GridPos] = battleUnits.map(_.position)
-    var drawn: Vector[StackPane] = Vector[StackPane]()
+    val positions: Vector[GridPos] = battleUnits.filter(_.alive).map(_.position)
+    var drawn: Vector[Option[StackPane]] = Vector[Option[StackPane]]()
 
     val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
 
     /** Returns a StackPane containing the image of the battle unit, an initially transparent border
      * and a mouse click event listener that toggles the highlighting (border) of the BattleUnit and
      * the highlightTiles in the Game class associated with it */
-    def selectableBattleUnit(battleUnit: BattleUnit): StackPane =
+    def selectableBattleUnit(battleUnit: BattleUnit): Option[StackPane] =
 
       val orientation = battleUnit.orientation match
         case North => -90
@@ -594,7 +598,15 @@ object GUI extends JFXApp3:
       if battleUnit.alive then
         selectable.children.addAll(image, border, healthBarBackground, healthBar)
       else
-        selectable.children.addAll(image, border)
+        // If BattleUnit is dead, embeds its image into the stackpane containing the TerrainTile it is on and does not render it again
+        if game.player1.battleUnits.contains(battleUnit) && game.player1.battleUnits.count(!_.alive) > numOfDeadPlayer1Units then
+          val hostStackPane = grid.children.find(e => GridPane.getRowIndex(e) == battleUnit.position.y && GridPane.getColumnIndex(e) == battleUnit.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
+          hostStackPane.children.add((hostStackPane.children.length - 2), image)
+          numOfDeadPlayer1Units += 1
+        else if game.player2.battleUnits.contains(battleUnit) && game.player2.battleUnits.count(!_.alive) > numOfDeadPlayer2Units then
+          val hostStackPane = grid.children.find(e => GridPane.getRowIndex(e) == battleUnit.position.y && GridPane.getColumnIndex(e) == battleUnit.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
+          hostStackPane.children.add((hostStackPane.children.length - 2), image)
+          numOfDeadPlayer2Units += 1
 
       // Allows selecting only currently playing player's BattleUnits
       if !game.currentlyPlaying.battleUnits.contains(battleUnit) then
@@ -666,7 +678,7 @@ object GUI extends JFXApp3:
               selectedTilePane(grid, tile).children.add(1, primaryHighlight)
               selectedTilePane(grid, tile).children.add(2, actionSuccessProbability)
             // If there is another BattleUnit in range, displays the probability of beating it in battle by adding a stackpane with that probability on top of it
-            if game.selectedPrimaryAction == Action.Attack && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
+            if (game.selectedPrimaryAction == Action.Attack || game.selectedPrimaryAction == Action.Move) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
               val winProbability = new Label() {
                 font = HeadingFont
                 textFill = PrimaryHighlightColor
@@ -710,7 +722,7 @@ object GUI extends JFXApp3:
               selectedTilePane(grid, tile).children.add(1, secondaryHighlight)
               selectedTilePane(grid, tile).children.add(2, moveProbability)
             // If there is another BattleUnit in range, displays the probability of beating it in battle by adding a stackpane with that probability on top of it
-            if (game.selectingSecondaryTarget && game.selectedSecondaryAction == Action.Attack) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
+            if (game.selectingSecondaryTarget && (game.selectedSecondaryAction == Action.Attack || game.selectedSecondaryAction == Action.Move)) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
               val winProbability = new Label() {
                 font = HeadingFont
                 textFill = PrimaryHighlightColor
@@ -747,13 +759,14 @@ object GUI extends JFXApp3:
         // that has the largest range by dynamically removing the correct number of colored rectangles
         def clearTilesInRange(battleUnit: BattleUnit) =
           for tile <- game.tilesInRange(battleUnit, if game.tilesInRange(battleUnit, game.selectedPrimaryAction).length > game.tilesInRange(battleUnit, game.selectedSecondaryAction).length then game.selectedPrimaryAction else game.selectedSecondaryAction) do
-            val i = selectedTilePane(grid, tile).children.length - 3
+            val deadBattleUnitsPile = (game.player1.battleUnits.filter(!_.alive) ++ game.player2.battleUnits.filter(!_.alive))
+            val i = if deadBattleUnitsPile.count(_.position == tile.position) > 0 then selectedTilePane(grid, tile).children.length - (3 + deadBattleUnitsPile.count(_.position == tile.position)) else selectedTilePane(grid, tile).children.length - 3
             var j = i
             for tileContent <- 1 to i do
               selectedTilePane(grid, tile).children.remove(j)
               j -= 1
           // Clear all extra StackPanes
-          grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.length + game.player2.battleUnits.length, grid.children.length)
+          grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.count(_.alive) + game.player2.battleUnits.count(_.alive), grid.children.length)
           // Add back checkmarks for set actions
           for readyBattleUnit <- game.pendingActions do
             grid.add(drawPic("src/main/resources/done-symbol.png", scene, 0), readyBattleUnit.position.x, readyBattleUnit.position.y)
@@ -798,13 +811,16 @@ object GUI extends JFXApp3:
         event.consume()
       }
 
-      selectable
+      if battleUnit.alive then
+        Some(selectable)
+      else
+        None
 
     end selectableBattleUnit
 
     // Displays BattleUnits on the grid with correct orientations
     battleUnits.foreach(battleUnit => drawn = drawn :+ selectableBattleUnit(battleUnit))
-    displayInGrid(drawn, positions, grid)
+    displayInGrid(drawn.filter(_.isDefined).map(_.get), positions, grid)
 
   end drawBattleUnits
 

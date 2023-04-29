@@ -61,6 +61,14 @@ class Game:
    *  @param target destination coordinates */
   def calculateMoveProbability(battleUnit: BattleUnit, target: GridPos): Int =
 
+    val opponent = if currentlyPlaying == player1 then player2 else player1
+    val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == target)
+
+    var rammingProbability = 100
+
+    if targetBattleUnit.isDefined then
+      rammingProbability = (((battleUnit.armor * battleUnit.weight * 1.0) / (battleUnit.armor * battleUnit.weight * 1.0 + (targetBattleUnit.get.armor * targetBattleUnit.get.weight * 1.0))) * 100).toInt
+
     val targetTile = gameMap.tiles.filter(_.position == target).head
 
     val xDistance = battleUnit.position.x - target.x
@@ -97,7 +105,8 @@ class Game:
       for i <- targetPath.indices.reverse do
         successProbability = max(1, successProbability - blockingDegree)
         blockingDegree = blockingDegree + targetPath(i).elevation + targetPath(i).vegetationDensity
-    successProbability
+
+    min(99, max(1, ((successProbability * rammingProbability) / 100)))
 
   end calculateMoveProbability
 
@@ -157,7 +166,7 @@ class Game:
     val absoluteDistance = if abs(xDistance) >= abs(yDistance) then abs(xDistance) else abs(yDistance)
 
     val opponent = if currentlyPlaying == player1 then player2 else player1
-    val targetBattleUnit = opponent.battleUnits.find(_.position == target)
+    val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == target)
 
     var combatSuccessProbability = 100
 
@@ -198,7 +207,14 @@ class Game:
    *  @param battleUnit BattleUnit to be moved
    *  @param destination GridPos position in the grid where BattleUnit will be moved */
   def move(battleUnit: BattleUnit, destination: GridPos): Unit =
-    if !player1.battleUnits.exists(_.position == destination) && !player2.battleUnits.exists(_.position == destination) then
+
+    val opponent = if currentlyPlaying == player1 then player2 else player1
+    val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == destination)
+
+    if targetBattleUnit.isDefined then
+      targetBattleUnit.get.takeDamage(targetBattleUnit.get.maxHealth)
+
+    if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
       battleUnit.actionSet.primaryActionSuccess = true
       battleUnit.defending = false
       turn(battleUnit, destination)
@@ -223,19 +239,19 @@ class Game:
     val absoluteDistance = if abs(xDistance) >= abs(yDistance) then abs(xDistance) else abs(yDistance)
 
     val opponent = if currentlyPlaying == player1 then player2 else player1
-    val targetBattleUnit = opponent.battleUnits.find(_.position == target)
+    val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == target)
     val targetTile = gameMap.tiles.filter(_.position == target).head
 
-    if targetBattleUnit.isDefined then
+    if targetBattleUnit.isDefined then {
 
-      if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._2 then
+      if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._2 then {
 
         turn(targetBattleUnit.get, battleUnit.position)
         battleUnit.useAmmo(1)
         targetBattleUnit.get.useAmmo(1)
 
-        if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then
-          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 then
+        if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then {
+          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 then {
             battleUnit.actionSet.primaryActionSuccess = true
 
             if targetBattleUnit.get.defending then
@@ -245,14 +261,12 @@ class Game:
 
             if targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage then
               targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
-
-        else
-          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(targetBattleUnit.get, battleUnit.position)._1 then
+          }
+        } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(targetBattleUnit.get, battleUnit.position)._1 then
             battleUnit.takeDamage(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
             gameMap.tiles.filter(_.position == battleUnit.position).head.degrade(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
-
-    else
-      if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && (targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage) then
+      }
+    } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && (targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage) then
         battleUnit.actionSet.primaryActionSuccess = true
         targetTile.degrade(battleUnit.damageGradient(max(0, absoluteDistance - 1)).toInt)
 

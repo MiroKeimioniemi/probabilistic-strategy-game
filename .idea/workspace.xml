@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added more BattleUnits and TerrainTiles, refactored both classes and made various changes to the Game class to make the BattleUnits get along better with different attributes.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented the Conquest game mode.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/blue-tank.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/destroyed-blue-tank.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/destroyed-red-tank.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/red-tank.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/TerrainTile.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -516,7 +510,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682701407387</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Implemented the Conquest game mode.">
+      <created>1682726919789</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1682726919790</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -543,7 +544,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rewrote selectableBattleUnit method's mouse click event listener and removed the selectTiles method." />
     <MESSAGE value="Added fovTiles method to Game class that displays the tiles available for direct actions by a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method such that only one BattleUnit can be selected at any time." />
     <MESSAGE value="Rewrote the GUI to be scalable and overhauled the layout by adding more panes for presenting information and interacting with the game, the first example of which is the updating turnCounter." />
     <MESSAGE value="Interim report 3.4." />
@@ -568,7 +568,8 @@
     <MESSAGE value="Implemented defend." />
     <MESSAGE value="Finished the GUI fully and fixed a bug causing action set ticks to sometimes disappear and attack probabilities to linger." />
     <MESSAGE value="Added more BattleUnits and TerrainTiles, refactored both classes and made various changes to the Game class to make the BattleUnits get along better with different attributes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added more BattleUnits and TerrainTiles, refactored both classes and made various changes to the Game class to make the BattleUnits get along better with different attributes." />
+    <MESSAGE value="Implemented the Conquest game mode." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented the Conquest game mode." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
