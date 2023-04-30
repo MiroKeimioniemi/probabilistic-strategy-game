@@ -30,11 +30,11 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   var health:          Int
   var supplyChain:     Option[SupplyChain]
 
-  var actionSet: ActionSet = ActionSet(Action.Stay, position, Action.Stay, position)
+  var actionSet: ActionSet = ActionSet(Action.Rest, position, Action.Rest, position)
 
-  def setActionSet(primaryAction: Action = Action.Stay,
+  def setActionSet(primaryAction: Action = Action.Rest,
                    primaryTarget: GridPos = position,
-                   secondaryAction: Action = Action.Stay,
+                   secondaryAction: Action = Action.Rest,
                    secondaryTarget: GridPos = position
                    ): Unit =
     actionSet = new ActionSet(primaryAction, primaryTarget, secondaryAction, secondaryTarget)
@@ -56,6 +56,12 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
 
   def defend(): Unit =
     defending = true
+    
+  def reload(): Unit =
+    ammo = maxAmmo
+    
+  def refuel(): Unit =
+    fuel = maxFuel
 
 end BattleUnit
 
@@ -86,7 +92,7 @@ case class TankUnit(initialGridPos: GridPos, initialFacing: CompassDir, player1U
 end TankUnit
 
 case class SoldiersUnit(initialGridPos: GridPos, initialFacing: CompassDir, player1Unit: Boolean) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
-  
+
   var image           = if player1Unit then Player1SoldiersImage else Player2SoldiersImage
   val deadImage       = if player1Unit then Player1DestroyedSoldiersImage else Player2DestroyedSoldiersImage
   val unitType        = SoldiersUnitType
@@ -110,7 +116,7 @@ case class SoldiersUnit(initialGridPos: GridPos, initialFacing: CompassDir, play
 end SoldiersUnit
 
 case class SniperUnit(initialGridPos: GridPos, initialFacing: CompassDir, player1Unit: Boolean) extends BattleUnit(initialGridPos, initialFacing: CompassDir):
-  
+
   var image           = if player1Unit then Player1SniperImage else Player2SniperImage
   val deadImage       = if player1Unit then Player1DestroyedSniperImage else Player2DestroyedSniperImage
   val unitType        = SniperUnitType

@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented the Conquest game mode.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Action.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
     </list>
@@ -517,7 +520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682726919790</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units.">
+      <created>1682808399174</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1682808399174</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -544,7 +554,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added fovTiles method to Game class that displays the tiles available for direct actions by a given battleUnit and modified selectableBattleUnit function in drawBattleUnits GUI method such that only one BattleUnit can be selected at any time." />
     <MESSAGE value="Rewrote the GUI to be scalable and overhauled the layout by adding more panes for presenting information and interacting with the game, the first example of which is the updating turnCounter." />
     <MESSAGE value="Interim report 3.4." />
     <MESSAGE value="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building." />
@@ -569,7 +578,8 @@
     <MESSAGE value="Finished the GUI fully and fixed a bug causing action set ticks to sometimes disappear and attack probabilities to linger." />
     <MESSAGE value="Added more BattleUnits and TerrainTiles, refactored both classes and made various changes to the Game class to make the BattleUnits get along better with different attributes." />
     <MESSAGE value="Implemented the Conquest game mode." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented the Conquest game mode." />
+    <MESSAGE value="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

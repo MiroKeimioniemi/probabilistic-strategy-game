@@ -52,8 +52,9 @@ class Game:
     selectedAction match
       case Move => fovTiles(battleUnit, battleUnit.range)
       case Attack => fovTiles(battleUnit, MapWidth)
-      case Stay => fovTiles(battleUnit, 0)
+      case Rest => fovTiles(battleUnit, 0)
       case Defend => fovTiles(battleUnit, 0)
+      case Reload => fovTiles(battleUnit, 0)
 
 
   /** Returns the probability of a given BattleUnit successfully moving to target coordinates
@@ -116,7 +117,7 @@ class Game:
    *  @param targetBattleUnit Attacked BattleUnit
    *  @param distance Distance between the BattleUnits */
   def attackProbabilityAgainstBattleUnit(battleUnit: BattleUnit, targetBattleUnit: BattleUnit, distance: Int) =
-    (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt
+    (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt + min(10, ((2 * battleUnit.experience / battleUnit.baseDamage) - (2 * targetBattleUnit.experience / targetBattleUnit.baseDamage)))
 
 
   /** Returns a tuple containing the probability of successfully attacking a target, masked by damageGradient in the first place and the unmasked probability in the second
@@ -207,19 +208,19 @@ class Game:
    *  @param battleUnit BattleUnit to be moved
    *  @param destination GridPos position in the grid where BattleUnit will be moved */
   def move(battleUnit: BattleUnit, destination: GridPos): Unit =
+    if battleUnit.fuel > 0 then
+      val opponent = if currentlyPlaying == player1 then player2 else player1
+      val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == destination)
 
-    val opponent = if currentlyPlaying == player1 then player2 else player1
-    val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == destination)
+      if targetBattleUnit.isDefined then
+        targetBattleUnit.get.takeDamage(targetBattleUnit.get.maxHealth)
 
-    if targetBattleUnit.isDefined then
-      targetBattleUnit.get.takeDamage(targetBattleUnit.get.maxHealth)
-
-    if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
-      battleUnit.actionSet.primaryActionSuccess = true
-      battleUnit.defending = false
-      turn(battleUnit, destination)
-      battleUnit.useFuel(1)
-      battleUnit.position = destination
+      if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
+        battleUnit.actionSet.primaryActionSuccess = true
+        battleUnit.defending = false
+        turn(battleUnit, destination)
+        battleUnit.useFuel(1)
+        battleUnit.position = destination
   end move
 
 
@@ -247,12 +248,13 @@ class Game:
       if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._2 then {
 
         turn(targetBattleUnit.get, battleUnit.position)
-        battleUnit.useAmmo(1)
-        targetBattleUnit.get.useAmmo(1)
+        if battleUnit.ammo > 0 then
+          battleUnit.useAmmo(1)
+        if targetBattleUnit.get.ammo > 0 then
+          targetBattleUnit.get.useAmmo(1)
 
         if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then {
-          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 then {
-            battleUnit.actionSet.primaryActionSuccess = true
+          if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && battleUnit.ammo >= 0 then {
 
             if targetBattleUnit.get.defending then
               targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1) / (max(1, DefendStrength))).toInt)
@@ -261,12 +263,17 @@ class Game:
 
             if targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage then
               targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
+
+            battleUnit.actionSet.primaryActionSuccess = true
+            battleUnit.gainExperience((battleUnit.damageGradient(absoluteDistance - 1).toInt))
           }
-        } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(targetBattleUnit.get, battleUnit.position)._1 then
+        } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(targetBattleUnit.get, battleUnit.position)._1 && targetBattleUnit.get.ammo >= 0 then
             battleUnit.takeDamage(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
             gameMap.tiles.filter(_.position == battleUnit.position).head.degrade(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
+            targetBattleUnit.get.gainExperience(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
       }
-    } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && (targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage) then
+    } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && (targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage) && battleUnit.ammo > 0 then
+        battleUnit.useAmmo(1)
         battleUnit.actionSet.primaryActionSuccess = true
         targetTile.degrade(battleUnit.damageGradient(max(0, absoluteDistance - 1)).toInt)
 
@@ -279,6 +286,20 @@ class Game:
   def defend(battleUnit: BattleUnit): Unit =
     battleUnit.actionSet.primaryActionSuccess = true
     battleUnit.defend()
+
+
+  /** Restores BattleUnit ammo to maximum
+   *  @param battleUnit Reloading BattleUnit */
+  def reload(battleUnit: BattleUnit): Unit =
+    battleUnit.actionSet.primaryActionSuccess = true
+    battleUnit.reload()
+
+
+  /** Restores BattleUnit ammo to maximum
+   *  @param battleUnit Reloading BattleUnit */
+  def refuel(battleUnit: BattleUnit): Unit =
+    battleUnit.actionSet.primaryActionSuccess = true
+    battleUnit.refuel()
 
 
   def updateConquest() =
@@ -309,7 +330,10 @@ class Game:
         attack(battleUnit, battleUnit.actionSet.primaryTarget)
       case Defend =>
         defend(battleUnit)
-      case Stay =>
+      case Reload =>
+        reload(battleUnit)
+      case Rest =>
+        refuel(battleUnit)
 
     if !battleUnit.actionSet.primaryActionSuccess && battleUnit.alive then
       battleUnit.actionSet.secondaryAction match
@@ -320,7 +344,10 @@ class Game:
           attack(battleUnit, battleUnit.actionSet.secondaryTarget)
         case Defend =>
           defend(battleUnit)
-        case Stay =>
+        case Reload =>
+          reload(battleUnit)
+        case Rest =>
+          refuel(battleUnit)
 
 
   /** Updates the game state by executing all pending actions and clearing all selections */

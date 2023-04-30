@@ -101,7 +101,7 @@ object GUI extends JFXApp3:
 
         refresh()
 
-        if primaryTargetTile.isDefined && !(game.selectedPrimaryAction == Action.Stay || game.selectedPrimaryAction == Action.Defend) then
+        if primaryTargetTile.isDefined && !game.selectedPrimaryAction.targetless then
           game.selectingSecondaryTarget = false
           primaryTargetTile.get.fireEvent(syntheticMouseClick(primaryTargetTile.get))
     // Updates the primary or secondary action, depending on which is being selected
@@ -635,8 +635,8 @@ object GUI extends JFXApp3:
           game.selectedBattleUnit = Some(battleUnit)
 
           // Highlights BattleUnit with approprieate color for the Action chosen. As the tile on which the BattleUnit is does not
-          // get highlighted separately, primary action selection has to be replicated here in the case of Stay and Defend actions
-          if (game.selectedPrimaryAction == Action.Stay || game.selectedPrimaryAction == Action.Defend) then
+          // get highlighted separately, primary action selection has to be replicated here in the case of targetless actions
+          if game.selectedPrimaryAction.targetless then
             border.stroke = PrimaryHighlightColor
             primaryTarget.value = game.gameMap.tiles.filter(_.position == battleUnit.position).head.position.toString
             game.selectedPrimaryTile = Some(game.gameMap.tiles.filter(_.position == battleUnit.position).head)
@@ -644,13 +644,13 @@ object GUI extends JFXApp3:
             // Enable and bring focus to secondary action dropdown
             secondaryActionDropdown.disable = false
             secondaryActionDropdown.requestFocus()
-            // If both actions are Stay or Defend, highlights BattleUnit tile with secondary highlight color
-            if (game.selectedSecondaryAction == Action.Stay || game.selectedSecondaryAction == Action.Defend) then
+            // If both actions are targetless, highlights BattleUnit tile with secondary highlight color
+            if game.selectedSecondaryAction.targetless then
               border.stroke = SecondaryHighlightColor
               game.selectedSecondaryTile = Some(game.gameMap.tiles.filter(_.position == battleUnit.position).head)
               secondaryTarget.value = game.gameMap.tiles.filter(_.position == battleUnit.position).head.position.toString
-          // If secondary action is Stay or Defend, highlights it with secondary highlight color and changes to select primary target
-          else if (game.selectedSecondaryAction == Action.Stay || game.selectedSecondaryAction == Action.Defend) then
+          // If secondary action is targetless, highlights it with secondary highlight color and changes to select primary target
+          else if game.selectedSecondaryAction.targetless then
             border.stroke = SecondaryHighlightColor
             game.selectedSecondaryTile = Some(game.gameMap.tiles.filter(_.position == battleUnit.position).head)
             secondaryTarget.value = game.gameMap.tiles.filter(_.position == battleUnit.position).head.position.toString
@@ -674,11 +674,11 @@ object GUI extends JFXApp3:
               textFill = BattleUnitHighlightColor
               text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedPrimaryAction).toString
             }
-            if !(game.selectedPrimaryAction == Action.Stay || game.selectedPrimaryAction == Action.Defend) then
+            if !game.selectedPrimaryAction.targetless then
               selectedTilePane(grid, tile).children.add(1, primaryHighlight)
               selectedTilePane(grid, tile).children.add(2, actionSuccessProbability)
             // If there is another BattleUnit in range, displays the probability of beating it in battle by adding a stackpane with that probability on top of it
-            if (game.selectedPrimaryAction == Action.Attack || game.selectedPrimaryAction == Action.Move) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
+            if !game.selectedPrimaryAction.targetless && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
               val winProbability = new Label() {
                 font = HeadingFont
                 textFill = PrimaryHighlightColor
@@ -709,7 +709,7 @@ object GUI extends JFXApp3:
             // If tiles in range of secondary action overlap with tiles in range of primary action,
             // the formers' highlights are replaced with the latters'. If not, they are simply
             // placed on top of the image and the transparent highlight rectangle
-            if !(game.selectedPrimaryAction == Action.Stay || game.selectedPrimaryAction == Action.Defend) then
+            if !game.selectedPrimaryAction.targetless then
               if game.tilesInRange(battleUnit, game.selectedPrimaryAction).contains(tile) && game.selectingSecondaryTarget then
                 selectedTilePane(grid, tile).children.remove(2)
                 selectedTilePane(grid, tile).children.remove(1)
@@ -722,7 +722,7 @@ object GUI extends JFXApp3:
               selectedTilePane(grid, tile).children.add(1, secondaryHighlight)
               selectedTilePane(grid, tile).children.add(2, moveProbability)
             // If there is another BattleUnit in range, displays the probability of beating it in battle by adding a stackpane with that probability on top of it
-            if (game.selectingSecondaryTarget && (game.selectedSecondaryAction == Action.Attack || game.selectedSecondaryAction == Action.Move)) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
+            if (game.selectingSecondaryTarget && !game.selectedSecondaryAction.targetless) && (game.currentlyPlaying == game.player2 && game.player1.battleUnits.exists(_.position == tile.position) || game.currentlyPlaying == game.player1 && game.player2.battleUnits.exists(_.position == tile.position)) then
               val winProbability = new Label() {
                 font = HeadingFont
                 textFill = PrimaryHighlightColor

@@ -180,8 +180,8 @@ val SniperExplosiveDamage = false
 val SniperMaxHealth       = 25
 val SniperDamageGradient: LazyList[Double] = LazyList.iterate(SniperBaseDamage * 4.0)( x => max(1, (x / 1.5)) ).patch(0, Iterable(SniperBaseDamage / 6, SniperBaseDamage / 4.5, SniperBaseDamage / 3, SniperBaseDamage / 1.5), 4)
 
-var SniperAmmo   = 3
-var SniperFuel   = 3
+var SniperAmmo   = 5
+var SniperFuel   = 5
 var SniperHealth = SniperMaxHealth
 
 
@@ -239,6 +239,7 @@ val Player2BattleUnitsFormation =
     TankUnit(GridPos(16, 2), West, false),
     TankUnit(GridPos(9, 8), West, false),
     TankUnit(GridPos(7, 6), West, false),
+    TankUnit(GridPos(5, 8), West, false),
     SoldiersUnit(GridPos(4, 1), West, false),
     SniperUnit(GridPos(2, 3), North, false)
 )

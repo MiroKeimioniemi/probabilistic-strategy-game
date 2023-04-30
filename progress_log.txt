@@ -334,3 +334,8 @@ damage than usual. This is a bug as I do not understand how it is possible for i
 interesting gameplay twist in harmony with other mechanics it brings, it is now declared a feature. I also will not be implementing
 simultaneous turns because the trivial solution would give a slight advantage to either player and a more sophisticated solution
 would require a lot more time.
+
+Added an experience system where successfully dealing damage gains the successfull BattleUnit experience points, which increases their
+chance of victory against less experienced BattleUnits. As a result of Action refactorizations and the addition of Reload and replacing
+of Stay with Rest, Attacks and moves now require and consume ammo and fuel respectively which must be refilled with Reload and Rest
+respectively.
