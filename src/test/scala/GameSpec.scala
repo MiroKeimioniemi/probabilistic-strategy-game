@@ -48,7 +48,7 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
     game.randomNumberGenerator.setSeed(1)
     testBattleUnit.orientation = East
     testBattleUnit.position    = GridPos(7, 8)
-    testBattleUnit.actionSet   = ActionSet(Action.Stay, testBattleUnit.position, Action.Stay, testBattleUnit.position)
+    testBattleUnit.actionSet   = ActionSet(Action.Rest, testBattleUnit.position, Action.Rest, testBattleUnit.position)
     testBattleUnit.health      = testBattleUnit.maxHealth
     testEnemyUnit.health       = testEnemyUnit.maxHealth
   }

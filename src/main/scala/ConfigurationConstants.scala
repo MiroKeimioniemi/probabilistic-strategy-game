@@ -6,9 +6,9 @@ import scalafx.scene.text.{Font, FontWeight}
 
 import math.max
 
-/** Contains the current configuration of the game as constants specifying class attributes that are initialized by constant literals.
+/** Contains the default configuration of the game as constants specifying class attributes that are initialized by constant literals.
  *
- * All Game object values are relative and should therefore generally range between 0 and 100. */
+ * Most Game object values are relative and should therefore generally range between 0 and 100. */
 
 /** GUI properties */
 // Layout properties
@@ -19,29 +19,38 @@ val BottomPaneHeight = GameWindowHeight / 15
 
 // Component properties
 val SelectionRectangleThickness = 6
-val BattleUnitHighlightColor    = Color.Blue
-val PrimaryHighlightColor       = Color.Red
-val SecondaryHighlightColor     = Color.Yellow
-val HeadingFont                 = Font.font("Open Sans", FontWeight.Bold, 20)
-val DefaultFont                 = Font.font("Open Sans", 20)
-val DefaultSpacing              = 20
-val LayoutInset                 = Insets(25)
-val DefaultLeftMargin           = Insets(0, 0, 0, 20)
-val DropdownWidth               = 80
-val DropdownHeight              = 50
-val HealthBarCriticalThreshold  = 0.5
-val HealthBarHealthyColor       = Color.LimeGreen
-val HealthBarCriticalColor      = Color.Red
-val BarBackgroundColor          = Color.DarkGrey
-val BarRounding                 = 5
-val ProgressBarWidth            = 200
-val ProgressBarHeight           = 5
-val TextColor                   = Color.White
-val RightPaneBackgroundStyle    = "-fx-background-color: #252825"
-val BottomPaneBacgroundStyle    = "-fx-background-color: #222522"
-val CounterWidth                = 250
-val PopUpHeadingFont            = Font.font("Open Sans", FontWeight.Bold, 40)
-val PopUpButtonFont             = Font.font("Open Sans", 14)
+
+// Colors
+val TextColor                     = Color.White
+val PrimaryActionHighlightColor   = Color.Blue
+val SecondaryActionHighlightColor = Color.Cyan
+val PrimaryHighlightColor         = Color.Red
+val SecondaryHighlightColor       = Color.Yellow
+val HealthBarHealthyColor         = Color.LimeGreen
+val HealthBarCriticalColor        = Color.Red
+val BarBackgroundColor            = Color.DarkGrey
+
+val RightPaneBackgroundStyle      = "-fx-background-color: #252825"
+val BottomPaneBacgroundStyle      = "-fx-background-color: #222522"
+
+// Fonts
+val HeadingFont                   = Font.font("Open Sans", FontWeight.Bold, 20)
+val DefaultFont                   = Font.font("Open Sans", 20)
+val PopUpHeadingFont              = Font.font("Open Sans", FontWeight.Bold, 40)
+val PopUpButtonFont               = Font.font("Open Sans", 14)
+
+// Values
+val DefaultSpacing                = 20
+val LayoutInset                   = 25
+val DefaultLeftMargin             = 20
+val DropdownWidth                 = 80
+val DropdownHeight                = 50
+val HealthBarCriticalThreshold    = 0.5
+val BarRounding                   = 5
+val ProgressBarWidth              = 200
+val ProgressBarHeight             = 5
+val CounterWidth                  = 250
+
 
 /** Text */
 val GameTitle                = "Strategy Game"
@@ -60,6 +69,8 @@ val Player1Score             = "Player 1 score: "
 val Player2Score             = "Player 2 score: "
 val PopUpRestartButton       = "Restart"
 val PopUpQuitButton          = "Quit"
+val Player1Win               = "Player 1 wins!"
+val Player2Win               = "Player 2 wins!"
 
 
 

@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added an experience system as well as Reload and Rest actions.">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Action.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Action.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +88,7 @@
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "preferences.editor"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -165,8 +165,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.GUI" />
-        <item itemvalue="Scala REPL.Scala REPL" />
         <item itemvalue="ScalaTest.GameSpec" />
+        <item itemvalue="Scala REPL.Scala REPL" />
         <item itemvalue="ScalaTest.GameSpec.defend should work according to specification" />
         <item itemvalue="ScalaTest.GameSpec.attack should work according to specification" />
       </list>
@@ -183,13 +183,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675949968254</updated>
-    </task>
-    <task id="LOCAL-00001" summary="Created the initial project structure necessary for developing the game map by adding the Game and Map classes, the GUI object, ConfigurationConstants file for configuring the game and the TerrainTile trait as well as its subclasses representing different terrains in different tiles of the map. Additionally added dependencies to build.sbt for ScalaTest for future testing and ScalaFX and JavaFX for displaying the map and made the GUI display an empty window when running the program.">
-      <created>1678016614944</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1678016614944</updated>
     </task>
     <task id="LOCAL-00002" summary="Implemented the TerrainTile trait with a couple of example terrain tile classes implementing it with different degrade methods based on their nature and ConfigurationConstants. Also created and added the progress_log.txt file.">
       <created>1678019787079</created>
@@ -527,7 +520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682808399174</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Added an experience system as well as Reload and Rest actions.">
+      <created>1682817430042</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1682817430043</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -554,7 +554,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rewrote the GUI to be scalable and overhauled the layout by adding more panes for presenting information and interacting with the game, the first example of which is the updating turnCounter." />
     <MESSAGE value="Interim report 3.4." />
     <MESSAGE value="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building." />
     <MESSAGE value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
@@ -579,7 +578,8 @@
     <MESSAGE value="Added more BattleUnits and TerrainTiles, refactored both classes and made various changes to the Game class to make the BattleUnits get along better with different attributes." />
     <MESSAGE value="Implemented the Conquest game mode." />
     <MESSAGE value="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units." />
+    <MESSAGE value="Added an experience system as well as Reload and Rest actions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added an experience system as well as Reload and Rest actions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

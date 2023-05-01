@@ -11,7 +11,7 @@ import java.io.FileInputStream
 import o1.{East, GridPos, South, West}
 import o1.grid.CompassDir.North
 import scalafx.application.JFXApp3.PrimaryStage
-import scalafx.beans.property.{BooleanProperty, IntegerProperty, StringProperty}
+import scalafx.beans.property.{BooleanProperty, IntegerProperty, ObjectProperty, StringProperty}
 import scalafx.collections.ObservableBuffer
 import scalafx.concurrent.Task
 import scalafx.geometry.Insets
@@ -30,6 +30,8 @@ object GUI extends JFXApp3:
   // Initialize game
   private var game = new Game
 
+//  println(GameConfig.defaultGameConfig)
+
   // Initialize bound properties
   private val selectedUnitType       = StringProperty(SelectedUnitDefault)
   private val turnCount              = StringProperty(game.turnCount.toString)
@@ -38,13 +40,16 @@ object GUI extends JFXApp3:
   private val selectedUnitHealth     = StringProperty(Health)
   private val selectedUnitExperience = StringProperty(Experience)
   private val selectedUnitAmmo       = StringProperty(Ammo)
+  private val ammoLabelColor         = ObjectProperty(TextColor)
   private val selectedUnitFuel       = StringProperty(Fuel)
+  private val fuelLabelColor         = ObjectProperty(TextColor)
   private val player1Score           = IntegerProperty(game.player1.winProgress)
   private val player2Score           = IntegerProperty(game.player2.winProgress)
   private val player1ScoreText       = StringProperty(Player1Score + game.player1.winProgress.toString + "/" + ConquestTarget)
   private val player2ScoreText       = StringProperty(Player2Score + game.player2.winProgress.toString + "/" + ConquestTarget)
-  private var numOfDeadPlayer1Units  = 0
-  private var numOfDeadPlayer2Units  = 0
+
+  // State variables
+  private var drawnDeadBattleUnits = Vector[BattleUnit]()
 
   // Utility functions
   private def selectedBattleUnitPane(grid: GridPane): StackPane =
@@ -129,13 +134,13 @@ object GUI extends JFXApp3:
     val rightPane = new VBox():
       style    = RightPaneBackgroundStyle
       minWidth = GameWindowWidth
-      padding  = LayoutInset
+      padding  = Insets(LayoutInset)
       spacing  = DefaultSpacing
 
     val bottomPane = new HBox():
       style     = BottomPaneBacgroundStyle
       minHeight = GameWindowHeight
-      padding   = LayoutInset
+      padding   = Insets(LayoutInset)
       spacing   = DefaultSpacing
 
     val rootPane = new BorderPane():
@@ -173,12 +178,12 @@ object GUI extends JFXApp3:
     var ammoLabel = new Label():
       font = HeadingFont
       text <== selectedUnitAmmo
-    ammoLabel.setTextFill(TextColor)
+      textFill <== ammoLabelColor
 
     var fuelLabel = new Label():
       font = HeadingFont
       text <== selectedUnitFuel
-    fuelLabel.setTextFill(TextColor)
+      textFill <== fuelLabelColor
 
     infoGrid.add(healthLabel, 0, 0)
     infoGrid.add(experienceLabel, 1, 0)
@@ -211,7 +216,7 @@ object GUI extends JFXApp3:
     var primaryActionTarget = new Label():
       font = HeadingFont
       text <== primaryTarget
-      margin = DefaultLeftMargin
+      margin = Insets(0, 0, 0, DefaultLeftMargin)
     primaryActionTarget.setTextFill(TextColor)
 
     var secondaryActionLabel = new Label():
@@ -236,7 +241,7 @@ object GUI extends JFXApp3:
     var secondaryActionTarget = new Label():
       font = HeadingFont
       text <== secondaryTarget
-      margin = DefaultLeftMargin
+      margin = Insets(0, 0, 0, DefaultLeftMargin)
     secondaryActionTarget.setTextFill(TextColor)
 
     var setActionSetButton = new Button():
@@ -269,7 +274,7 @@ object GUI extends JFXApp3:
     turnCounter.setPrefWidth(CounterWidth)
 
     var player1WinProgress = new VBox():
-      margin = DefaultLeftMargin
+      margin = Insets(0, 0, 0, DefaultLeftMargin)
 
     var player1WinProgressLabel = new Label():
       font = HeadingFont
@@ -300,7 +305,7 @@ object GUI extends JFXApp3:
     player1WinProgress.children.addAll(player1WinProgressLabel, player1WinProgressBarBackground, player1WinProgressBar)
 
     var player2WinProgress = new VBox():
-      margin = DefaultLeftMargin
+      margin = Insets(0, 0, 0, DefaultLeftMargin)
 
     var player2WinProgressLabel = new Label():
       font = HeadingFont
@@ -333,8 +338,10 @@ object GUI extends JFXApp3:
 
     // Resets all selections, invokes the PlayTurn method of Game and refreshes the GUI
     playTurnButton.onMouseClicked = (event: MouseEvent) => {
-      clearHighlights(grid)
 
+      setActionSetButton.fireEvent(syntheticMouseClick(setActionSetButton))
+
+      clearHighlights(grid)
       game.playTurn()
 
       updateMapTiles(gameScene)
@@ -351,14 +358,14 @@ object GUI extends JFXApp3:
       drawBattleUnits(gameScene, game.player2)
 
       if game.gameOver then
-        // Game over popup window
+        // Game over popup window announcing the winner
         val popUpBody = new VBox():
           style = BottomPaneBacgroundStyle
         popUpBody.alignment = javafx.geometry.Pos.CENTER
 
         val popupText = new Label():
           font = PopUpHeadingFont
-          text = if game.player1.winProgress > game.player2.winProgress then "Player 1 wins!" else "Player 2 wins!"
+          text = if game.player1.winProgress > game.player2.winProgress then Player1Win else Player2Win
         popupText.textFill = if game.player1.winProgress > game.player2.winProgress then Player1Color else Player2Color
 
         val buttonRow = new HBox():
@@ -427,7 +434,11 @@ object GUI extends JFXApp3:
   /** Updates attacked tiles' images based on which tiles are targeted by the Attack action in pendingActions */
   private def updateMapTiles(scene: Scene) =
     val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
-    val updateableTiles = game.pendingActions.filter(_.actionSet.primaryAction == Action.Attack).map(_.actionSet.primaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head) ++ game.pendingActions.filter(_.actionSet.secondaryAction == Action.Attack).map(_.actionSet.secondaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head) ++ game.gameMap.tiles.filter(_.getClass == classOf[ConquestTile])
+    val updateableTiles = game.pendingActions.filter(_.actionSet.primaryAction == Action.Attack).map(_.actionSet.primaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head)
+        ++ game.pendingActions.filter(_.actionSet.secondaryAction == Action.Attack).map(_.actionSet.secondaryTarget).map(l => game.gameMap.tiles.filter(_.position == l).head)
+        ++ game.pendingActions.filter(_.actionSet.primaryAction == Action.Attack).map(_.position).map(l => game.gameMap.tiles.filter(_.position == l).head)
+        ++ game.pendingActions.filter(_.actionSet.secondaryAction == Action.Attack).map(_.position).map(l => game.gameMap.tiles.filter(_.position == l).head)
+        ++ game.gameMap.tiles.filter(_.getClass == classOf[ConquestTile])
     val updateableImages = updateableTiles.map(t => drawPic(t.image, scene, 0))
     val updateablePositions = updateableTiles.map(_.position)
     for tile <- updateablePositions do
@@ -544,7 +555,7 @@ object GUI extends JFXApp3:
 
     val grid = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(0).asInstanceOf[javafx.scene.layout.GridPane]
 
-    /** Returns a StackPane containing the image of the battle unit, an initially transparent border
+    /** Returns a StackPane containing the image of the battle unit, its health bar, an initially transparent border
      * and a mouse click event listener that toggles the highlighting (border) of the BattleUnit and
      * the highlightTiles in the Game class associated with it */
     def selectableBattleUnit(battleUnit: BattleUnit): Option[StackPane] =
@@ -595,18 +606,17 @@ object GUI extends JFXApp3:
       }
 
       val selectable = new StackPane()
+      println(game.player1.battleUnits.contains(battleUnit))
       if battleUnit.alive then
         selectable.children.addAll(image, border, healthBarBackground, healthBar)
-      else
-        // If BattleUnit is dead, embeds its image into the stackpane containing the TerrainTile it is on and does not render it again
-        if game.player1.battleUnits.contains(battleUnit) && game.player1.battleUnits.count(!_.alive) > numOfDeadPlayer1Units then
-          val hostStackPane = grid.children.find(e => GridPane.getRowIndex(e) == battleUnit.position.y && GridPane.getColumnIndex(e) == battleUnit.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
-          hostStackPane.children.add((hostStackPane.children.length - 2), image)
-          numOfDeadPlayer1Units += 1
-        else if game.player2.battleUnits.contains(battleUnit) && game.player2.battleUnits.count(!_.alive) > numOfDeadPlayer2Units then
-          val hostStackPane = grid.children.find(e => GridPane.getRowIndex(e) == battleUnit.position.y && GridPane.getColumnIndex(e) == battleUnit.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
-          hostStackPane.children.add((hostStackPane.children.length - 2), image)
-          numOfDeadPlayer2Units += 1
+      else if game.player1.battleUnits.contains(battleUnit) && !drawnDeadBattleUnits.contains(battleUnit) then
+        var hostStackPane = grid.children.find(e => GridPane.getRowIndex(e) == battleUnit.position.y && GridPane.getColumnIndex(e) == battleUnit.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
+        hostStackPane.children.add((hostStackPane.children.length - 2), image)
+        drawnDeadBattleUnits = drawnDeadBattleUnits :+ battleUnit
+      else if game.player2.battleUnits.contains(battleUnit) && !drawnDeadBattleUnits.contains(battleUnit) then
+        var hostStackPane = grid.children.find(e => GridPane.getRowIndex(e) == battleUnit.position.y && GridPane.getColumnIndex(e) == battleUnit.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
+        hostStackPane.children.add((hostStackPane.children.length - 2), image)
+        drawnDeadBattleUnits = drawnDeadBattleUnits :+ battleUnit
 
       // Allows selecting only currently playing player's BattleUnits
       if !game.currentlyPlaying.battleUnits.contains(battleUnit) then
@@ -656,7 +666,7 @@ object GUI extends JFXApp3:
             secondaryTarget.value = game.gameMap.tiles.filter(_.position == battleUnit.position).head.position.toString
             game.selectingSecondaryTarget = false
           else
-            border.stroke = BattleUnitHighlightColor
+            border.stroke = PrimaryActionHighlightColor
 
           // Adds colored rectangles and probability labels between the image and the transparent
           // highlight rectangle to each tile within the field of view of the selected BattleUnit's
@@ -666,12 +676,12 @@ object GUI extends JFXApp3:
               width <== image.fitWidth - strokeWidth
               height <== image.fitHeight - strokeWidth
               strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
-              stroke = BattleUnitHighlightColor
+              stroke = PrimaryActionHighlightColor
               fill = Color.Transparent
             }
             val actionSuccessProbability = new Label() {
               font = HeadingFont
-              textFill = BattleUnitHighlightColor
+              textFill = PrimaryActionHighlightColor
               text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedPrimaryAction).toString
             }
             if !game.selectedPrimaryAction.targetless then
@@ -734,13 +744,21 @@ object GUI extends JFXApp3:
               }
               displayInGrid(Vector(winProbabilityContainer), Vector(tile.position), grid)
 
-          // Updates uselected unit information
+          // Updates selected unit information
           val defending = if battleUnit.defending then " (Defending)" else ""
           selectedUnitType.value = battleUnit.unitType + defending
           selectedUnitHealth.value = Health + battleUnit.health.toString + "/" + battleUnit.maxHealth
           selectedUnitExperience.value = Experience + battleUnit.experience.toString
           selectedUnitAmmo.value = Ammo + battleUnit.ammo.toString + "/" + battleUnit.maxAmmo
           selectedUnitFuel.value = Fuel + battleUnit.fuel.toString + "/" + battleUnit.maxFuel
+          if battleUnit.ammo <= 1 then
+            ammoLabelColor.set(HealthBarCriticalColor)
+          else
+            ammoLabelColor.set(TextColor)
+          if battleUnit.fuel <= 1 then
+            fuelLabelColor.set(HealthBarCriticalColor)
+          else
+            fuelLabelColor.set(TextColor)
 
         end highlightBattleUnit
 
@@ -760,11 +778,9 @@ object GUI extends JFXApp3:
         def clearTilesInRange(battleUnit: BattleUnit) =
           for tile <- game.tilesInRange(battleUnit, if game.tilesInRange(battleUnit, game.selectedPrimaryAction).length > game.tilesInRange(battleUnit, game.selectedSecondaryAction).length then game.selectedPrimaryAction else game.selectedSecondaryAction) do
             val deadBattleUnitsPile = (game.player1.battleUnits.filter(!_.alive) ++ game.player2.battleUnits.filter(!_.alive))
-            val i = if deadBattleUnitsPile.count(_.position == tile.position) > 0 then selectedTilePane(grid, tile).children.length - (3 + deadBattleUnitsPile.count(_.position == tile.position)) else selectedTilePane(grid, tile).children.length - 3
-            var j = i
-            for tileContent <- 1 to i do
-              selectedTilePane(grid, tile).children.remove(j)
-              j -= 1
+            val i = selectedTilePane(grid, tile).children.length - (3 + deadBattleUnitsPile.count(_.position == tile.position))
+            for tileContent <- (1 to i).reverse do
+              selectedTilePane(grid, tile).children.remove(tileContent)
           // Clear all extra StackPanes
           grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.count(_.alive) + game.player2.battleUnits.count(_.alive), grid.children.length)
           // Add back checkmarks for set actions
@@ -787,11 +803,14 @@ object GUI extends JFXApp3:
                   primaryActionDropdown.requestFocus()
                   secondaryActionDropdown.disable = true
 
+                // Reset selected BattleUnit information
                 selectedUnitType.value = SelectedUnitDefault
                 selectedUnitHealth.value = Health
                 selectedUnitExperience.value = Experience
                 selectedUnitAmmo.value = Ammo
                 selectedUnitFuel.value = Fuel
+                ammoLabelColor.set(TextColor)
+                fuelLabelColor.set(TextColor)
 
               if sBU != battleUnit then
 
@@ -818,7 +837,7 @@ object GUI extends JFXApp3:
 
     end selectableBattleUnit
 
-    // Displays BattleUnits on the grid with correct orientations
+    // Displays BattleUnits on the grid
     battleUnits.foreach(battleUnit => drawn = drawn :+ selectableBattleUnit(battleUnit))
     displayInGrid(drawn.filter(_.isDefined).map(_.get), positions, grid)
 

@@ -97,7 +97,7 @@ class Game:
     var successProbability = 100
     var blockingDegree = 100 - min(99, max(1, (100 - (0.33 * (bw / (ds + bv))) - (0.33 * (dv + bv)) - (de) + (0.33 * df))).toInt)
 
-    // Calculates probabilites for a successful attack based on TerrainTiles' characteristics on the path and the damage gradient
+    // Calculates probabilites for a successful move based on TerrainTiles' characteristics on the path
     if xDistance < 0 || yDistance < 0 then
       for i <- targetPath.indices do
         successProbability = max(1, successProbability - blockingDegree)
@@ -117,7 +117,7 @@ class Game:
    *  @param targetBattleUnit Attacked BattleUnit
    *  @param distance Distance between the BattleUnits */
   def attackProbabilityAgainstBattleUnit(battleUnit: BattleUnit, targetBattleUnit: BattleUnit, distance: Int) =
-    (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt + min(10, ((2 * battleUnit.experience / battleUnit.baseDamage) - (2 * targetBattleUnit.experience / targetBattleUnit.baseDamage)))
+    (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt + max(0, min(10, ((2 * battleUnit.experience / battleUnit.baseDamage) - (2 * targetBattleUnit.experience / targetBattleUnit.baseDamage))))
 
 
   /** Returns a tuple containing the probability of successfully attacking a target, masked by damageGradient in the first place and the unmasked probability in the second
@@ -200,8 +200,10 @@ class Game:
         battleUnit.orientation = East
       else if battleUnit.position.y - target.y > 0 then
         battleUnit.orientation = North
-      else
+      else if battleUnit.position.y - target.y < 0 then
         battleUnit.orientation = South
+      else
+        battleUnit.orientation = battleUnit.orientation
 
 
   /** Changes the position of a BattleUnit from the current one to the one given
@@ -215,12 +217,12 @@ class Game:
       if targetBattleUnit.isDefined then
         targetBattleUnit.get.takeDamage(targetBattleUnit.get.maxHealth)
 
-      if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
-        battleUnit.actionSet.primaryActionSuccess = true
-        battleUnit.defending = false
-        turn(battleUnit, destination)
-        battleUnit.useFuel(1)
-        battleUnit.position = destination
+    if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
+      battleUnit.actionSet.primaryActionSuccess = true
+      battleUnit.defending = false
+      turn(battleUnit, destination)
+      battleUnit.useFuel(1)
+      battleUnit.position = destination
   end move
 
 

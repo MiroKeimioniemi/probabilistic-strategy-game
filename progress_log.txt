@@ -339,3 +339,14 @@ Added an experience system where successfully dealing damage gains the successfu
 chance of victory against less experienced BattleUnits. As a result of Action refactorizations and the addition of Reload and replacing
 of Stay with Rest, Attacks and moves now require and consume ammo and fuel respectively which must be refilled with Reload and Rest
 respectively.
+
+1.5.2023
+
+Resolved a bug where some dead units would disappear from the map as a result of the GUI not being able to recognize which units had 
+already died and been drawn onto their respective tile. This took approximately a day again. Also added highlighting on ammo and fuel
+running low and made the "Play Turn" button set the currently selected action set before executing them. Game config file was added as
+a play ground for reading game configuration files but is commented out not to interfere with ConfigurationConstants.
+
+When detailing the above tie and critical hit "bugs" I apparently had, in my sleep-deprived state forgotten that this is indeed intended
+behavior as losing a duel is not a successful action. Therefore, a tie occurs when first attack is lost and second is won and a "critical
+hit" occurs when both are lost. Everything works as it should.
