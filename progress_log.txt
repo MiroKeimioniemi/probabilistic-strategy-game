@@ -350,3 +350,28 @@ a play ground for reading game configuration files but is commented out not to i
 When detailing the above tie and critical hit "bugs" I apparently had, in my sleep-deprived state forgotten that this is indeed intended
 behavior as losing a duel is not a successful action. Therefore, a tie occurs when first attack is lost and second is won and a "critical
 hit" occurs when both are lost. Everything works as it should.
+
+3.5.2023
+
+Implemented loadConfig that loads the game launch configuration from a custom human-readable file. Within certain constraints, it gives a
+very flexible way of creating and storing custom maps and BattleUnit configurations. It takes as a parameter a directory (launch-configuration
+folder by default) instead of a file so that any file of any name (as long as it is the only file there) will be attempted to read. If the
+file meets all criteria and is successfully read, the game is initialized according to the configuration with the GUI responding to the size
+of the map. If any kind of exception is encountered, whether resulting from missing or illegal files or anything else, its message is printed
+to standard output and the default configuration is loaded from ConfigurationConstants.
+
+I know it is typically not advisable for a single function to do multiple things but as my custom file type is such that the map and the
+player objects can and kind of have to be read in a single swipe through, it makes sense for loadConfig to also create all these objects.
+
+This was my first attempt at genuine test-driven development, first writing a general outline of the function and then writing tests for
+the desired behavior in each possible scenario based on various more or less functioning or faulty files in test-launch-configurations.
+I must say, it makes sense when writing a single, critical method, whose functionality must be known in every scenario and in that it
+certainly helped a lot too. However, for the Game class I only wrote the tests more or less for optics because I felt that they just
+slowed me down when trying to do a lot very fast. Thus, I am still searching for the optimal balance between rigorous testing and rabid
+development, something that does not come naturally yet.
+
+Additionally, I modified the win condition such that the game is over when either player reaches ConquestTarget or runs out of alive units.
+Also did some light refactoring and bug fixing as well as made the GUI scale better with map size and added a method to GameMap class for
+printing out the current map in a space separated form, just as in the launch-configuration.
+
+

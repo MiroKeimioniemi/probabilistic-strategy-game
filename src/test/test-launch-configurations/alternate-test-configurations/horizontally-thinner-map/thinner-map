@@ -1,0 +1,39 @@
+Launch configuration
+
+The launch configuration below represents the map and initial placements of units in the game. It may be modified so that each continuous word (_ or _,_) is separated by at
+least one space character. The number of words in the first row gives the map width and the number of rows gives its height. Any incomplete rows will be padded with the top
+left type of tile. Units on the left belong to Player 1 and units on the right belong to Player 2. For standard heap memory size, maximum map size is approximately 18 * 11
+with a total of 24 battleUnits, meaning that for safety, launch configuration should not contain much more than 220 elements. There must be more rows than columns and Each
+row must have the same length and be of one of the following:
+
+Grass
+Forest
+Rock
+Sand
+Dirt
+VegeDirt
+Gravel
+Objective (conquering of which will gain points towards winning)
+
+
+A Battle unit can be placed on top of a Terrain tile by writing a comma after the latter and then writing one of the following:
+
+Soldiers
+Sniper
+Tank
+
+
+Please only edit below this line.
+-------------------------------------------------
+
+
+
+Grass            Grass        Grass      Grass
+Grass            Grass        Grass      Grass
+Grass,Sniper     Grass        Grass      Grass,Sniper
+Grass,Soldiers   Grass,Tank   Grass,Tank Grass,Soldiers
+Grass,Soldiers   Grass        Grass      Grass,Soldiers
+Grass,Soldiers   Grass,Tank   Grass,Tank Grass,Soldiers
+Grass,Sniper     Grass        Grass      Grass,Sniper
+Grass            Grass        Grass      Grass
+Grass            Grass        Grass      Grass

@@ -12,10 +12,10 @@ import math.max
 
 /** GUI properties */
 // Layout properties
-val GameWindowWidth  = 1280
-val GameWindowHeight = 720
-val RightPaneWidth   = GameWindowWidth / 4
-val BottomPaneHeight = GameWindowHeight / 15
+val GameWindowWidth          = 1280
+val GameWindowHeight         = 720
+val RightPaneWidthFraction   = 0.25
+val MinRightPaneWidth        = 300
 
 // Component properties
 val SelectionRectangleThickness = 6
@@ -31,7 +31,7 @@ val HealthBarCriticalColor        = Color.Red
 val BarBackgroundColor            = Color.DarkGrey
 
 val RightPaneBackgroundStyle      = "-fx-background-color: #252825"
-val BottomPaneBacgroundStyle      = "-fx-background-color: #222522"
+val BottomPaneBackgroundStyle     = "-fx-background-color: #222522"
 
 // Fonts
 val HeadingFont                   = Font.font("Open Sans", FontWeight.Bold, 20)
@@ -65,14 +65,21 @@ val Health                   = "HP: "
 val Experience               = "XP: "
 val Ammo                     = "Ammo: "
 val Fuel                     = "Fuel: "
+val Player1Name              = "Player 1"
+val Player2Name              = "Player 2"
 val Player1Score             = "Player 1 score: "
 val Player2Score             = "Player 2 score: "
+val popUpTitle               = "Game over"
 val PopUpRestartButton       = "Restart"
 val PopUpQuitButton          = "Quit"
 val Player1Win               = "Player 1 wins!"
 val Player2Win               = "Player 2 wins!"
 
+val LaunchConfigDirectory    = "src/main/resources/launch-configuration/"
+val MapConfigStartFlag       = "-------------------------------------------------"
 
+
+/** Game default configuration */
 
 /** TerrainTiles' properties' values are interpreted as percentages such that 100 -> 100% */
 // Grass
@@ -124,6 +131,7 @@ val SandSolidity          = 20
 val SandVegetationDensity = 0
 val SandElevation         = 10
 
+// Conquest tile (objective)
 val NeutralConquestTileImage      = "src/main/resources/neutral-conquest-tile.png"
 val BlueConquestTileImage         = "src/main/resources/captured-blue-conquest-tile.png"
 val RedConquestTileImage          = "src/main/resources/captured-red-conquest-tile.png"
@@ -235,24 +243,26 @@ val MapTiles  =
 // Player 1
 val Player1BattleUnitsFormation =
   Vector[BattleUnit](
-    TankUnit(GridPos(2, 1), East, true),
-    TankUnit(GridPos(1, 2), East, true),
-    TankUnit(GridPos(7, 8), East, true),
-    SniperUnit(GridPos(11, 1), East, true),
-    SoldiersUnit(GridPos(8, 5), East, true)
+    TankUnit(GridPos(2, 4), East, true),
+    TankUnit(GridPos(2, 6), East, true),
+    SoldiersUnit(GridPos(1, 4), East, true),
+    SoldiersUnit(GridPos(1, 5), East, true),
+    SoldiersUnit(GridPos(1, 6), East, true),
+    SniperUnit(GridPos(1, 3), East, true),
+    SniperUnit(GridPos(1, 7), East, true)
 )
 val Player1Color = Color.web("4d6ef3")
 
 // Player 2
 val Player2BattleUnitsFormation =
   Vector[BattleUnit](
-    TankUnit(GridPos(15, 1), West, false),
-    TankUnit(GridPos(16, 2), West, false),
-    TankUnit(GridPos(9, 8), West, false),
-    TankUnit(GridPos(7, 6), West, false),
-    TankUnit(GridPos(5, 8), West, false),
-    SoldiersUnit(GridPos(4, 1), West, false),
-    SniperUnit(GridPos(2, 3), North, false)
+    TankUnit(GridPos(15, 4), West, false),
+    TankUnit(GridPos(15, 6), West, false),
+    SoldiersUnit(GridPos(16, 4), West, false),
+    SoldiersUnit(GridPos(16, 5), West, false),
+    SoldiersUnit(GridPos(16, 6), West, false),
+    SniperUnit(GridPos(16, 3), West, false),
+    SniperUnit(GridPos(16, 7), West, false)
 )
 val Player2Color = Color.web("ed1c23")
 

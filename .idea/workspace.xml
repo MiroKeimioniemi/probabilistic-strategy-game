@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Added an experience system as well as Reload and Rest actions.">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/scala/GameSpec.scala" afterDir="false" />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI.">
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +79,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-A1120 - Programming 2/Round 7/A1120-scala3-r07-efficiency/build.sbt",
+    "last_opened_file_path": "C:/Users/Miro/OneDrive - Aalto University/CS-C2120 - Programming Studio A/Strategy game project/strategy-game/src/main/resources/launch-configuration",
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -93,6 +88,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\src\main\resources\launch-configuration" />
       <recent name="C:\Users\Miro\OneDrive - Aalto University\CS-C2120 - Programming Studio A\Strategy game project\strategy-game\o1" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -121,6 +117,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ConfigSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="strategy-game" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="testKind" value="Class" />
+      <option name="testClassPath" value="ConfigSpec" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="GameSpec" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="strategy-game" />
       <option name="allowRunningInParallel" value="false" />
@@ -134,7 +143,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GameSpec.attack should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
+    <configuration name="GameSpec.executeActionSet should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="strategy-game" />
       <option name="allowRunningInParallel" value="false" />
       <option name="projectPathOnTarget" />
@@ -143,21 +152,7 @@
       </option>
       <option name="testKind" value="Test name" />
       <option name="testClassPath" value="GameSpec" />
-      <option name="testName" value="attack should work according to specification" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GameSpec.defend should work according to specification" type="ScalaTestRunConfiguration" factoryName="ScalaTest" temporary="true" nameIsGenerated="true" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="strategy-game" />
-      <option name="allowRunningInParallel" value="false" />
-      <option name="projectPathOnTarget" />
-      <option name="selectedOptions">
-        <list />
-      </option>
-      <option name="testKind" value="Test name" />
-      <option name="testClassPath" value="GameSpec" />
-      <option name="testName" value="defend should work according to specification" />
+      <option name="testName" value="executeActionSet should work according to specification" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -166,9 +161,9 @@
       <list>
         <item itemvalue="Application.GUI" />
         <item itemvalue="ScalaTest.GameSpec" />
+        <item itemvalue="ScalaTest.ConfigSpec" />
+        <item itemvalue="ScalaTest.GameSpec.executeActionSet should work according to specification" />
         <item itemvalue="Scala REPL.Scala REPL" />
-        <item itemvalue="ScalaTest.GameSpec.defend should work according to specification" />
-        <item itemvalue="ScalaTest.GameSpec.attack should work according to specification" />
       </list>
     </recent_temporary>
   </component>
@@ -183,20 +178,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675949968254</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Implemented the TerrainTile trait with a couple of example terrain tile classes implementing it with different degrade methods based on their nature and ConfigurationConstants. Also created and added the progress_log.txt file.">
-      <created>1678019787079</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1678019787079</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Dependency for O1Library added to access the grid package, Map class started and sand terrain tile added along with preliminary sketches of assets to resources.">
-      <created>1678050406269</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1678050406269</updated>
     </task>
     <task id="LOCAL-00004" summary="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row.">
       <created>1678088916224</created>
@@ -527,7 +508,21 @@
       <option name="project" value="LOCAL" />
       <updated>1682817430043</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Bug fixes and quality of life improvements.">
+      <created>1682938118101</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1682938118101</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI.">
+      <created>1683069111554</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1683069111554</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -554,8 +549,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Interim report 3.4." />
-    <MESSAGE value="Made symmetricTileUpdater support more different kinds of symmetries to accommodate any style of map building." />
     <MESSAGE value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
     <MESSAGE value="Modified the GUI to show action-dependent highlights." />
     <MESSAGE value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
@@ -579,7 +572,9 @@
     <MESSAGE value="Implemented the Conquest game mode." />
     <MESSAGE value="Refined the move method and GUI to enable ramming other units and occupying tiles with dead units." />
     <MESSAGE value="Added an experience system as well as Reload and Rest actions." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added an experience system as well as Reload and Rest actions." />
+    <MESSAGE value="Bug fixes and quality of life improvements." />
+    <MESSAGE value="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -588,6 +583,15 @@
           <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="5" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="scala.MatchError" package="scala" />
+          <option name="timeStamp" value="28" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/test/scala/GameSpec.scala</url>
+          <line>188</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

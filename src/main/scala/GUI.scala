@@ -30,8 +30,6 @@ object GUI extends JFXApp3:
   // Initialize game
   private var game = new Game
 
-//  println(GameConfig.defaultGameConfig)
-
   // Initialize bound properties
   private val selectedUnitType       = StringProperty(SelectedUnitDefault)
   private val turnCount              = StringProperty(game.turnCount.toString)
@@ -70,9 +68,9 @@ object GUI extends JFXApp3:
     if game.selectedBattleUnit.isDefined then
       selectedBattleUnitPane(grid).fireEvent(syntheticMouseClick(selectedBattleUnitPane(grid)))
     if game.selectedPrimaryTile.isDefined then
-      selectedTilePane(grid, game.selectedPrimaryTile.get).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+      selectedTilePane(grid, game.selectedPrimaryTile.get).children(selectedTilePane(grid, game.selectedPrimaryTile.get).children.length - 2).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
     if game.selectedSecondaryTile.isDefined then
-      selectedTilePane(grid, game.selectedSecondaryTile.get).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
+      selectedTilePane(grid, game.selectedSecondaryTile.get).children(selectedTilePane(grid, game.selectedSecondaryTile.get).children.length - 2).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
 
     game.selectedBattleUnit = None
     game.selectedPrimaryTile = None
@@ -138,12 +136,13 @@ object GUI extends JFXApp3:
       spacing  = DefaultSpacing
 
     val bottomPane = new HBox():
-      style     = BottomPaneBacgroundStyle
+      style     = BottomPaneBackgroundStyle
       minHeight = GameWindowHeight
       padding   = Insets(LayoutInset)
       spacing   = DefaultSpacing
 
     val rootPane = new BorderPane():
+      style  = RightPaneBackgroundStyle
       left   = grid
       right  = rightPane
       bottom = bottomPane
@@ -353,19 +352,19 @@ object GUI extends JFXApp3:
       player1ScoreText.value = Player1Score + game.player1.winProgress.toString + "/" + ConquestTarget
       player2ScoreText.value = Player2Score + game.player2.winProgress.toString + "/" + ConquestTarget
 
-      grid.children.removeRange(MapWidth * MapHeight, grid.children.length)
+      grid.children.removeRange(game.gameMap.width * game.gameMap.height, grid.children.length)
       drawBattleUnits(gameScene, game.player1)
       drawBattleUnits(gameScene, game.player2)
 
       if game.gameOver then
         // Game over popup window announcing the winner
         val popUpBody = new VBox():
-          style = BottomPaneBacgroundStyle
+          style = BottomPaneBackgroundStyle
         popUpBody.alignment = javafx.geometry.Pos.CENTER
 
         val popupText = new Label():
           font = PopUpHeadingFont
-          text = if game.player1.winProgress > game.player2.winProgress then Player1Win else Player2Win
+          text = game.winner.getOrElse(game.player1).name
         popupText.textFill = if game.player1.winProgress > game.player2.winProgress then Player1Color else Player2Color
 
         val buttonRow = new HBox():
@@ -386,7 +385,7 @@ object GUI extends JFXApp3:
         val popUpScene = new Scene(popUpBody, 400, 200)
         val popUp = new Stage() {
           scene = popUpScene
-          title = "Game over"
+          title = popUpTitle
           initModality(Modality.ApplicationModal)
           resizable = false
         }
@@ -415,9 +414,9 @@ object GUI extends JFXApp3:
   /** Returns an ImageView object corresponding to a given image path, scaled with respect to the game scene */
   private def drawPic(pic: String, gameScene: Scene, rotation: Int): ImageView =
     val imageView = new ImageView(new Image(FileInputStream(pic))) {
-      fitWidth <== ((gameScene.widthProperty()) / MapWidth) - (RightPaneWidth / MapWidth)
-      fitHeight <== ((gameScene.widthProperty()) / MapWidth) - (RightPaneWidth / MapWidth)
-      maxHeight((gameScene.widthProperty() / MapWidth).toDouble)
+      fitWidth <== (((gameScene.widthProperty()) - MinRightPaneWidth) / game.gameMap.width)
+      fitHeight <== (((gameScene.widthProperty()) - MinRightPaneWidth) / game.gameMap.width)
+      maxHeight((gameScene.widthProperty() / game.gameMap.width).toDouble)
       preserveRatio = true
     }
     imageView.rotate = rotation
@@ -606,7 +605,6 @@ object GUI extends JFXApp3:
       }
 
       val selectable = new StackPane()
-      println(game.player1.battleUnits.contains(battleUnit))
       if battleUnit.alive then
         selectable.children.addAll(image, border, healthBarBackground, healthBar)
       else if game.player1.battleUnits.contains(battleUnit) && !drawnDeadBattleUnits.contains(battleUnit) then
@@ -708,12 +706,12 @@ object GUI extends JFXApp3:
               width <== image.fitWidth - strokeWidth
               height <== image.fitHeight - strokeWidth
               strokeWidth <== ((image.fitWidth) / 100) * SelectionRectangleThickness
-              stroke = if game.selectingSecondaryTarget then Color.Cyan else Color.Transparent
+              stroke = if game.selectingSecondaryTarget then SecondaryActionHighlightColor else Color.Transparent
               fill = Color.Transparent
             }
             val moveProbability = new Label() {
               font = HeadingFont
-              textFill = if game.selectingSecondaryTarget then Color.Cyan else Color.Transparent
+              textFill = if game.selectingSecondaryTarget then SecondaryActionHighlightColor else Color.Transparent
               text = game.calculateSuccessProbability(battleUnit, tile.position, game.selectedSecondaryAction).toString
             }
             // If tiles in range of secondary action overlap with tiles in range of primary action,
@@ -721,6 +719,8 @@ object GUI extends JFXApp3:
             // placed on top of the image and the transparent highlight rectangle
             if !game.selectedPrimaryAction.targetless then
               if game.tilesInRange(battleUnit, game.selectedPrimaryAction).contains(tile) && game.selectingSecondaryTarget then
+                if grid.children.filter(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x).length > 2 then
+                  grid.children.remove(grid.children.indexOf(grid.children.filter(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x)(2)))
                 selectedTilePane(grid, tile).children.remove(2)
                 selectedTilePane(grid, tile).children.remove(1)
                 selectedTilePane(grid, tile).children.add(1, secondaryHighlight)
@@ -782,7 +782,7 @@ object GUI extends JFXApp3:
             for tileContent <- (1 to i).reverse do
               selectedTilePane(grid, tile).children.remove(tileContent)
           // Clear all extra StackPanes
-          grid.children.removeRange(MapWidth * MapHeight + game.player1.battleUnits.count(_.alive) + game.player2.battleUnits.count(_.alive), grid.children.length)
+          grid.children.removeRange(game.gameMap.width * game.gameMap.height + game.player1.battleUnits.count(_.alive) + game.player2.battleUnits.count(_.alive), grid.children.length)
           // Add back checkmarks for set actions
           for readyBattleUnit <- game.pendingActions do
             grid.add(drawPic("src/main/resources/done-symbol.png", scene, 0), readyBattleUnit.position.x, readyBattleUnit.position.y)

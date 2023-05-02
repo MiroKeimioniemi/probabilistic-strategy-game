@@ -45,12 +45,19 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
 
   // Restores game state before each test
   before {
-    game.randomNumberGenerator.setSeed(1)
     testBattleUnit.orientation = East
     testBattleUnit.position    = GridPos(7, 8)
     testBattleUnit.actionSet   = ActionSet(Action.Rest, testBattleUnit.position, Action.Rest, testBattleUnit.position)
     testBattleUnit.health      = testBattleUnit.maxHealth
+    testBattleUnit.alive       = true
     testEnemyUnit.health       = testEnemyUnit.maxHealth
+    testBattleUnit.fuel        = testBattleUnit.maxFuel
+    testBattleUnit.ammo        = testBattleUnit.maxAmmo
+    game.randomNumberGenerator.setSeed(1)
+  }
+
+  after {
+    game.refuel(testBattleUnit)
   }
 
   "Game" should "be initialized correctly" in {
@@ -71,8 +78,6 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
       game.player2.battleUnits.last shouldBe a [BattleUnit]
     }
   }
-
-  // TODO: Add a test for tilesInRange
 
   "probabilities" should "work according to specification" in {
 
@@ -112,6 +117,7 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
     }
 
     withClue("move should change BattleUnit position to match destination coordinates and orientation to match direction moved") {
+      game.refuel(testBattleUnit)
       game.move(testBattleUnit, GridPos(7, 8))
       testBattleUnit.position should equal (GridPos(7, 8))
       testBattleUnit.orientation should equal (North)
@@ -122,8 +128,26 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
 
     val battleUnitHealthBeforeAttack = testBattleUnit.health
     val enemyHealthBeforeAttack = testEnemyUnit.health
+    val targetTile = game.gameMap.tiles.find(_.position == GridPos(9, 8)).getOrElse(game.gameMap.tiles.head)
+
+    withClue("failed attack against an enemy should leave both BattleUnit's health levels untouched") {
+      game.attack(testBattleUnit, GridPos(9, 8))
+      testBattleUnit.health should be (testBattleUnit.maxHealth)
+      testEnemyUnit.health should be (testEnemyUnit.maxHealth)
+    }
+
+    withClue("failed attack against an enemy should leave the tile it is on as is") {
+      targetTile.image should be (SandImage)
+      targetTile.flatness should be (SandFlatness)
+      targetTile.solidity should be (SandSolidity)
+      targetTile.vegetationDensity should be (SandVegetationDensity)
+      targetTile.elevation should be (SandElevation)
+    }
 
     withClue("lost attack should decrease the attacking BattleUnit's health") {
+      game.randomNumberGenerator.nextInt(101)
+      game.randomNumberGenerator.nextInt(101)
+      game.randomNumberGenerator.nextInt(101)
       game.attack(testBattleUnit, GridPos(9, 8))
       testBattleUnit.health should be < battleUnitHealthBeforeAttack
     }
@@ -133,7 +157,7 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
       testEnemyUnit.health should be < enemyHealthBeforeAttack
     }
 
-    withClue("attack should degrade the target tile") {
+    withClue("successful attack should degrade the target tile") {
       val targetTileFlatnessBeforeAttack = game.gameMap.tiles.filter(_.position == GridPos(9, 8)).head.flatness
       game.attack(testBattleUnit, GridPos(9, 8))
       game.gameMap.tiles.filter(_.position == GridPos(9, 8)).head.flatness should be !== targetTileFlatnessBeforeAttack
@@ -147,6 +171,7 @@ class GameSpec extends AnyFlatSpec with Matchers with BeforeAndAfter:
     testEnemyUnit.defend()
 
     withClue("lost attack by formerly defending BattleUnit should decrease the attacking BattleUnit's health as normal") {
+      (1 to 44).foreach(_ => game.randomNumberGenerator.nextInt(101))
       game.attack(testBattleUnit, GridPos(9, 8))
       testBattleUnit.health should be (testBattleUnit.maxHealth - testEnemyUnit.damageGradient(1).toInt)
     }

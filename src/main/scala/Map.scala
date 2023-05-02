@@ -1,3 +1,4 @@
+import GameMap.printAsSSV
 import o1.grid.*
 
 object GameMap:
@@ -55,13 +56,27 @@ object GameMap:
 
     newTiles
 
+  def printAsSSV(tiles: Vector[TerrainTile]): Unit =
+    val rowOrder = tiles.grouped(MapHeight).toVector.transpose
+    val humanReadable = rowOrder.map(_.map(tile => tile match
+      case tile: GrassTile          => "Grass     "
+      case tile: ForestTile         => "Forest    "
+      case tile: RockTile           => "Rock      "
+      case tile: SandTile           => "Sand      "
+      case tile: ConquestTile       => "Objective "
+      case tile: VegetativeDirtTile => "VegeDirt  "
+      case tile: DirtTile           => "Dirt      "
+      case tile: GravelTile         => "Gravel    "
+      ))
+    humanReadable.foreach(row => {
+      row.foreach(tile => print(tile))
+      println("")
+    })
 
 
-class GameMap(width: Int, height: Int) extends Grid[TerrainTile](width, height):
+class GameMap(override val width: Int, override val height: Int, var tiles: Vector[TerrainTile] = MapTiles) extends Grid[TerrainTile](width, height):
 
-  def initialElements: Vector[TerrainTile] = MapTiles
-
-  var tiles: Vector[TerrainTile] = initialElements
+  def initialElements: Vector[TerrainTile] = tiles
 
   def getTile(position: GridPos): TerrainTile =
     tiles.find(_.position == position).getOrElse(tiles.head)

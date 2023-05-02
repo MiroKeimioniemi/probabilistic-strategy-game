@@ -2,22 +2,34 @@ import Action.*
 import o1.grid.CompassDir.*
 import o1.grid.GridPos
 
+import java.io.IOException
 import javax.print.attribute.standard.Destination
-import math.{max, min, abs}
+import math.{abs, max, min}
 import scala.util.Random
 
 class Game:
 
   // Initializes the Game
-  val gameMap = GameMap(MapWidth, MapHeight)
-  val player1 = Player("Player 1", Player1BattleUnitsFormation)
-  val player2 = Player("Player 2", Player2BattleUnitsFormation)
+  val initializer =
+    try {
+      loadConfig(LaunchConfigDirectory)
+    } catch {
+      case ex: Throwable =>
+        println(ex.getMessage)
+        (GameMap(MapWidth, MapHeight),
+         Player(Player1Name, Player1BattleUnitsFormation),
+         Player(Player2Name, Player2BattleUnitsFormation))
+    }
+  val gameMap = initializer._1
+  val player1 = initializer._2
+  val player2 = initializer._3
 
   val randomNumberGenerator = new Random(System.nanoTime())
 
   // Game state variables
   var turnCount = 0
   var gameOver = false
+  var winner: Option[Player] = None
 
   // Turn state variables
   var currentlyPlaying = player1
@@ -217,12 +229,12 @@ class Game:
       if targetBattleUnit.isDefined then
         targetBattleUnit.get.takeDamage(targetBattleUnit.get.maxHealth)
 
-    if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
-      battleUnit.actionSet.primaryActionSuccess = true
-      battleUnit.defending = false
-      turn(battleUnit, destination)
-      battleUnit.useFuel(1)
-      battleUnit.position = destination
+      if !player1.battleUnits.filter(_.alive).exists(_.position == destination) && !player2.battleUnits.filter(_.alive).exists(_.position == destination) then
+        battleUnit.actionSet.primaryActionSuccess = true
+        battleUnit.defending = false
+        turn(battleUnit, destination)
+        battleUnit.useFuel(1)
+        battleUnit.position = destination
   end move
 
 
@@ -361,8 +373,9 @@ class Game:
 
     updateConquest()
 
-    if player1.winProgress >= 100 || player2.winProgress >= 100 then
+    if player1.winProgress >= ConquestTarget || player2.winProgress >= ConquestTarget || player1.battleUnits.count(_.alive) == 0 || player2.battleUnits.count(_.alive) == 0 then
       gameOver = true
+      winner = if player1.battleUnits.count(_.alive) > player2.battleUnits.count(_.alive) || player1.winProgress >= ConquestTarget then Some(player1) else Some(player2)
 
     turnCount += 1
 
