@@ -22,8 +22,8 @@ val SelectionRectangleThickness = 6
 
 // Colors
 val TextColor                     = Color.White
-val PrimaryActionHighlightColor   = Color.Blue
-val SecondaryActionHighlightColor = Color.Cyan
+val PrimaryActionHighlightColor   = Color.Silver
+val SecondaryActionHighlightColor = Color.SandyBrown
 val PrimaryHighlightColor         = Color.Red
 val SecondaryHighlightColor       = Color.Yellow
 val HealthBarHealthyColor         = Color.LimeGreen
@@ -269,5 +269,5 @@ val Player2Color = Color.web("ed1c23")
 
 
 /** GamePlay properties */
-val ConquestTarget = 100
+val ConquestTarget = 1
 val DefendStrength = 2

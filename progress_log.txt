@@ -379,4 +379,7 @@ controlled. The current plan for its implementation is to create a new AIPlayer 
 that player's units for which the AIPlayer has been selected. It can be Player 1, Player 2 or both, playing against itself. As its general
 strategy it simply aims to fill the ConquestTIles and defend them to the best of its abilities by patrolling around the objective.
 
-
+Changed highlight colors for more contrast and a better look and created another launch configuration with a different map and BattleUnit
+formations. I meant to make it such that absolutely every constant in the game is externally configurable and thus this new configuration
+would work in combination with ConquestTarget = 1 in a guard and destroy bases manner, but I don't have time for creating more configuration
+files and readers and therefore this will have to be adjusted directly in ConfigurationConstants for now.
