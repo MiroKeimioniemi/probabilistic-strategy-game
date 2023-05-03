@@ -1,6 +1,6 @@
 5.3.2023
 
-Set up the devlopment environment and added dependencies for ScalaFX and ScalaTest.
+Set up the development environment and added dependencies for ScalaFX and ScalaTest.
 Created the initial project structure necessary for developing the game map.
 
 Implemented the TerrainTile trait with a couple of example terrain tile classes
@@ -373,5 +373,10 @@ development, something that does not come naturally yet.
 Additionally, I modified the win condition such that the game is over when either player reaches ConquestTarget or runs out of alive units.
 Also did some light refactoring and bug fixing as well as made the GUI scale better with map size and added a method to GameMap class for
 printing out the current map in a space separated form, just as in the launch-configuration.
+
+Made selected action default to Move everytime "Set Action Set" is clicked and added radiobutton toggles for making Player 1 and/or Player 2 AI
+controlled. The current plan for its implementation is to create a new AIPlayer class that has a dependency to the GUI, which it uses to control
+that player's units for which the AIPlayer has been selected. It can be Player 1, Player 2 or both, playing against itself. As its general
+strategy it simply aims to fill the ConquestTIles and defend them to the best of its abilities by patrolling around the objective.
 
 

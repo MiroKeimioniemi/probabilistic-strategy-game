@@ -14,6 +14,7 @@ class Game:
     try {
       loadConfig(LaunchConfigDirectory)
     } catch {
+      // If any type of exception is detected, defaults to default configuration from ConfigurationConstants
       case ex: Throwable =>
         println(ex.getMessage)
         (GameMap(MapWidth, MapHeight),
@@ -24,7 +25,7 @@ class Game:
   val player1 = initializer._2
   val player2 = initializer._3
 
-  val randomNumberGenerator = new Random(System.nanoTime())
+  private val randomNumberGenerator = new Random(System.nanoTime())
 
   // Game state variables
   var turnCount = 0
@@ -42,9 +43,8 @@ class Game:
   var pendingActions: Vector[BattleUnit] = Vector[BattleUnit]()
 
 
-
   /** Returns the tiles in the field of view of a given BattleUnit, that is,
-   *  all tiles to the cardinal directions with respect to the BattleUnit
+   *  all tiles to the cardinal directions with respect to the BattleUnit,
    *  within its range
    *  @param battleUnit BattleUnit considered
    *  @param range number of tiles expected in each cardinal direction */
@@ -69,7 +69,9 @@ class Game:
       case Reload => fovTiles(battleUnit, 0)
 
 
-  /** Returns the probability of a given BattleUnit successfully moving to target coordinates
+  /** Returns the probability of a given BattleUnit successfully moving to target coordinates that may or may
+   * not contain an enemy unit, in which case it returns the probability of successfully destroying them by
+   * ramming and moving on top of them
    *  @param battleUnit BattleUnit considered to be moved
    *  @param target destination coordinates */
   def calculateMoveProbability(battleUnit: BattleUnit, target: GridPos): Int =
@@ -109,7 +111,7 @@ class Game:
     var successProbability = 100
     var blockingDegree = 100 - min(99, max(1, (100 - (0.33 * (bw / (ds + bv))) - (0.33 * (dv + bv)) - (de) + (0.33 * df))).toInt)
 
-    // Calculates probabilites for a successful move based on TerrainTiles' characteristics on the path
+    // Calculates probabilites for a successful move based on TerrainTiles' characteristics on the way to target
     if xDistance < 0 || yDistance < 0 then
       for i <- targetPath.indices do
         successProbability = max(1, successProbability - blockingDegree)
@@ -239,8 +241,8 @@ class Game:
 
 
   /** Attacks the given target such that if target coordinates contain an enemy BattleUnit, a duel is launched, the loser of which
-   *  takes all the damage. The tile in the loser's coordinates or the target coordinates if it does not contain an enemy unit
-   *  gets degraded
+   *  takes all the damage. The tile in the loser's coordinates or the target coordinates gets degraded depending on whether a duel
+   *  is launched and what its outcome is.
    *  @param battleUnit Attacking BattleUnit
    *  @param target Target coordinates of attack */
   def attack(battleUnit: BattleUnit, target: GridPos): Unit =
@@ -315,7 +317,7 @@ class Game:
     battleUnit.actionSet.primaryActionSuccess = true
     battleUnit.refuel()
 
-
+  /** Updates conquest tile colors and win progress of the current conqueror if their units are exclusively occupying any ConquestTile */
   def updateConquest() =
     val conquestTiles = gameMap.tiles.filter(_.getClass == classOf[ConquestTile])
     if conquestTiles.map(_.position).intersect(player1.battleUnits.filter(_.alive).map(_.position)).nonEmpty && conquestTiles.map(_.position).intersect(player2.battleUnits.filter(_.alive).map(_.position)).isEmpty then
@@ -380,8 +382,7 @@ class Game:
     turnCount += 1
 
     currentlyPlaying = if currentlyPlaying == player1 then player2 else player1
+    
   end playTurn
-
-
 
 end Game

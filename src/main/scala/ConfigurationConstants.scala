@@ -42,7 +42,6 @@ val PopUpButtonFont               = Font.font("Open Sans", 14)
 // Values
 val DefaultSpacing                = 20
 val LayoutInset                   = 25
-val DefaultLeftMargin             = 20
 val DropdownWidth                 = 80
 val DropdownHeight                = 50
 val HealthBarCriticalThreshold    = 0.5
@@ -74,6 +73,7 @@ val PopUpRestartButton       = "Restart"
 val PopUpQuitButton          = "Quit"
 val Player1Win               = "Player 1 wins!"
 val Player2Win               = "Player 2 wins!"
+val AIPLayer                 = "AI Player"
 
 val LaunchConfigDirectory    = "src/main/resources/launch-configuration/"
 val MapConfigStartFlag       = "-------------------------------------------------"

@@ -1,26 +1,30 @@
-import Action.Move
-import javafx.scene.layout.{ColumnConstraints, RowConstraints}
-import scalafx.Includes.*
-import scalafx.application.{JFXApp3, Platform}
-import scalafx.scene.{Node, Scene, layout, text}
-import scalafx.scene.image.{Image, ImageView}
-import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
-
-import math.min
-import java.io.FileInputStream
-import o1.{East, GridPos, South, West}
-import o1.grid.CompassDir.North
-import scalafx.application.JFXApp3.PrimaryStage
 import scalafx.beans.property.{BooleanProperty, IntegerProperty, ObjectProperty, StringProperty}
+import scalafx.scene.layout.{BorderPane, GridPane, HBox, StackPane, VBox}
+import scalafx.scene.input.{MouseButton, MouseEvent, PickResult}
+import javafx.scene.layout.{ColumnConstraints, RowConstraints}
+import scalafx.scene.control.{Button, ChoiceBox, Label}
+import scalafx.scene.{Node, Scene, layout, text}
+import scalafx.application.JFXApp3.PrimaryStage
+import scalafx.application.{JFXApp3, Platform}
+import scalafx.scene.image.{Image, ImageView}
+import scalafx.scene.text.{Font, FontWeight}
 import scalafx.collections.ObservableBuffer
+import scalafx.stage.{Modality, Stage}
+import o1.{East, GridPos, South, West}
+import scalafx.scene.shape.Rectangle
+import scalafx.scene.paint.Color
+import o1.grid.CompassDir.North
 import scalafx.concurrent.Task
 import scalafx.geometry.Insets
-import scalafx.scene.control.{Button, ChoiceBox, Label}
-import scalafx.scene.input.{MouseButton, MouseEvent, PickResult}
-import scalafx.scene.paint.Color
-import scalafx.scene.shape.Rectangle
-import scalafx.scene.text.{Font, FontWeight}
-import scalafx.stage.{Modality, Stage}
+
+import java.io.FileInputStream
+import scalafx.Includes.*
+import Action.Move
+import javafx.scene.control.RadioButton
+
+import math.min
+
+
 
 object GUI extends JFXApp3:
 
@@ -154,32 +158,32 @@ object GUI extends JFXApp3:
 
 
     /** Display and control components */
-    var unitLabel = new Label():
+    val unitLabel = new Label():
       font = HeadingFont
       text <== selectedUnitType
       margin = Insets(0, 0, (DefaultSpacing / 2), 0)
     unitLabel.setTextFill(TextColor)
 
-    var infoGrid = new GridPane()
+    val infoGrid = new GridPane()
     infoGrid.columnConstraints.addAll(ColumnConstraints(150), ColumnConstraints(150))
     infoGrid.rowConstraints.addAll(RowConstraints(50), RowConstraints(50))
 
-    var healthLabel = new Label():
+    val healthLabel = new Label():
       font = HeadingFont
       text <== selectedUnitHealth
     healthLabel.setTextFill(TextColor)
 
-    var experienceLabel = new Label():
+    val experienceLabel = new Label():
       font = HeadingFont
       text <== selectedUnitExperience
     experienceLabel.setTextFill(TextColor)
 
-    var ammoLabel = new Label():
+    val ammoLabel = new Label():
       font = HeadingFont
       text <== selectedUnitAmmo
       textFill <== ammoLabelColor
 
-    var fuelLabel = new Label():
+    val fuelLabel = new Label():
       font = HeadingFont
       text <== selectedUnitFuel
       textFill <== fuelLabelColor
@@ -189,15 +193,15 @@ object GUI extends JFXApp3:
     infoGrid.add(ammoLabel, 0, 1)
     infoGrid.add(fuelLabel, 1, 1)
 
-    var primaryActionLabel = new Label():
+    val primaryActionLabel = new Label():
       font = DefaultFont
       text = PrimaryAction
       margin = Insets(DefaultSpacing, 0, 0, 0)
     primaryActionLabel.setTextFill(TextColor)
 
-    var primaryActionSelector = new HBox()
+    val primaryActionSelector = new HBox()
 
-    var primaryActionDropdown = new ChoiceBox[String]():
+    val primaryActionDropdown = new ChoiceBox[String]():
       maxWidth = DropdownWidth
       maxHeight = DropdownHeight
       items = actionDropdownItems
@@ -212,20 +216,20 @@ object GUI extends JFXApp3:
         refreshSelection(grid, Action.values.find(_.toString == value.value).getOrElse(Move))
       }
 
-    var primaryActionTarget = new Label():
+    val primaryActionTarget = new Label():
       font = HeadingFont
       text <== primaryTarget
-      margin = Insets(0, 0, 0, DefaultLeftMargin)
+      margin = Insets(0, 0, 0, DefaultSpacing)
     primaryActionTarget.setTextFill(TextColor)
 
-    var secondaryActionLabel = new Label():
+    val secondaryActionLabel = new Label():
       font = DefaultFont
       text = SecondaryAction
     secondaryActionLabel.setTextFill(TextColor)
 
-    var secondaryActionSelector = new HBox()
+    val secondaryActionSelector = new HBox()
 
-    var secondaryActionDropdown = new ChoiceBox[String]():
+    val secondaryActionDropdown = new ChoiceBox[String]():
       maxWidth = DropdownWidth
       maxHeight = DropdownHeight
       items = actionDropdownItems
@@ -237,13 +241,13 @@ object GUI extends JFXApp3:
         refreshSelection(grid, Action.values.find(_.toString == value.value).getOrElse(Move))
       }
 
-    var secondaryActionTarget = new Label():
+    val secondaryActionTarget = new Label():
       font = HeadingFont
       text <== secondaryTarget
-      margin = Insets(0, 0, 0, DefaultLeftMargin)
+      margin = Insets(0, 0, 0, DefaultSpacing)
     secondaryActionTarget.setTextFill(TextColor)
 
-    var setActionSetButton = new Button():
+    val setActionSetButton = new Button():
       font = HeadingFont
       text = SetActionSetButton
       margin = Insets((DefaultSpacing * 2), 0, 0, 0)
@@ -260,28 +264,37 @@ object GUI extends JFXApp3:
         )
         game.pendingActions = game.pendingActions :+ game.selectedBattleUnit.get
         clearHighlights(grid)
+
+        // Resets selected actions to Move
+        game.selectedPrimaryAction = Action.Move
+        game.selectedSecondaryAction = Action.Move
+        game.selectedPrimaryTile = None
+        game.selectedSecondaryTile = None
+        primaryActionDropdown.value = actionDropdownItems(0)
+        secondaryActionDropdown.value = actionDropdownItems(0)
+        game.selectingSecondaryTarget = false
     }
 
-    var playTurnButton = new Button():
+    val playTurnButton = new Button():
       font = HeadingFont
       text = PlayTurnButton
 
-    var turnCounter = new Label():
+    val turnCounter = new Label():
       font = HeadingFont
       text <== turnCount
     turnCounter.setTextFill(TextColor)
     turnCounter.setPrefWidth(CounterWidth)
 
-    var player1WinProgress = new VBox():
-      margin = Insets(0, 0, 0, DefaultLeftMargin)
+    val player1Info = new VBox():
+      margin = Insets(0, 0, 0, DefaultSpacing)
 
-    var player1WinProgressLabel = new Label():
+    val player1WinProgressLabel = new Label():
       font = HeadingFont
       text <== player1ScoreText
     player1WinProgressLabel.setTextFill(TextColor)
     player1WinProgressLabel.setPrefWidth(CounterWidth)
 
-    var player1WinProgressBarBackground = new Rectangle():
+    val player1WinProgressBarBackground = new Rectangle():
       width <== ProgressBarWidth
       height <== ProgressBarHeight
       arcWidth = BarRounding
@@ -291,7 +304,7 @@ object GUI extends JFXApp3:
       margin = Insets(ProgressBarHeight, 0, 0, 0)
       alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
 
-    var player1WinProgressBar = new Rectangle():
+    val player1WinProgressBar = new Rectangle():
       width <== (player1Score * 1.0 / ConquestTarget) * ProgressBarWidth
       height <== ProgressBarHeight
       arcWidth = BarRounding
@@ -301,18 +314,26 @@ object GUI extends JFXApp3:
       margin = Insets(-ProgressBarHeight - 1.25, 0, 0, 0)
       alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
 
-    player1WinProgress.children.addAll(player1WinProgressLabel, player1WinProgressBarBackground, player1WinProgressBar)
+    val selectAIPlayer1 = new RadioButton("AI Player")
+    selectAIPlayer1.setFont(DefaultFont)
+    selectAIPlayer1.setTextFill(TextColor)
+    selectAIPlayer1.setPadding(Insets(DefaultSpacing, 0, 0, 0))
+    selectAIPlayer1.setScaleX(0.7)
+    selectAIPlayer1.setScaleY(0.7)
+    selectAIPlayer1.contentDisplay = scalafx.scene.control.ContentDisplay.Center
 
-    var player2WinProgress = new VBox():
-      margin = Insets(0, 0, 0, DefaultLeftMargin)
+    player1Info.children.addAll(player1WinProgressLabel, player1WinProgressBarBackground, player1WinProgressBar, selectAIPlayer1)
 
-    var player2WinProgressLabel = new Label():
+    val player2Info = new VBox():
+      margin = Insets(0, 0, 0, DefaultSpacing)
+
+    val player2WinProgressLabel = new Label():
       font = HeadingFont
       text <== player2ScoreText
     player2WinProgressLabel.setTextFill(TextColor)
     player2WinProgressLabel.setPrefWidth(CounterWidth)
 
-    var player2WinProgressBarBackground = new Rectangle():
+    val player2WinProgressBarBackground = new Rectangle():
       width <== ProgressBarWidth
       height <== ProgressBarHeight
       arcWidth = BarRounding
@@ -322,7 +343,7 @@ object GUI extends JFXApp3:
       margin = Insets(ProgressBarHeight, 0, 0, 0)
       alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
 
-    var player2WinProgressBar = new Rectangle():
+    val player2WinProgressBar = new Rectangle():
       width <== (player2Score * 1.0 / ConquestTarget) * ProgressBarWidth
       height <== ProgressBarHeight
       arcWidth = BarRounding
@@ -332,7 +353,15 @@ object GUI extends JFXApp3:
       margin = Insets(-ProgressBarHeight - 1.25, 0, 0, 0)
       alignmentInParent = javafx.geometry.Pos.BOTTOM_LEFT
 
-    player2WinProgress.children.addAll(player2WinProgressLabel, player2WinProgressBarBackground, player2WinProgressBar)
+    val selectAIPlayer2 = new RadioButton("AI Player")
+    selectAIPlayer2.setFont(DefaultFont)
+    selectAIPlayer2.setTextFill(TextColor)
+    selectAIPlayer2.setPadding(Insets(DefaultSpacing, 0, 0, 0))
+    selectAIPlayer2.setScaleX(0.7)
+    selectAIPlayer2.setScaleY(0.7)
+    selectAIPlayer2.contentDisplay = scalafx.scene.control.ContentDisplay.Center
+
+    player2Info.children.addAll(player2WinProgressLabel, player2WinProgressBarBackground, player2WinProgressBar, selectAIPlayer2)
 
 
     // Resets all selections, invokes the PlayTurn method of Game and refreshes the GUI
@@ -379,7 +408,6 @@ object GUI extends JFXApp3:
         }
 
         buttonRow.children.addAll(quitButton)
-
         popUpBody.children.addAll(popupText, buttonRow)
 
         val popUpScene = new Scene(popUpBody, 400, 200)
@@ -396,7 +424,7 @@ object GUI extends JFXApp3:
     primaryActionSelector.children.addAll(primaryActionDropdown, primaryActionTarget)
     secondaryActionSelector.children.addAll(secondaryActionDropdown, secondaryActionTarget)
     rightPane.children.addAll(unitLabel, infoGrid, primaryActionLabel, primaryActionSelector, secondaryActionLabel, secondaryActionSelector, setActionSetButton)
-    bottomPane.children.addAll(playTurnButton, turnCounter, player1WinProgress, player2WinProgress)
+    bottomPane.children.addAll(playTurnButton, turnCounter, player1Info, player2Info)
 
     // Initializes the game grid
     drawMapTiles(gameScene)

@@ -4,6 +4,10 @@ import java.io.*
 import scala.collection.mutable.{Buffer, Map}
 import scala.util.{Failure, Success, Try}
 
+/** Loads the game launch configuration from a custom human-readable file by reading the (single) file in the given directory and
+ *  returns a GameMap object and Player objects corresponding to both players wrapped in a tuple if reading is successful. If file
+ *  reading is unsuccessful or the file is formatted wrong, throws a corresponfing exception.
+ *  @param dir Directory from which the single launch configuration file will be read, regardless of how it is named */
 def loadConfig(dir: String): (GameMap, Player, Player) =
   val launchConfigDirectory = Option(new File(dir).list)
 

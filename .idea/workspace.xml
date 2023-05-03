@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI.">
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/configurations/base-wars" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,13 +183,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675949968254</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Implemented preliminary drawMapTiles and drawPic methods in GUI and updated TerrainTile subclasses to case classes. GUI now displays the desired tile textures in a single row.">
-      <created>1678088916224</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1678088916224</updated>
     </task>
     <task id="LOCAL-00005" summary="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets.">
       <created>1678115291342</created>
@@ -522,7 +520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683069111554</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI.">
+      <created>1683069359803</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1683069359803</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
