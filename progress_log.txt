@@ -392,3 +392,12 @@ spaghetti that, yes, does somehow move some BattleUnits around on the map every 
 itself. In compliance to the criteria, it is certainly better than a player playing at random but it often gets unexplainably stuck in trivial
 situations and therefore is not adapted to the complexities of the game systems. If not hallucinations, I think I also witnessed some rare, illegal
 jumps but at least it does not break the GUI now nor cause any errors. The "AI" Player can be toggled on or off for either player.
+
+Improved the AIPlayer and made other tiny corrections such as privatizing methods and removing non-necessary print commands as well as deleting
+redundant variables such as those in class BattleUnit reserved for supply chains. The AI is now a bit better but for some incomrehensible reason it is
+way too polite. This probably has something to do with the conditions before each action set selection but I simply cannot figure out why it happens.
+Everything works as expected, except that the AI refuses to move BattleUnits to tiles with dead opponent units on them. It has no problem running over
+its own dead companions but it simply refuses to ram to opponents or stand on top of them even if they are dead. This is highly peculiar as this can
+easily be done by a human player in every and all situations, even when just temporarily pausing the AI control to do so and there is no such condition
+int the AIPlayer class that would dictate this kind of behavior. Therefore the way to win the AI opponent currently is simply to just block it off from
+the conquest objective using your BattleUnits' corpses.

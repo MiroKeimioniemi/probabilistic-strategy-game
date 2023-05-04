@@ -52,10 +52,10 @@ object GUI extends JFXApp3:
   private var drawnDeadBattleUnits = Vector[BattleUnit]()
 
   // GUI manipulation functions
-  def selectedBattleUnitPane(grid: GridPane): StackPane =
+  private def selectedBattleUnitPane(grid: GridPane): StackPane =
     grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnit.getOrElse(game.currentlyPlaying.battleUnits.head).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnit.getOrElse(game.currentlyPlaying.battleUnits.head).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
 
-  def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
+  private def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
     grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
 
   def syntheticMouseClick(target: Node): MouseEvent =

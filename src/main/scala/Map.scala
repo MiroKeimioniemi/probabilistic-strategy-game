@@ -1,4 +1,3 @@
-import GameMap.printAsSSV
 import o1.grid.*
 
 object GameMap:
@@ -77,8 +76,5 @@ object GameMap:
 class GameMap(override val width: Int, override val height: Int, var tiles: Vector[TerrainTile] = MapTiles) extends Grid[TerrainTile](width, height):
 
   def initialElements: Vector[TerrainTile] = tiles
-
-  def getTile(position: GridPos): TerrainTile =
-    tiles.find(_.position == position).getOrElse(tiles.head)
 
 end GameMap

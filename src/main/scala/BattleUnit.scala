@@ -28,7 +28,6 @@ sealed trait BattleUnit(initialGridPos: GridPos, initialFacing: CompassDir):
   var ammo:            Int
   var fuel:            Int
   var health:          Int
-  var supplyChain:     Option[SupplyChain]
 
   var actionSet: ActionSet = ActionSet(Action.Rest, position, Action.Rest, position)
 

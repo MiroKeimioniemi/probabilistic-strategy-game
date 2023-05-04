@@ -48,7 +48,7 @@ class Game:
    *  within its range
    *  @param battleUnit BattleUnit considered
    *  @param range number of tiles expected in each cardinal direction */
-  def fovTiles(battleUnit: BattleUnit, range: Int): Vector[TerrainTile] =
+  private def fovTiles(battleUnit: BattleUnit, range: Int): Vector[TerrainTile] =
     val coordinatesOfCardinalDirections =
       battleUnit.position.pathTowards(East).take(range) ++
       battleUnit.position.pathTowards(South).take(range) ++
@@ -69,7 +69,7 @@ class Game:
       case Reload => fovTiles(battleUnit, 0)
 
 
-  def pathToTarget(battleUnit: BattleUnit, target: GridPos): Vector[TerrainTile] =
+  private def pathToTarget(battleUnit: BattleUnit, target: GridPos): Vector[TerrainTile] =
     val xDistance = battleUnit.position.x - target.x
     val yDistance = battleUnit.position.y - target.y
     if xDistance >= 0 && yDistance == 0 then
@@ -134,7 +134,7 @@ class Game:
    *  @param battleUnit Attacking BattleUnit
    *  @param targetBattleUnit Attacked BattleUnit
    *  @param distance Distance between the BattleUnits */
-  def attackProbabilityAgainstBattleUnit(battleUnit: BattleUnit, targetBattleUnit: BattleUnit, distance: Int) =
+  def attackProbabilityAgainstBattleUnit(battleUnit: BattleUnit, targetBattleUnit: BattleUnit, distance: Int): Int =
     (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt + max(0, min(10, ((2 * battleUnit.experience / battleUnit.baseDamage) - (2 * targetBattleUnit.experience / targetBattleUnit.baseDamage))))
 
 
@@ -201,7 +201,7 @@ class Game:
   /** Changes the given BattleUnit's orientation to be towards target
    *  @param battleUnit BattleUnit to be turned
    *  @param target Target coordinates towards which BattleUnit will be turned */
-  def turn(battleUnit: BattleUnit, target: GridPos): Unit =
+  private def turn(battleUnit: BattleUnit, target: GridPos): Unit =
       if battleUnit.position.x - target.x > 0 then
         battleUnit.orientation = West
       else if battleUnit.position.x - target.x < 0 then
@@ -313,7 +313,7 @@ class Game:
     battleUnit.refuel()
 
   /** Updates conquest tile colors and win progress of the current conqueror if their units are exclusively occupying any ConquestTile */
-  def updateConquest() =
+  def updateConquest(): Unit =
     val conquestTiles = gameMap.tiles.filter(_.getClass == classOf[ConquestTile])
     if conquestTiles.map(_.position).intersect(player1.battleUnits.filter(_.alive).map(_.position)).nonEmpty && conquestTiles.map(_.position).intersect(player2.battleUnits.filter(_.alive).map(_.position)).isEmpty then
       for cTile <- conquestTiles do
