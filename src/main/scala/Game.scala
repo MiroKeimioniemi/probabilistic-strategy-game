@@ -25,7 +25,7 @@ class Game:
   val player1 = initializer._2
   val player2 = initializer._3
 
-  private val randomNumberGenerator = new Random(System.nanoTime())
+  val randomNumberGenerator = new Random(System.nanoTime())
 
   // Game state variables
   var turnCount = 0
@@ -69,6 +69,20 @@ class Game:
       case Reload => fovTiles(battleUnit, 0)
 
 
+  def pathToTarget(battleUnit: BattleUnit, target: GridPos): Vector[TerrainTile] =
+    val xDistance = battleUnit.position.x - target.x
+    val yDistance = battleUnit.position.y - target.y
+    if xDistance >= 0 && yDistance == 0 then
+      gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
+    else if xDistance < 0 && yDistance == 0 then
+      gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
+    else if yDistance >= 0 && xDistance == 0 then
+      gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
+    else if yDistance < 0 && xDistance == 0 then
+      gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
+    else
+      Vector()
+
   /** Returns the probability of a given BattleUnit successfully moving to target coordinates that may or may
    * not contain an enemy unit, in which case it returns the probability of successfully destroying them by
    * ramming and moving on top of them
@@ -88,17 +102,7 @@ class Game:
 
     val xDistance = battleUnit.position.x - target.x
     val yDistance = battleUnit.position.y - target.y
-    val targetPath =
-      if xDistance >= 0 && yDistance == 0 then
-        gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
-      else if xDistance < 0 && yDistance == 0 then
-        gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
-      else if yDistance >= 0 && xDistance == 0 then
-        gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
-      else if yDistance < 0 && xDistance == 0 then
-        gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
-      else
-        Vector()
+    val targetPath = pathToTarget(battleUnit, target)
 
     val bw = battleUnit.weight
     val bv = battleUnit.volume
@@ -141,17 +145,7 @@ class Game:
 
     val xDistance = battleUnit.position.x - target.x
     val yDistance = battleUnit.position.y - target.y
-    val targetPath =
-      if xDistance >= 0 && yDistance == 0 then
-        gameMap.tiles.filter(_.position.y == target.y).takeWhile(_.position.x < battleUnit.position.x).dropWhile(_.position.x < target.x)
-      else if xDistance < 0 && yDistance == 0 then
-        gameMap.tiles.filter(_.position.y == target.y).dropWhile(_.position.x <= battleUnit.position.x).takeWhile(_.position.x <= target.x)
-      else if yDistance >= 0 && xDistance == 0 then
-        gameMap.tiles.filter(_.position.x == target.x).takeWhile(_.position.y < battleUnit.position.y).dropWhile(_.position.y < target.y)
-      else if yDistance < 0 && xDistance == 0 then
-        gameMap.tiles.filter(_.position.x == target.x).dropWhile(_.position.y <= battleUnit.position.y).takeWhile(_.position.y <= target.y)
-      else
-        Vector()
+    val targetPath = pathToTarget(battleUnit, target)
 
     var successProbability = 100
     var blockingDegree = 0
@@ -254,6 +248,7 @@ class Game:
     val xDistance = battleUnit.position.x - target.x
     val yDistance = battleUnit.position.y - target.y
     val absoluteDistance = if abs(xDistance) >= abs(yDistance) then abs(xDistance) else abs(yDistance)
+    val damageGradientIndex = max(0, absoluteDistance - 1)
 
     val opponent = if currentlyPlaying == player1 then player2 else player1
     val targetBattleUnit = opponent.battleUnits.find(bU => bU.alive && bU.position == target)
@@ -269,29 +264,29 @@ class Game:
         if targetBattleUnit.get.ammo > 0 then
           targetBattleUnit.get.useAmmo(1)
 
-        if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, absoluteDistance - 1) then {
+        if randomNumberGenerator.nextInt(101) <= attackProbabilityAgainstBattleUnit(battleUnit, targetBattleUnit.get, damageGradientIndex) then {
           if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && battleUnit.ammo >= 0 then {
 
             if targetBattleUnit.get.defending then
-              targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1) / (max(1, DefendStrength))).toInt)
+              targetBattleUnit.get.takeDamage((battleUnit.damageGradient(damageGradientIndex) / (max(1, DefendStrength))).toInt)
             else
-              targetBattleUnit.get.takeDamage((battleUnit.damageGradient(absoluteDistance - 1).toInt))
+              targetBattleUnit.get.takeDamage((battleUnit.damageGradient(damageGradientIndex).toInt))
 
             if targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage then
               targetTile.degrade(battleUnit.damageGradient(absoluteDistance).toInt)
 
             battleUnit.actionSet.primaryActionSuccess = true
-            battleUnit.gainExperience((battleUnit.damageGradient(absoluteDistance - 1).toInt))
+            battleUnit.gainExperience((battleUnit.damageGradient(damageGradientIndex).toInt))
           }
         } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(targetBattleUnit.get, battleUnit.position)._1 && targetBattleUnit.get.ammo >= 0 then
-            battleUnit.takeDamage(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
-            gameMap.tiles.filter(_.position == battleUnit.position).head.degrade(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
-            targetBattleUnit.get.gainExperience(targetBattleUnit.get.damageGradient(absoluteDistance - 1).toInt)
+            battleUnit.takeDamage(targetBattleUnit.get.damageGradient(damageGradientIndex).toInt)
+            gameMap.tiles.filter(_.position == battleUnit.position).head.degrade(targetBattleUnit.get.damageGradient(damageGradientIndex).toInt)
+            targetBattleUnit.get.gainExperience(targetBattleUnit.get.damageGradient(damageGradientIndex).toInt)
       }
     } else if randomNumberGenerator.nextInt(101) <= attackInitiationProbability(battleUnit, target)._1 && (targetTile.getClass != classOf[RockTile] || battleUnit.explosiveDamage) && battleUnit.ammo > 0 then
         battleUnit.useAmmo(1)
         battleUnit.actionSet.primaryActionSuccess = true
-        targetTile.degrade(battleUnit.damageGradient(max(0, absoluteDistance - 1)).toInt)
+        targetTile.degrade(battleUnit.damageGradient(max(0, damageGradientIndex)).toInt)
 
   end attack
 
@@ -376,8 +371,8 @@ class Game:
     updateConquest()
 
     if player1.winProgress >= ConquestTarget || player2.winProgress >= ConquestTarget || player1.battleUnits.count(_.alive) == 0 || player2.battleUnits.count(_.alive) == 0 then
-      gameOver = true
       winner = if player1.battleUnits.count(_.alive) > player2.battleUnits.count(_.alive) || player1.winProgress >= ConquestTarget then Some(player1) else Some(player2)
+      gameOver = true
 
     turnCount += 1
 

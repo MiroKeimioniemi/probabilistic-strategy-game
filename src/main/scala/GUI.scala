@@ -9,6 +9,7 @@ import scalafx.application.{JFXApp3, Platform}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.text.{Font, FontWeight}
 import scalafx.collections.ObservableBuffer
+import javafx.scene.control.RadioButton
 import scalafx.stage.{Modality, Stage}
 import o1.{East, GridPos, South, West}
 import scalafx.scene.shape.Rectangle
@@ -16,12 +17,9 @@ import scalafx.scene.paint.Color
 import o1.grid.CompassDir.North
 import scalafx.concurrent.Task
 import scalafx.geometry.Insets
-
 import java.io.FileInputStream
 import scalafx.Includes.*
 import Action.Move
-import javafx.scene.control.RadioButton
-
 import math.min
 
 
@@ -53,16 +51,22 @@ object GUI extends JFXApp3:
   // State variables
   private var drawnDeadBattleUnits = Vector[BattleUnit]()
 
-  // Utility functions
-  private def selectedBattleUnitPane(grid: GridPane): StackPane =
+  // GUI manipulation functions
+  def selectedBattleUnitPane(grid: GridPane): StackPane =
     grid.children.filter(e => GridPane.getRowIndex(e) == game.selectedBattleUnit.getOrElse(game.currentlyPlaying.battleUnits.head).position.y && GridPane.getColumnIndex(e) == game.selectedBattleUnit.getOrElse(game.currentlyPlaying.battleUnits.head).position.x)(1).asInstanceOf[javafx.scene.layout.StackPane]
 
-  private def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
+  def selectedTilePane(grid: GridPane, tile: TerrainTile): StackPane =
     grid.children.find(e => GridPane.getRowIndex(e) == tile.position.y && GridPane.getColumnIndex(e) == tile.position.x).getOrElse(grid.children.head).asInstanceOf[javafx.scene.layout.StackPane]
 
-  private def syntheticMouseClick(target: Node): MouseEvent =
+  def syntheticMouseClick(target: Node): MouseEvent =
     MouseEvent(MouseEvent.MouseClicked, 0, 0, 0, 0, MouseButton.Primary, 0, false, false, false, false, false, false, false, false, false, false, new PickResult(target.delegate, target.localToScene(0, 0, 0), 0.0))
 
+  def paneAt(col: Int, row: Int, grid: GridPane): Node =
+    grid.children.filter(child =>
+      GridPane.getRowIndex(child) == row &&
+      GridPane.getColumnIndex(child) == col).last
+
+  // Utility functions
   private def actionDropdownItems: ObservableBuffer[String] =
     var showItems = ObservableBuffer[String]()
     Action.values.foreach(action => showItems = showItems :+ action.toString)
@@ -321,6 +325,9 @@ object GUI extends JFXApp3:
     selectAIPlayer1.setScaleX(0.7)
     selectAIPlayer1.setScaleY(0.7)
     selectAIPlayer1.contentDisplay = scalafx.scene.control.ContentDisplay.Center
+    selectAIPlayer1.onAction = () => {
+      AIPlayer.controlPlayer1 = !AIPlayer.controlPlayer1
+    }
 
     player1Info.children.addAll(player1WinProgressLabel, player1WinProgressBarBackground, player1WinProgressBar, selectAIPlayer1)
 
@@ -360,6 +367,9 @@ object GUI extends JFXApp3:
     selectAIPlayer2.setScaleX(0.7)
     selectAIPlayer2.setScaleY(0.7)
     selectAIPlayer2.contentDisplay = scalafx.scene.control.ContentDisplay.Center
+    selectAIPlayer2.onAction = () => {
+      AIPlayer.controlPlayer2 = !AIPlayer.controlPlayer2
+    }
 
     player2Info.children.addAll(player2WinProgressLabel, player2WinProgressBarBackground, player2WinProgressBar, selectAIPlayer2)
 
@@ -434,6 +444,23 @@ object GUI extends JFXApp3:
     drawBattleUnits(gameScene, game.player2)
 
     stage.show()
+
+    // Starts a new thread that enables AIOpponent to observe and interact with the GUI
+    val aiPlayerThread = new Thread(() => {
+      while !game.gameOver do
+        if AIPlayer.controlPlayer1 && game.currentlyPlaying == game.player1 then
+          Platform.runLater(() => {
+            AIPlayer.AIPlayTurn(game, gameScene, game.currentlyPlaying)
+          })
+          Thread.sleep(1000)
+        if AIPlayer.controlPlayer2 && game.currentlyPlaying == game.player2 then
+          Platform.runLater(() => {
+            AIPlayer.AIPlayTurn(game, gameScene, game.currentlyPlaying)
+          })
+        Thread.sleep(1000)
+    })
+    aiPlayerThread.setDaemon(true)
+    aiPlayerThread.start()
 
   end start
 

@@ -269,5 +269,10 @@ val Player2Color = Color.web("ed1c23")
 
 
 /** GamePlay properties */
-val ConquestTarget = 1
+val ConquestTarget = 100
 val DefendStrength = 2
+
+val AIAttackProbabilityThreshold          = 27
+val AIAttackConfidentProbabilityThreshold = 40
+val AIMoveProbabilityThreshold            = 25
+val AIMoveConfidentProbabilityThreshold   = 50

@@ -383,3 +383,12 @@ Changed highlight colors for more contrast and a better look and created another
 formations. I meant to make it such that absolutely every constant in the game is externally configurable and thus this new configuration
 would work in combination with ConquestTarget = 1 in a guard and destroy bases manner, but I don't have time for creating more configuration
 files and readers and therefore this will have to be adjusted directly in ConfigurationConstants for now.
+
+4.5.2023
+
+Implemented a very poor AI player that was supposed to cleanly interact only with the GUI and actually have some sort of logical algorithm to
+its operations but due to major sleep deprivation caused by soon a week of essentially no more than 3h of sleep a night, it ended up being ugly
+spaghetti that, yes, does somehow move some BattleUnits around on the map every now and then and usually resolves a winner too when playing against
+itself. In compliance to the criteria, it is certainly better than a player playing at random but it often gets unexplainably stuck in trivial
+situations and therefore is not adapted to the complexities of the game systems. If not hallucinations, I think I also witnessed some rare, illegal
+jumps but at least it does not break the GUI now nor cause any errors. The "AI" Player can be toggled on or off for either player.

@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI.">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/configurations/base-wars" afterDir="false" />
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Changed highlight colors for more contrast and a better look and create another launch configuration with a different map and BattleUnit formations.">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/AIPlayer.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/ConfigurationConstants.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GameConfig.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,10 +164,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.GUI" />
+        <item itemvalue="Scala REPL.Scala REPL" />
         <item itemvalue="ScalaTest.GameSpec" />
         <item itemvalue="ScalaTest.ConfigSpec" />
         <item itemvalue="ScalaTest.GameSpec.executeActionSet should work according to specification" />
-        <item itemvalue="Scala REPL.Scala REPL" />
       </list>
     </recent_temporary>
   </component>
@@ -183,20 +182,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675949968254</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Modified GUI to display tiles in a MapWidth by MapHeight grid layout using GridPane and added more placeholder assets.">
-      <created>1678115291342</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1678115291342</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Implemented BattleUnit trait to the extent it was defined in the technical plan with a TankUnit case class to have something to instantiate for displaying BattleUnits on the map. Also added more class files.">
-      <created>1678121179501</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1678121179501</updated>
     </task>
     <task id="LOCAL-00007" summary="Updated progress_log.txt to reflect the current plan of approach.">
       <created>1679305407172</created>
@@ -527,7 +512,21 @@
       <option name="project" value="LOCAL" />
       <updated>1683069359803</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Made selected action default to Move everytime &quot;Set Action Set&quot; is clicked and added radiobutton toggles for making Player 1 and/or Player 2 AI controlled.">
+      <created>1683075979753</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1683075979753</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Changed highlight colors for more contrast and a better look and create another launch configuration with a different map and BattleUnit formations.">
+      <created>1683107368445</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1683107368445</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -554,8 +553,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changed the GUI so that the &quot;Play Turn&quot; button now visibly resets all selections." />
-    <MESSAGE value="Modified the GUI to show action-dependent highlights." />
     <MESSAGE value="Refactored the GUI by writing a few utility functions for getting the selected battle units and map tiles and to synthesize a mouse click." />
     <MESSAGE value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
     <MESSAGE value="BattleUnits move!" />
@@ -579,7 +576,9 @@
     <MESSAGE value="Added an experience system as well as Reload and Rest actions." />
     <MESSAGE value="Bug fixes and quality of life improvements." />
     <MESSAGE value="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created a custom human-readable text file format for configuring the game and implemented loadConfig along with light refactoring, bug fixing and improvements to the scaling of the GUI." />
+    <MESSAGE value="Made selected action default to Move everytime &quot;Set Action Set&quot; is clicked and added radiobutton toggles for making Player 1 and/or Player 2 AI controlled." />
+    <MESSAGE value="Changed highlight colors for more contrast and a better look and create another launch configuration with a different map and BattleUnit formations." />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed highlight colors for more contrast and a better look and create another launch configuration with a different map and BattleUnit formations." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
