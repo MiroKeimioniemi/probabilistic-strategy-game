@@ -854,7 +854,7 @@ object GUI extends JFXApp3:
           grid.children.removeRange(game.gameMap.width * game.gameMap.height + game.player1.battleUnits.count(_.alive) + game.player2.battleUnits.count(_.alive), grid.children.length)
           // Add back checkmarks for set actions
           for readyBattleUnit <- game.pendingActions do
-            grid.add(drawPic("src/main/resources/done-symbol.png", scene, 0), readyBattleUnit.position.x, readyBattleUnit.position.y)
+            grid.add(drawPic(CheckmarkImage, scene, 0), readyBattleUnit.position.x, readyBattleUnit.position.y)
 
         if battleUnit.alive then
           game.selectedBattleUnit match
@@ -886,7 +886,7 @@ object GUI extends JFXApp3:
                 clearTilesInRange(sBU)
                 clearHighlightedTiles()
 
-                // Unhighlight previously highlighted BattleUnit tile
+                // Unhighlights previously highlighted BattleUnit tile
                 selectedBattleUnitPane(grid).children(1).asInstanceOf[javafx.scene.shape.Rectangle].stroke = Color.Transparent
                 game.selectedBattleUnit = None
 

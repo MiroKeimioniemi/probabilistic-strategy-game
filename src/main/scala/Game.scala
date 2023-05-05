@@ -68,7 +68,9 @@ class Game:
       case Defend => fovTiles(battleUnit, 0)
       case Reload => fovTiles(battleUnit, 0)
 
-
+  /** Returns the tiles between the given BattleUnit and target
+   *  @param battleUnit BattleUnit considered
+   *  @param target The coordinates of target */
   private def pathToTarget(battleUnit: BattleUnit, target: GridPos): Vector[TerrainTile] =
     val xDistance = battleUnit.position.x - target.x
     val yDistance = battleUnit.position.y - target.y

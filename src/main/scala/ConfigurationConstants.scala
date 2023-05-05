@@ -75,6 +75,7 @@ val Player1Win               = "Player 1 wins!"
 val Player2Win               = "Player 2 wins!"
 val AIPLayer                 = "AI Player"
 
+val CheckmarkImage           = "src/main/resources/done-symbol.png"
 val LaunchConfigDirectory    = "src/main/resources/launch-configuration/"
 val MapConfigStartFlag       = "-------------------------------------------------"
 
