@@ -408,4 +408,4 @@ Added the ability to set an action set by pressing enter after selecting targets
 the game while the aiPlayerThread is running. Also increased the thread sleep time to make sure only one turn is played at a time. This is very crude and
 should be addressed by synchronizing threads and waiting but I unfortunately ran out of time to play around with that.
 
-Edited two comments, refactored checkmark image and deleted the empty SupplyChain class. (Course) project done.
+Edited two comments, refactored checkmark image and deleted the empty SupplyChain class. Added final report pdf. (Course) project done.
