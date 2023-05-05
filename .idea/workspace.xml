@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Implemented the &quot;artificially intelligent&quot; opponent.">
+    <list default="true" id="195babaa-d446-47e7-9f1d-84a2c9f3cc67" name="Changes" comment="Improved the AIPlayer and made other tiny corrections such as privatizing methods and removing non-necessary print commands as well as deleting redundant variables such as those in class BattleUnit reserved for supply chains.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/progress_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/progress_log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/AIPlayer.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/AIPlayer.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/BattleUnit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/GUI.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/GUI.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/Game.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Game.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/Map.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/Map.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,9 +162,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.GUI" />
-        <item itemvalue="Scala REPL.Scala REPL" />
-        <item itemvalue="ScalaTest.GameSpec" />
         <item itemvalue="ScalaTest.ConfigSpec" />
+        <item itemvalue="ScalaTest.GameSpec" />
+        <item itemvalue="Scala REPL.Scala REPL" />
         <item itemvalue="ScalaTest.GameSpec.executeActionSet should work according to specification" />
       </list>
     </recent_temporary>
@@ -183,13 +180,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1675949968254</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes.">
-      <created>1679598265118</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1679598265118</updated>
     </task>
     <task id="LOCAL-00009" summary="Various changes to facilitate displaying BattleUnits on the map including refactoring GUI methods and many others player- and BattleUnit-related classes.">
       <created>1679598355776</created>
@@ -527,7 +517,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683169461145</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="Improved the AIPlayer and made other tiny corrections such as privatizing methods and removing non-necessary print commands as well as deleting redundant variables such as those in class BattleUnit reserved for supply chains.">
+      <created>1683218430112</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1683218430112</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -554,7 +551,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Limited the number and scope of selectable tiles to one and tiles in range of the selected battle unit and action respectively." />
     <MESSAGE value="BattleUnits move!" />
     <MESSAGE value="Added a &quot;Set Action set&quot; button to the GUI that adds battle units to pending actions and pending targets and signals the success of this by adding a green checkmark to the corner of the tile where the battle unit resides, enabling the moving of multiple battle units per turn." />
     <MESSAGE value="Implemented first tests to test the correct initialization of the game and expected behavior of the move method." />
@@ -579,7 +575,8 @@
     <MESSAGE value="Made selected action default to Move everytime &quot;Set Action Set&quot; is clicked and added radiobutton toggles for making Player 1 and/or Player 2 AI controlled." />
     <MESSAGE value="Changed highlight colors for more contrast and a better look and create another launch configuration with a different map and BattleUnit formations." />
     <MESSAGE value="Implemented the &quot;artificially intelligent&quot; opponent." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented the &quot;artificially intelligent&quot; opponent." />
+    <MESSAGE value="Improved the AIPlayer and made other tiny corrections such as privatizing methods and removing non-necessary print commands as well as deleting redundant variables such as those in class BattleUnit reserved for supply chains." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved the AIPlayer and made other tiny corrections such as privatizing methods and removing non-necessary print commands as well as deleting redundant variables such as those in class BattleUnit reserved for supply chains." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

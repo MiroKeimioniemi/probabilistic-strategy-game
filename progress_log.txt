@@ -401,3 +401,9 @@ its own dead companions but it simply refuses to ram to opponents or stand on to
 easily be done by a human player in every and all situations, even when just temporarily pausing the AI control to do so and there is no such condition
 int the AIPlayer class that would dictate this kind of behavior. Therefore the way to win the AI opponent currently is simply to just block it off from
 the conquest objective using your BattleUnits' corpses.
+
+5.5.20223
+
+Added the ability to set an action set by pressing enter after selecting targets for both actions. Fixed a bug causing a heap memory error when quitting
+the game while the aiPlayerThread is running. Also increased the thread sleep time to make sure only one turn is played at a time. This is very crude and
+should be addressed by synchronizing threads and waiting but I unfortunately ran out of time to play around with that.

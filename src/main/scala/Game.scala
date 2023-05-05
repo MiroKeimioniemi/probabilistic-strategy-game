@@ -135,7 +135,10 @@ class Game:
    *  @param targetBattleUnit Attacked BattleUnit
    *  @param distance Distance between the BattleUnits */
   def attackProbabilityAgainstBattleUnit(battleUnit: BattleUnit, targetBattleUnit: BattleUnit, distance: Int): Int =
-    (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance) + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt + max(0, min(10, ((2 * battleUnit.experience / battleUnit.baseDamage) - (2 * targetBattleUnit.experience / targetBattleUnit.baseDamage))))
+    (((battleUnit.armor * battleUnit.damageGradient(distance)) / (battleUnit.armor * battleUnit.damageGradient(distance)
+      + (targetBattleUnit.armor * targetBattleUnit.damageGradient(distance)))) * 100).toInt
+      + max(0, min(10, ((2 * battleUnit.experience / battleUnit.baseDamage)
+      - (2 * targetBattleUnit.experience / targetBattleUnit.baseDamage))))
 
 
   /** Returns a tuple containing the probability of successfully attacking a target, masked by damageGradient in the first place and the unmasked probability in the second

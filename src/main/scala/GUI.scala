@@ -278,6 +278,9 @@ object GUI extends JFXApp3:
         secondaryActionDropdown.value = actionDropdownItems(0)
         game.selectingSecondaryTarget = false
     }
+    setActionSetButton.onAction = () => {
+      setActionSetButton.fireEvent(syntheticMouseClick(setActionSetButton))
+    }
 
     val playTurnButton = new Button():
       font = HeadingFont
@@ -447,20 +450,28 @@ object GUI extends JFXApp3:
 
     // Starts a new thread that enables AIOpponent to observe and interact with the GUI
     val aiPlayerThread = new Thread(() => {
-      while !game.gameOver do
-        if AIPlayer.controlPlayer1 && game.currentlyPlaying == game.player1 then
-          Platform.runLater(() => {
-            AIPlayer.AIPlayTurn(game, gameScene, game.currentlyPlaying)
-          })
-          Thread.sleep(1000)
-        if AIPlayer.controlPlayer2 && game.currentlyPlaying == game.player2 then
-          Platform.runLater(() => {
-            AIPlayer.AIPlayTurn(game, gameScene, game.currentlyPlaying)
-          })
-        Thread.sleep(1000)
+      try {
+        while !game.gameOver do
+          if AIPlayer.controlPlayer1 && game.currentlyPlaying == game.player1 then
+            Platform.runLater(() => {
+              AIPlayer.AIPlayTurn(game, gameScene, game.currentlyPlaying)
+            })
+            Thread.sleep(1400)
+          if AIPlayer.controlPlayer2 && game.currentlyPlaying == game.player2 then
+            Platform.runLater(() => {
+              AIPlayer.AIPlayTurn(game, gameScene, game.currentlyPlaying)
+            })
+          Thread.sleep(1400)
+      } catch {
+        case e: InterruptedException => println("AI stopped playing")
+      }
     })
     aiPlayerThread.setDaemon(true)
     aiPlayerThread.start()
+
+    stage.onCloseRequest = () => {
+      aiPlayerThread.interrupt()
+    }
 
   end start
 
@@ -536,6 +547,7 @@ object GUI extends JFXApp3:
       selectable.onMouseClicked = (event: MouseEvent) => {
 
         val secondaryActionDropdown = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(5).asInstanceOf[javafx.scene.layout.HBox].children(0).asInstanceOf[javafx.scene.control.ChoiceBox[String]]
+        val setActionSetButton = scene.content(0).asInstanceOf[javafx.scene.layout.BorderPane].children(1).asInstanceOf[javafx.scene.layout.VBox].children(6).asInstanceOf[javafx.scene.control.Button]
 
         def highlightPrimaryTile() =
           primaryBorder.stroke = PrimaryHighlightColor
@@ -557,8 +569,10 @@ object GUI extends JFXApp3:
                 secondaryTarget.value = PrimaryTargetSelection
                 if sPT != tile && game.tilesInRange(game.selectedBattleUnit.get, game.selectedSecondaryAction).contains(tile) then
                   highlightSecondaryTile()
+                  setActionSetButton.requestFocus()
             case None =>
                 highlightSecondaryTile()
+                setActionSetButton.requestFocus()
 
         // Selects or deselects primary action target
         else if game.selectedBattleUnit.isDefined && game.tilesInRange(game.selectedBattleUnit.get, game.selectedPrimaryAction).contains(tile) && !game.selectingSecondaryTarget then
