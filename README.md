@@ -54,6 +54,8 @@ management as well.
 
 ## User Interface
 
+<img width="1000" alt="Probabilistic Strategy Game UI" src="https://github.com/MiroKeimioniemi/probabilistic-strategy-game/assets/65595542/e57204cf-37b1-44b4-ae0b-d187693166e4">
+
 Selected actions are highlighted in the game map upon
 unit selection. First, only the primary action in light grey and after selecting its target,
 highlighted in red, the range of the secondary action is highlighted in light brown as well
@@ -98,6 +100,9 @@ the first character of the first map tile. This is then read one row at a time i
 with width equal to the number of words on the first line and height equal to the number
 of lines.
 
+<img width="1000" alt="Probabilistic Strategy Game configuration file" src="https://github.com/MiroKeimioniemi/probabilistic-strategy-game/assets/65595542/590bd23d-1c94-44c1-bf12-3387e2653094">
+
+
 The launch configuration represents the map and initial placements of units in the
 game with units being specified on top their starting tiles, separated from them only by
 a comma (no spaces). It may be modified so that each continuous word representing a
@@ -138,3 +143,6 @@ the game defaults to the launch configuration defined in ConfigurationConstants.
 Run the GUI class to run the game.
 
 Read more about the implementation details in [Strategy Game Final Report](https://github.com/MiroKeimioniemi/probabilistic-strategy-game/blob/master/Strategy%20Game%20Final%20Report.pdf).
+
+<img width="1000" alt="Probabilistic Strategy Game UML Diagram" src="https://github.com/MiroKeimioniemi/probabilistic-strategy-game/assets/65595542/a6b38dcd-e589-42d8-a9ce-ea3a51519df4">
+
